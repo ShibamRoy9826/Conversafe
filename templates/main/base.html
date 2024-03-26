@@ -1,0 +1,440 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="bg-gray-900">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <!-- Icons -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Font Files -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Silkscreen&display=swap" rel="stylesheet">
+    <!-- Logo Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="loader" class="grid min-h-screen place-content-center bg-[#0C0908]">
+        <img src="{% static 'loader.svg' %}" class="lImage w-24 h-24" />
+    </div>
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-30 w-screen text-white h-16 bg-gray-900 flex flex-row">
+        <div class="h-full flex flex-row  items-center w-72 bg-[#11101D]">
+            <div class="logo text-white flex flex-row justify-evenly lg:ml-0 hidden lg:flex md:flex ">
+                <!-- Username on nav -->
+                <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif;">Welcome {{user.username}}</span>
+            </div>
+        </div>
+        <div class="h-full flex flex-row justify-end items-center w-full bg-[#11101D]">
+            <!-- Search  -->
+            <div class="px-4 text-gray-300 svgButton">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </div>
+            <!-- Notifications -->
+            <div class="px-4 text-gray-300 svgButton dropdown relative inline-block">
+                <button class="dropbtn relative" onclick="dropdownNotif()" id="dropdownNotif">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                    </svg>
+
+
+
+                    {% if notifications_count != 0 %}
+
+                    <div class="notifCounter flex justify-center items-center" id="notifCounter">
+                        {{notifications_count}}
+                    </div>
+
+                    <div class="dropdown-notif hidden justify-center items-center overflow-y-scroll border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-notifIcon">
+                        {% for notif in notifications_unread %}
+                        <div class="flex flex-row changeBG" style="border-bottom: 2px solid rgb(31 41 55);" id="toRemove">
+                            <div class="text-gray-400 closeButton flex flex-col justify-center items-center" style="padding-left: 0.5rem;padding-right: 0.5rem;" onclick="hideNotification(this);deleteNotification(this);" data-notificationid="{{notif.id}}" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                            <a href="/notifications/">{{notif.verb}}</a>
+
+                            
+                        </div>
+                        {% endfor%}
+                    </div>
+                    {% else %}
+                    <div class=" flex flex-col justify-center items-center dropdown-notif hidden border-2 border-gray-600 rounded-lg shadow-xl" style="height: 5rem;" id="dropdown-notifIcon">
+                        <br>
+                        <p style="margin-left: 1rem;">No notifications available...</p>
+                    </div>
+                    {% endif %}
+                </button>
+            </div>
+            <!-- Profile pic -->
+            <div class="pl-2 lg:pl-4 pr-8 lg:pr-8 flex flex-row relative top-2">
+                <a href="/profile/">
+                <img src="{{user.userprofile.avatar.url}}" class="rounded-full w-6 h-6" >
+            </a>
+                <!-- Dropdown -->
+                <div class="text-gray-300 svgButton dropdown relative inline-block">
+                    <button class="dropbtn" onclick="dropdownProfile()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="px-2 w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg></button>
+                    <div class="dropdown-content hidden border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-icon" style="background-color: rgb(55, 65, 81);">
+                        <a href="/settings/">Settings</a>
+                        <a href="/logout/">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <img src="{% static 'logoNav.png' %}" class="w-8 h-8 mx-2 icon">
+            <div class="logo_name" style="font-family: 'Pacifico',sans-serif;">Conversafe</div>
+            <button id="btn">
+                <svg class="ham hamRotate ham8" viewBox="0 0 100 100" width="80" onclick="this.classList.toggle('active');">
+                    <path class="line top" d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20" />
+                    <path class="line middle" d="m 30,50 h 40" />
+                    <path class="line bottom" d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20" />
+                </svg>
+            </button>
+        </div>
+        <ul class="nav-list hidden md:block overflow-y-scroll lg:overflow-y-hidden overflow-x-hidden">
+            <li>
+                <a href="/home/">
+                    <i class='bx bx-home homeIcon' id="homeIcon"></i>
+                    <span class="links_name">Home</span>
+                </a>
+                <!-- <span class="tooltip">Home</span> -->
+            </li>
+            <li>
+                <a href="/events">
+                    <i class='bx bx-game'></i>
+                    <span class="links_name">Games & Events</span>
+                </a>
+                <!-- <span class="tooltip">Games & Events</span> -->
+            </li>
+            <li>
+                <a href="/friends">
+                    <i class='bx bx-user'></i>
+                    <span class="links_name">Friends</span>
+                </a>
+                <!-- <span class="tooltip">Friends</span> -->
+            </li>
+            <li>
+                <a href="/notifications/">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name">Notifications</span>
+                </a>
+                <!-- <span class="tooltip">Notifications</span> -->
+            </li>
+            <li>
+                <a href="/profile/">
+                    <i class='bx bx-user-circle'></i>
+                    <span class="links_name">Profile</span>
+                </a>
+                <!-- <span class="tooltip">User Profile</span> -->
+            </li>
+            <li>
+                <a href="/settings/">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Settings</span>
+                </a>
+                <!-- <span class="tooltip">Settings</span> -->
+            </li>
+            <li>
+                <a href="/feedback/">
+                    <i class='bx bx-heart'></i>
+                    <span class="links_name">Feedback</span>
+                </a>
+                <!-- <span class="tooltip">Feedback</span> -->
+            </li>
+            <li>
+                <a href="/contact/">
+                    <i class='bx bx-envelope'></i>
+                    <span class="links_name">Contact</span>
+                </a>
+                <!-- <span class="tooltip">Contact Me:)</span> -->
+            </li>
+            <li>
+                <a href="/logout/">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">Log Out</span>
+                </a>
+                <!-- <span class="tooltip">Log Out</span> -->
+            </li>
+        </ul>
+    </div>
+
+
+    <style type="text/css">
+    #dropdown-notifIcon.dropdown-visible {
+        display: block;
+    }
+
+    #dropdown-notifIcon2.dropdown-visible {
+        display: block;
+    }
+
+    .dropdown-notif {
+        position: absolute;
+        top: 2.5rem;
+        right: 1rem;
+        background-color: rgb(55, 65, 81);
+        min-width: 15rem;
+        height: 15rem;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown-notif a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: all 1s;
+    }
+
+    .dropdown-notif a:hover {
+        background-color: rgb(31 41 55);
+    }
+    .closeButton{
+        transition: all 1s;
+    }
+    .closeButton:hover{
+        color: white;
+    }
+   .changeBG:hover .closeButton{
+        background-color: rgb(31,41,55);
+    }
+
+    @media (max-width:768px) {
+        .dropdown-notif {
+        position: absolute;
+        top: 4rem;
+        right: 1rem;
+        background-color: rgb(55, 65, 81);
+        min-width: 15rem;
+        height: 15rem;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+    }
+
+
+    /*Dropdown Menu CSS*/
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 1rem;
+  background-color: rgb(55, 65, 81);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: all 1s;
+}
+
+.dropdown-content a:hover {
+  background-color: rgb(31 41 55);
+}
+
+#dropdown-icon.dropdown-visible {
+  display: block;
+}
+
+.notifCounter{
+    position: absolute;
+    right: -0.7em;
+    top: -0.7em;
+    min-width: 1.6em; /* or width, explained below. */
+    height: 1.6em;
+    border-radius: 0.8em; /* or 50%, explained below. */
+    background-color: red;
+    font-size: 0.8em;
+    color: white;
+}
+
+    </style>
+    <section class="section mt-16 bg-gray-900 flex flex-col justify-center items-center w-[95vw]" id="contentSection">
+        <!-- Alert -->
+        <div class="bg-white border-l-[10px] border-red-500 text-rose-600 px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline " id="alertText">Something seriously bad happened.</span>
+            <span class="absolute top-0 bottom-0 right-0 px-2 py-3 closeBtn" onclick="closeAlert()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </span>
+            <div id="progress">
+                <div id="bar"></div>
+            </div>
+        </div>
+
+
+        {% block content %}
+        {% endblock %}
+
+    </section>
+    <!-- Sidebar end -->
+    <script type="text/javascript">
+
+    function dropdownProfile() {
+        let profileIcon = document.getElementById("dropdown-icon");
+        profileIcon.classList.toggle("dropdown-visible");
+    }
+
+    function dropdownNotif() {
+        let notifIcon = document.getElementById("dropdown-notifIcon");
+        notifIcon.classList.toggle("dropdown-visible");
+
+        if (notifCount == 0 && bydefault){
+            document.getElementById("notifCounter").style.display="none";
+            // console.log("triggered");
+            const notifContent = document.getElementById('dropdownNotif');
+            notifContent.insertAdjacentHTML("afterend",
+               `<div class=" flex flex-col justify-center items-center dropdown-notif hidden border-2 border-gray-600 rounded-lg shadow-xl" style="height: 5rem;" id="dropdown-notifIcon2">
+                            <br>
+                            <p style="margin-left: 1rem;">No notifications available...</p>
+                        </div>`);
+            document.getElementById('dropdown-notifIcon').style.display="none";
+            bydefault=false;
+
+            let notifIcon2 = document.getElementById("dropdown-notifIcon2");
+            notifIcon2.classList.toggle("dropdown-visible");
+        }
+        else{
+            let notifIcon2 = document.getElementById("dropdown-notifIcon2");
+            notifIcon2.classList.toggle("dropdown-visible");
+        }
+    }
+
+    let sidebar = document.querySelector(".sidebar");
+    let closeBtn = document.querySelector("#btn");
+    let homeBtn = document.getElementById("homeIcon");
+
+    closeBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        menuBtnChange();
+    });
+
+    function menuBtnChange() {
+        if (sidebar.classList.contains("open")) {
+            homeBtn.classList.remove("homeIcon");
+            // closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); 
+        } else {
+            homeBtn.classList.add("homeIcon");
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+        }
+    }
+
+
+
+
+// Notification delete
+function hideNotification(element) {
+    element.parentNode.style.display = "none";
+    notifCount -= 1;
+    document.getElementById("notifCounter").innerHTML= notifCount.toString();
+}
+
+let bydefault = true;
+let notifCount = {{ notifications_count }};
+
+function deleteNotification(element){
+
+    const notificationId = element.dataset.notificationid; // Get notification ID
+
+    $.ajax({
+        type: "POST",
+        url: "/deleteNotif/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', notification_id: notificationId },
+    });
+    
+   
+}
+
+// Alert Function
+
+function closeAlert() {
+        {
+
+            // Fetching elements
+            var al = document.getElementById('errorAlert');
+            al.style.display = "none";
+            var bar = document.getElementById('bar');
+            bar.style.width = "100%";
+            clearTimeout(window.closeAlertTimer);
+            closeAlertTimer = null;
+
+
+
+        }
+
+    }
+
+
+    function alertUser(text) {
+        var audio = new Audio("{% static 'res/audio/error.mp3' %}");
+        audio.play();
+        // Fetching objects
+        var al = document.getElementById('errorAlert');
+        var alText = document.getElementById('alertText');
+        var progress = document.getElementById('progress');
+        var bar = document.getElementById('bar');
+
+        // Declaring Vars
+        var prog = 100;
+
+        // Setting inner text
+        alText.innerHTML = text;
+        al.style.display = "block";
+
+
+
+        bar.style.width = "100%";
+
+        setTimeout(() => {
+            bar.style.width = "0%";
+        });
+
+        window.closeAlertTimer = setTimeout(() => {
+            closeAlert();
+        }, 5500);
+
+    }
+    </script>
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Other JS -->
+    <script type="text/javascript" src="{% static 'js/dashboard.js' %}"></script>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,447 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conversafe: Learn English Confidently & Safely</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Silkscreen&display=swap" rel="stylesheet">
+
+    <!-- Logo Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="loader" class="grid min-h-screen place-content-center bg-[#0C0908]">
+        <img src="{% static 'loader.svg' %}" class="lImage w-24 h-24" />
+    </div>
+    <!-- Navbar -->
+    <header class="backdrop-blur-lg text-white body-font fixed top-0 left-0 right-0 z-40 w-screen " id="navbar">
+        <div class="h-full backdrop-blur-lg container mx-auto  flex flex-wrap px-5 py-4 flex-row items-center z-40">
+
+            <!-- Logo at navbar -->
+            <a href="/" class="h-full flex title-font font-medium items-center text-white mb-4 md:mb-0">
+                <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
+                <span class="mx-3 text-xl logo h-full" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
+            </a>
+
+            <!-- Navbar content for larger screens -->
+            <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base hidden lg:block justify-center">
+                <a class="mr-3 ml-4 navLink text-center" href="#home">Home</a>
+                <a class="mr-3 ml-4 navLink text-center" href="#about">About</a>
+                <a class="mr-3 ml-4 navLink text-center" href="#contact">Contact</a>
+            </nav>
+
+            <a href="/login" class="coolButton shadow-2xl bg-[#4C51E0] w-16 h-full  mr-4 text-center rounded-md text-white px-2 py-2 hidden lg:flex">Login</a>
+            <a href="/signup" class="coolButton shadow-2xl bg-[#4C51E0] w-18 h-full text-center  rounded-md text-white px-2 py-2 hidden lg:flex">Sign Up</a>
+            <div class="hamburger w-16 h-full absolute top-[-0.7rem] md:right-0 right-[2rem] flex flex-col justify-center items-center lg:hidden z-42">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <path class="line" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                    <path class="line" d="M 20,50 H 80" />
+                    <path class="line" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar content for smaller screens -->
+    <nav class="backdrop-blur-lg w-screen h-screen flex flex-col justify-center items-center navBar lg:hidden">
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="#home">Home</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="#about">About</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="#contact">Contact</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="/login">Login</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="/signup">Signup</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero min-h-screen w-screen flex flex-row items-center justify-center lg:justify-end overflow-hidden relative" id="home">
+        <div id="particles-js"></div>
+
+
+        <div class="flex flex-col min-h-screen justify-center lg:justify-normal items-center lg:items-stretch px-20 py-44">
+            <h1 class="text-white text-center lg:text-left text-4xl lg:text-5xl m-3" style="z-index: 1;">Welcome to <b>Conversafe</b></h1>
+            <p class="text-gray-400 text-md lg:text-lg m-3 text-center lg:text-left lg:px-5" style="z-index: 1;">Learn speaking English by talking to others and even AI,<br> In a Safe and Secure way!</p>
+            <a class="coolButton shadow-2xl bg-[#4C51E0] w-36 rounded-lg text-white px-4 py-2 mx-8 my-6" href="/signup" style="z-index: 1;">
+                Get Started🔥
+            </a>
+        </div>
+
+        <!-- Overlay Image -->
+        <div class="hidden lg:block z-20 ">
+            <img src="{% static 'res/bg/overlay/heroOverlay.png' %}" class="absolute bottom-24 right-24 w-[60vw]" id="heroOverlay">
+        </div>
+
+        <!-- Links section -->
+        <div class="w-24 h-64 bg-[rgba(0,0,0,0.3)] rounded-lg ml-auto mr-8 flex flex-col justify-evenly items-center hidden lg:flex" style="z-index:2">
+            <a href="https://www.instagram.com/hatake_shibam/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 mr-4">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                </svg>
+            </a>
+            <a href="https://github.com/ShibamRoy9826" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 mr-4">
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/shibam-roy-509774257/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 mr-4">
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+                    <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Interesting facts -->
+
+    <section class="h-[90vh] lg:h-[70vh] flex items-center justify-center overflow-hidden relative" id="fact">
+        <div class="wavyCurve absolute top-0 left-0 secondCurve">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        <div class="flex flex-col items-center">
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-8 px-4" data-aos="fade-in"><b>Did you know?</b></h1>
+            <ul class="text-[#C8C8C8] px-16 list-disk" data-aos="slide-left" data-aos-duration="1500">
+                <li class="factItem" data-aos="fade-in">The longest word you can make using only four letters is “senseless.”</li>
+                <li class="factItem" data-aos="fade-in"> English is not the official language of the United States.</li>
+                <li class="factItem" data-aos="fade-in">“The quick brown fox jumps over the lazy dog” uses all 26 letters of the English alphabet.</li>
+                <li class="factItem" data-aos="fade-in">Supercalifragilisticexpialidocious (*breath*) is NOT the longest word in English.</li>
+                <li class="factItem" data-aos="fade-in"> If you wrote out all the numbers (i.e. one, two, three…), you would not use the letter “b” until the word “billion.</li>
+            </ul>
+    </section>
+    
+    <!-- Features -->
+    <section class="min-h-screen  flex items-center justify-center relative" id="about">
+        <div class="wavyCurve absolute top-[-8px] left-0">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        <div class="flex flex-col items-center">
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-8 pb-4 lg:pt-24 lg:pb-14" data-aos="fade-in"><b>What does this app allow?</b></h1>
+            <p class="text-[#C8C8C8] text-center px-8 lg:px-48" data-aos="fade-in">This app allows you to learn English by talking with others and even with AI , in a safe and secure manner, so you dont need to worry about your privacy and safety, this app takes care of them for you:)</p>
+            <div class="flex flex-row justify-center items-center pt-16 pb-8">
+                <div class="text-white text-xl flex flex-col justify-center items-center px-8 lg:px-16" data-aos="fade-up">
+                    <svg fill="#ffffff" height="50px" width="50px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 98.192 98.192" xml:space="preserve" stroke="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <path d="M95.799,87.061c-1.96-1.857-3.291-4.046-3.963-6.514c1.101-2.402,1.658-4.952,1.658-7.593V57.771 c0-6.521-3.432-12.239-8.572-15.493v-9.857c0-14.083-11.457-25.54-25.54-25.54H31.524c-14.083,0-25.539,11.457-25.539,25.54v21.849 c0,3.778,0.819,7.423,2.436,10.846c-0.979,3.837-3.005,7.229-6.028,10.092L0,77.475l3.114,1.076c2.032,0.703,4.191,1.06,6.417,1.06 c3.412,0,6.997-0.823,10.667-2.448c3.505,1.734,7.4,2.646,11.327,2.646h7.265c2.722,6.729,9.297,11.502,16.993,11.502h19.355 c2.727,0,5.432-0.612,7.884-1.777c2.54,1.089,5.025,1.641,7.402,1.641c1.613,0,3.18-0.259,4.654-0.769l3.114-1.077L95.799,87.061z M21.209,73.179l-0.897-0.49l-0.923,0.44c-4.185,1.996-8.173,2.8-11.817,2.362c2.433-3.004,4.081-6.416,4.913-10.181l0.154-0.698 l-0.323-0.638c-1.546-3.05-2.331-6.314-2.331-9.706V32.421c0-11.877,9.663-21.54,21.539-21.54h27.858 c11.877,0,21.54,9.663,21.54,21.54v21.848c0,11.876-9.663,21.538-21.54,21.538H31.524C27.924,75.806,24.357,74.898,21.209,73.179z M90.423,87.172c-2.06,0-4.277-0.561-6.592-1.664l-0.923-0.44l-0.897,0.49c-2.098,1.146-4.475,1.751-6.874,1.751H55.782 c-5.433,0-10.159-3.039-12.594-7.502h16.194c14.083,0,25.54-11.456,25.54-25.538V47.29c2.809,2.62,4.572,6.345,4.572,10.48v15.183 c0,2.258-0.523,4.433-1.555,6.466l-0.324,0.638l0.154,0.699c0.516,2.335,1.468,4.481,2.841,6.413 C90.548,87.17,90.486,87.172,90.423,87.172z"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <h1 class="text-center"> <b>Allows to Chat with others</b></h1>
+                </div>
+                <div class="text-white text-xl flex flex-col justify-center items-center" data-aos="fade-up">
+                    <svg height="50px" width="50px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ffffff" stroke="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <style type="text/css">
+                            .st0 {
+                                fill: #ffffff;
+                            }
+                            </style>
+                            <g>
+                                <path class="st0" d="M510.831,167.648c-2.954-20.666-2.954-35.432-14.767-26.572c-11.81,8.86-84.65,27.247-162.402,35.433 c-36.479,3.844-61.048,14.564-77.663,27.262c-16.616-12.697-41.18-23.418-77.663-27.262 c-77.752-8.186-150.594-26.573-162.403-35.433C4.12,132.216,4.12,146.982,1.17,167.648c-5.43,38.006,5.902,144.691,79.724,183.076 c77.892,40.502,132.874,17.712,159.45,2.954c5.852-3.256,11.003-6.581,15.654-9.891c4.651,3.31,9.801,6.635,15.654,9.891 c26.577,14.758,81.562,37.548,159.454-2.954C504.924,312.339,516.257,205.654,510.831,167.648z M159.24,306.471 c-33.266-2.566-66.535-35.836-66.535-63.981c0,0,51.184,2.557,74.213,5.116c23.03,2.558,40.948,20.472,40.948,30.711 C207.865,288.549,192.509,309.021,159.24,306.471z M352.757,306.471c-33.266,2.55-48.622-17.922-48.622-28.154 c0-10.239,17.914-28.154,40.944-30.711c23.03-2.558,74.213-5.116,74.213-5.116C419.292,270.635,386.027,303.905,352.757,306.471z"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <h1 class="text-center"><b>Gives you complete privacy</b></h1>
+                </div>
+            </div>
+            <div class="flex flex-row justify-center items-center pt-8 pb-16" data-aos="fade-up">
+                <div class="text-white text-xl flex flex-col justify-center items-center px-8 lg:px-16">
+                    <svg viewBox="0 0 24 24" height="50px" width="50px" xmlns="http://www.w3.org/2000/svg" id="secure" class="icon glyph" fill="#ffffff" stroke="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path d="M19.42,3.83,12.24,2h0A.67.67,0,0,0,12,2a.67.67,0,0,0-.2,0h0L4.58,3.83A2,2,0,0,0,3.07,5.92l.42,5.51a12,12,0,0,0,7.24,10.11l.88.38h0a.91.91,0,0,0,.7,0h0l.88-.38a12,12,0,0,0,7.24-10.11l.42-5.51A2,2,0,0,0,19.42,3.83ZM15.71,9.71l-4,4a1,1,0,0,1-1.42,0l-2-2a1,1,0,0,1,1.42-1.42L11,11.59l3.29-3.3a1,1,0,0,1,1.42,1.42Z" style="fill:#ffffff"></path>
+                        </g>
+                    </svg>
+                    <h1 class="text-center"><b>Provides a Safe environment</b></h1>
+                </div>
+                <div class="text-white text-xl flex flex-col justify-center items-center" data-aos="fade-up">
+                    <svg width="50px" height="50px" viewBox="0 0 48 48" id="a" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff" stroke-width="1.44">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <defs>
+                                <style>.b{fill:#ffffff;}.c{fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;}</style>
+                            </defs>
+                            <line class="c" x1="14.25" y1="23.6948" x2="14.25" y2="18.2679"></line>
+                            <line class="c" x1="11.5366" y1="20.9814" x2="16.9634" y2="20.9814"></line>
+                            <path class="c" d="m17.1869,13.6919v-1.6128c0-.581-.471-1.052-1.052-1.052h-3.7698c-.581,0-1.052.471-1.052,1.052v1.7708"></path>
+                            <path class="c" d="m29.0435,27.7355l4.5534,6.83c1.485,2.2276,4.377,3.0323,6.7991,1.8919,2.2669-1.0672,3.5041-3.5476,2.9874-5.9993-.9842-4.6705-1.7692-9.0259-2.5726-11.9826-.8457-3.1124-3.8836-5.2804-7.2842-5.2804-2.0521,0-3.9114.8108-5.2876,2.1236h-8.4779c-1.3763-1.3128-3.2355-2.1236-5.2876-2.1236-3.4006,0-6.4386,2.1681-7.2842,5.2804-.8034,2.9567-1.5884,7.3122-2.5726,11.9826-.5167,2.4517.7205,4.9321,2.9874,5.9993,2.4221,1.1404,5.3141.3357,6.7991-1.8919l4.5534-6.83h10.087Z"></path>
+                            <path class="c" d="m30.8131,13.6919v-1.6128c0-.581.471-1.052,1.052-1.052h3.7698c.581,0,1.052.471,1.052,1.052v1.7708"></path>
+                            <circle class="b" cx="31.03" cy="20.9814" r=".75"></circle>
+                            <circle class="b" cx="36.4634" cy="20.9814" r=".75"></circle>
+                            <circle class="b" cx="33.75" cy="18.2679" r=".75"></circle>
+                            <circle class="b" cx="33.75" cy="23.6948" r=".785"></circle>
+                        </g>
+                    </svg>
+                    <h1 class="text-center"><b>Allows to learn with Games & AI</b></h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact us section -->
+    <section class="min-h-screen  flex items-center justify-center" id="contact">
+        <div class="flex flex-col items-center">
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-8 pb-4 lg:pt-24 lg:pb-14" data-aos="fade-in"><b>Facing any problems?</b></h1>
+            <p class="text-[#C8C8C8] text-center px-8 lg:px-48" data-aos="fade-in">Feel free to share your feedback with me, incase you face any difficulties let me know:)</p>
+            <form action="https://formspree.io/f/xwkyjjnz" method="POST" class="flex flex-col items-center bg-gray-900 mb-8 mt-16 w-[80%] lg:w-[60%] border-2 border-gray-700 rounded-lg" data-aos="flip-up">
+                <div class="flex flex-col lg:flex-row justify-ends bg-red w-[80%]">
+                    <div class="flex flex-row justify-evenly lg:py-4 lg:pr-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Name</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Name" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" required>
+                        </div>
+                    </div>
+                    <div class="flex flex-row justify-evenly p-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Email</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Email" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:text-gray-900 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out lg:w-[16rem]" required>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                    <b>Your Message</b>
+                </h1>
+                <textarea id="message" placeholder="Your Message" name="message" class="w-[80%] bg-gray-800  focus:text-gray-900 rounded border border-gray-700 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out h-32" required></textarea>
+                <input type="submit" class="coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6">
+                </a>
+            </form>
+        </div>
+    </section>
+    <!-- Other information -->
+    <section class="min-h-screen  flex items-center justify-center" id="info">
+        <div class="flex flex-col items-center">
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-8 pb-4 lg:pt-24 lg:pb-14" data-aos="fade-in"><b>Contact anytime you want:)</b></h1>
+            <p class="text-[#C8C8C8] text-center px-8 lg:px-48" data-aos="fade-in">I would love to get in touch with you, feel free to contact me</p>
+            <div class="h-24  mt-8 w-[90vw] lg:w-[70vw] bg-gray-900 flex flex-row justify-center items-center rounded-xl border-2 border-gray-700 overflow-scroll infoScroll" data-aos="flip-left">
+                <svg class="pl-4 ml-4 min-h-10 min-w-10 max-h-10 max-w-10" fill="#ffffff" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M1920 428.266v1189.54l-464.16-580.146-88.203 70.585 468.679 585.904H83.684l468.679-585.904-88.202-70.585L0 1617.805V428.265l959.944 832.441L1920 428.266ZM1919.932 226v52.627l-959.943 832.44L.045 278.628V226h1919.887Z" fill-rule="evenodd"></path>
+                    </g>
+                </svg>
+                <h1 class="p-4 text-white text-xl flex flex-row w-auto "><b> royshibam9826@gmail.com</b></h1>
+            </div>
+            <div class="h-24 mt-8 w-[90vw] lg:w-[70vw] bg-gray-900 flex flex-row justify-center items-center rounded-xl border-2 border-gray-700 overflow-scroll infoScroll" data-aos="flip-right">
+                <svg class="pl-4 ml-16 min-h-10 min-w-10 max-h-10 max-w-10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <defs>
+                            <style>.cls-1{fill:none;stroke:#ffffff;stroke-miterlimit:10;stroke-width:1.92px;}</style>
+                        </defs>
+                        <g id="roll_brush" data-name="roll brush">
+                            <rect class="cls-1" x="1.46" y="1.5" width="21.1" height="21.1"></rect>
+                            <polygon class="cls-1" points="22.56 7.25 16.28 7.25 14.37 7.25 1.46 7.25 1.46 1.5 22.56 1.5 22.56 7.25"></polygon>
+                            <line class="cls-1" x1="4.34" y1="4.38" x2="6.25" y2="4.38"></line>
+                            <line class="cls-1" x1="8.17" y1="4.38" x2="10.09" y2="4.38"></line>
+                            <line class="cls-1" x1="12.01" y1="4.38" x2="13.93" y2="4.38"></line>
+                        </g>
+                    </g>
+                </svg>
+                <a href="https://shibamroy9826.github.io/" class="p-4 text-white text-xl flex flex-row w-auto "><b>https://shibamroy9826.github.io/</b></a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer  -->
+    <footer class="text-gray-400 bg-gray-900 body-font">
+        <div class="container px-5 py-8 mx-auto flex md:items-center lg:items-start md:flex-nowrap flex-wrap flex-row">
+            <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+                <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
+                    <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
+                    <span class="ml-3 text-xl" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
+                </a>
+                <p class="mt-2 text-sm text-gray-500">Learn English Confidently & Safely</p>
+            </div>
+            <div class="flex-grow flex flex-wrap md:pl-20 -mb-2 md:mt-0 mt-2 md:text-left text-center">
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://github.com/ShibamRoy9826">Github</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://www.instagram.com/hatake_shibam/">Instagram</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://www.linkedin.com/in/shibam-roy-509774257/">LinkedIn</a>
+                        </li>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-800 bg-opacity-75">
+            <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+                <p class="text-gray-400 text-sm text-center sm:text-left">© 2023 Conversafe —
+                    <a href="https://github.com/ShibamRoy9826" rel="noopener noreferrer" class="text-gray-500 ml-1" target="_blank">@royshibam9826</a>
+                </p>
+                <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
+                    <a class="ml-3 text-gray-400" href="https://www.instagram.com/hatake_shibam">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400" href="https://www.instagram.com/hatake_shibam">
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400" href="https://www.linkedin.com/in/shibam-roy-509774257/">
+                        <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+                            <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+                            <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                        </svg>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <!-- Js -->
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+
+    <!-- Animations AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- More Js -->
+    <script src="{% static 'js/particles.js' %}"></script>
+    <script>
+
+    AOS.init();
+    AOS.init({
+
+        offset: 100, // offset (in px) from the original trigger point
+        duration: 800
+
+    });
+
+    // Particles Js
+        particlesJS.load('particles-js', "{% static 'src/particles.json' %}", function() {
+      console.log('callback - particles.js config loaded');
+    });
+
+    let heroOverlay = document.getElementById("heroOverlay");
+
+
+    window.addEventListener("scroll", () => {
+        let value = window.scrollY;
+
+        heroOverlay.style.right = value * -1.2 + "px";
+
+
+        if (heroOverlay.style.right == "0px") {
+            heroOverlay.style.right = 6 + "rem";
+        }
+
+    });
+
+    var page = window.location.pathname;
+    if (page != "/signup/" && page != "/login/") {
+
+
+        var navbar = document.querySelector('#navbar');
+        var logo = document.querySelector('.logo');
+        var navlinks = document.querySelectorAll('.navLink');
+        var hamburgerLines = document.querySelectorAll('.line');
+
+        window.onscroll = function() {
+
+            if (window.pageYOffset > 50) {
+
+                navbar.classList.add('scrolled');
+                logo.classList.add('scrolled');
+
+                navlinks.forEach((element) => {
+
+                    element.classList.add('scrolled');
+                });
+
+                hamburgerLines.forEach((element) => {
+                    element.classList.add('scrolled');
+
+                });
+                
+
+            }
+            if (window.pageYOffset>400){
+                document.getElementById("particles-js").classList.add('scrolled');
+            } else {
+
+                navbar.classList.remove('scrolled');
+                logo.classList.remove('scrolled');
+                document.getElementById("particles-js").classList.remove('scrolled');
+                navlinks.forEach((element) => {
+                    element.classList.remove('scrolled');
+                });
+
+                hamburgerLines.forEach((element) => {
+                    element.classList.remove('scrolled');
+                });
+            }
+        }
+
+    } else {
+        var hamburgerLines = document.querySelectorAll('.line')
+
+        hamburgerLines.forEach((element) => {
+            element.classList.add('scrolled');
+
+        });
+    }
+    </script>
+<style type="text/css">
+#particles-js canvas {
+    display: block;
+    vertical-align: bottom;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    -webkit-transition: opacity .8s ease, -webkit-transform 1.4s ease;
+    transition: opacity .8s ease, transform 1.4s ease
+} 
+
+#particles-js {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0
+}
+#particles-js.scrolled{
+    z-index: -10;
+}
+</style>
+</body>
+
+</html>

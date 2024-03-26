@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Conversafe - Feedback {% endblock %}
+
+
+
+
+{% block content %}
+<style type="text/css">
+    .feedbackWrapper{
+        top:1vh;
+    }
+
+    @media(max-width:768px){
+    .feedbackWrapper{
+        top: -4vh;
+    }
+}
+
+</style>
+<div class="flex flex-col items-center absolute feedbackWrapper">
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-8 lg:pt-0 pb-4 lg:pb-4" data-aos="fade-in"><b>Feedback❤️</b></h1>
+            <p class="text-[#C8C8C8] text-center px-8 lg:px-48" data-aos="fade-in">Please provide any suggestions incase you have, <br> and tell me if you enjoyed it!</p>
+
+            <form action="https://formspree.io/f/xwkyjjnz" method="POST" class="flex flex-col items-center bg-gray-900 mb-8 lg:mt-4 mt-8 lg:mt-16 w-[100%] lg:w-[80%] border-2 border-gray-700 rounded-lg" data-aos="flip-up">
+                <div class="flex flex-col lg:flex-row justify-ends bg-red w-[80%]">
+
+                    <div class="flex flex-row justify-evenly lg:py-4 lg:pr-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Name</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Name" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-[40vw] w-full lg:w-auto " required>
+                        </div>
+                    </div>
+                    <div class="flex flex-row justify-evenly p-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Email</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Email" class="bg-gray-800 rounded-md border border-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:text-gray-900 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 resize-none leading-6 transition-colors duration-200 ease-in-out lg:w-[16rem] w-full px-3 " value="{{request.user.email}}" disabled >
+                        </div>
+                    </div>
+                </div>
+                <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                    <b>Your Message</b>
+                </h1>
+                <textarea id="message" placeholder="Your Message" name="message" class="w-[80%] bg-gray-800  focus:text-gray-900 rounded border border-gray-700 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out h-32" required></textarea>
+                <input type="submit" class="coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6">
+                </a>
+            </form>
+        </div>
+
+{% endblock %}
+
+
+   

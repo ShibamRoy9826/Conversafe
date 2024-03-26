@@ -1,0 +1,492 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Chat Room {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Tabs.js -->
+<script src="{% static 'js/tab.js' %}" defer></script>
+<style type="text/css">
+.section {
+    justify-content: start;
+}
+
+.leaveButton {
+    transition: all 1s;
+    float: right;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    height: auto;
+    background-color: #D0312D;
+
+}
+
+.leaveButton:hover {
+    background-color: #900603;
+}
+
+.selfMessage {
+    border-radius: 0.75rem 0.2rem 0.75rem 0.75rem;
+}
+
+.selfMessage p {
+    text-align: right;
+}
+
+.otherMessage {
+    border-radius: 0.2rem 0.75rem 0.75rem 0.75rem;
+}
+
+.otherMessage p {
+    text-align: left;
+}
+
+.joinedLeft {
+    height: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+
+}
+
+[data-tab-content]{
+    height: 0;
+    visibility: hidden;
+}
+.active[data-tab-content]{
+    visibility: visible;
+}
+
+
+ul{
+    list-style-type: none;
+}
+
+[data-tab-target]{
+    transition: font-size 0.4s;
+    border-radius: 0.75rem 0.75rem 0 0;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    line-height: 2rem;
+    color: rgb(220,220,220);
+
+
+}
+
+.active[data-tab-target]{
+/*    background-color: white;*/
+/*    color: black;*/
+    border-top: 2px solid rgb(55,65,81);
+    border-left: 2px solid rgb(55,65,81);
+    border-right: 2px solid rgb(55,65,81);
+    border-bottom: 2px solid rgb(17,24,39);
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: white;
+    box-shadow: inset 4px 2px -2px rgba(0,0,0,0);
+}
+
+
+.tabContent{
+
+    border-top: 2px solid rgb(55,65,81);
+
+}
+
+
+#muteButton.active{
+    background-color: #D0312D;
+}
+#noAudioButton.active{
+    background-color: #D0312D;
+}
+@media (max-width:500px) {
+    .joinedLeft {
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
+
+}
+
+
+</style>
+<div class="p-10 lg:p-20 text-center mt-2">
+    <h2 class="text-white text-3xl lg:text-6xl">{{ rooms.name }}</h2>
+</div>
+<div class="flex flex-row justify-center items-center overflow-x-scroll " style="width:80vw;">
+    <div class="flex flex-row justify-center items-center overflow-x-scroll" style="width:80vw;">
+        <button class="tabOption active text-2xl lg:text-3xl text-white p-4 font-bold flex flex-row items-center" data-tab-target="#audio"> Audio <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+            </svg>
+        </button>
+        <button class="tabOption text-2xl lg:text-3xl text-white p-4 font-bold flex flex-row items-center" data-tab-target="#chat"> Chat
+            <svg xmlns="http://www.w3.org/2000/svg" fi1ll="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 " style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.08Z" />
+            </svg>
+        </button>
+        <button type="button" class="leaveButton shadow-2xl w-32 text-center rounded-md text-white px-2  py-3 flex" id="leaveButton"> Leave <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
+            </svg>
+        </button>
+    </div>
+</div>
+<div class="tabContent flex flex-col justify-center items-center" style="width: 100%;height: 100%; ">
+    <div id="audio" class="active" data-tab-content style="width: 80%">
+        <div>
+            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+                <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
+                <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
+                <div class="flex flex-row justify-center items-center">
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="mute()" id="muteButton">
+                        <i class='bx bx-microphone text-xl' id="muteButtonIcon" style="color: white;"></i>
+                    </button>
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="noAudio()" id="noAudioButton">
+                        <i class='bx bx-volume-full text-xl' id="noAudioButtonIcon" style="color: white;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- {% if room.users > 1 %}
+
+        {% if room.user1.username == user.username  and room.user2.username == None %}
+        {% elif room.user2.username == user.username  and room.user1.username == None %}
+        {% else %}
+        <div>
+            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+                {% if room.user1.username != user.username %}
+                <img src="{{ room.user1.userprofile.avatar.url }}" class="rounded-full" style="width:5rem;height: 5rem;">
+                <h1 class="text-2xl text-white text-center font-bold">if {{ room.user1.userprofile.display_name }}</h1>
+
+                {% else %}
+                <img src="{{room.user2.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
+                <h1 class="text-2xl text-white text-center font-bold">else {{ room.user2.userprofile.display_name }}</h1>
+                
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}   -->  
+
+       <!--  {% if room.users > 1 %}
+        <div>
+            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+                <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
+                <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
+                <div class="flex flex-row justify-center items-center">
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="mute()" id="muteButton">
+                        <i class='bx bx-microphone text-xl' id="muteButtonIcon" style="color: white;"></i>
+                    </button>
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="noAudio()" id="noAudioButton">
+                        <i class='bx bx-volume-full text-xl' id="noAudioButtonIcon" style="color: white;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {% endif %} -->
+
+
+
+    </div>
+
+<div id="chat" data-tab-content class="justify-center items-center" style="width: 80%;height: 100%;">
+<div class="my-4 flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700  shadow-xl "  style="width: 100%;height: 100%;">
+    <div id="chatContainer" class="overflow-y-scroll pb-4" style="height: 60vh; width: 100%;">
+        {% for message in messages %}
+        {% if message.messageType == 'NORMAL' %}
+        {% if message.user.userprofile.display_name == user.userprofile.display_name %}
+        <div class="flex flex-row justify-end">
+            <div class='bg-gray-600 text-white selfMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 bg-gray-200 selfMessage'>
+                    <p class='font-bold text-xl text-right w-auto'> {{ message.user.userprofile.display_name }} </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex flex-row justify-start">
+            <div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 bg-gray-200 otherMessage'>
+                    <p class='font-bold text-xl w-auto'> {{ message.user.userprofile.display_name }} </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% elif message.messageType == 'JOINED' %}
+        <div class="flex flex-row justify-center rounded-xl joinedLeft">
+            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-gray-600 rounded-xl">
+                    <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Joined The Conversation</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex flex-row justify-center rounded-xl joinedLeft">
+            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-gray-600 rounded-xl">
+                    <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Left The Conversation</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="mt-6 mx-4 p-4 bg-gray-600 rounded-xl w-[100%] ">
+    <form method="POST" action="." class="flex" style="height: 3rem;" onkeydown="return event.key != 'Enter';">
+        {% csrf_token %}
+        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
+        <button type="button" class="coolButton shadow-2xl bg-[#4C51E0] w-32  mx-3 text-center rounded-md text-white px-2 py-3 flex" id="messageSubmit"> Send <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" w-6 h-6" style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+            </svg>
+        </button>
+    </form>
+</div>
+</div>
+</div>
+
+
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username"}}
+<script type="text/javascript">
+const roomName = "{{ room.slug }}";
+const displayName = "{{ user.userprofile.display_name }}";
+const userName = "{{ user.username }}";
+
+const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/' + roomName + '/');
+
+const scrollableElement = document.getElementById("chatContainer");
+
+const scrollToBottom = () => {
+    setTimeout(() => {
+        scrollableElement.scrollTop = scrollableElement.scrollHeight;
+    }, 0);
+};
+
+function makeCode(display_name,pfp){
+    let html="<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='"+pfp+"' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>"+display_name+"</h1></div></div>";
+
+    return html
+
+}
+window.onload = function(e) {
+    if ({{ room.users }} > 2) {
+
+        alert("ChatRoom is already full!");
+        window.location.href = "/home/";
+
+
+    }
+};
+
+if ({{ room.users }} > 2) {
+    alert("ChatRoom is already full!");
+    window.location.href = "/home/";
+
+}
+
+
+// DOM NODE INSERTED CAN CAUSE ISSUES, IF IT DOES REMOVE IT AND USE MUTATION OBSERVERS ERROR IS POSSIBLE
+scrollableElement.addEventListener("DOMNodeInserted", scrollToBottom);
+window.addEventListener("load", scrollToBottom);
+
+document.getElementById("leaveButton").addEventListener('click', () => {
+
+    window.location.href = '/home/';
+});
+
+
+chatSocket.onopen = function() {
+
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': "",
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "JOINED"
+        // 'email': "{{ user.email }}"
+    }));
+}
+
+chatSocket.onmessage = function(e) {
+
+
+
+    const data = JSON.parse(e.data);
+
+    if (data.messageType == "NORMAL") {
+        if (userName == data.username) {
+            var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
+            audio.volume = 0.3;
+            audio.play();
+            let html = "<div class='flex flex-row justify-end'><div class='bg-gray-600 text-white selfMessage mx-8 my-4 space-y-3  text-right w-auto max-w-[95%] lg:max-w-[45%] '><div class='p-4 bg-gray-200 selfMessage' style='text-align:right;' ><p class='font-bold text-xl w-auto'> " + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
+
+            document.querySelector("#chatContainer").innerHTML += html;
+        } else {
+            var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
+            audio.volume = 0.3;
+            audio.play();
+
+            let html = "<div class='flex flex-row justify-start'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>" + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
+            container = document.querySelector("#chatContainer");
+            container.innerHTML += html;
+
+            // window.setInterval(function() {
+            //     var elem = document.getElementById('chatContainer');
+            //     elem.scrollTop = elem.scrollHeight;
+            // }, 10000);
+        }
+    } else if (data.messageType == "JOINED") {
+        // var audio = new Audio("{% static 'res/audio/userJoined.mp3' %}");
+        // // audio.volume = 0.3;
+        // audio.play();
+
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
+
+        user1= data.user1Username
+        user2= data.user2Username
+        user1Display=data.user1Display
+        user2Display=data.user2Display
+        user1Pfp=data.user1Pfp
+        user2Pfp=data.user2Pfp
+
+        currentUser=userName
+        userCount=data.userCount
+
+        audioContainer=document.getElementById("audio")
+
+        if(userCount>1){  //Total users=2
+            if(currentUser==user1){
+                // Do stuff with user2 as this is the otherUser
+                otherUser=makeCode(user2Display,user2Pfp);
+
+                audioContainer.innerHTML+=otherUser
+
+            }
+            else{
+                //then user2 has to be the current user and user1 is the current user
+                otherUser=makeCode(user1Display,user1Pfp);
+                audioContainer.innerHTML+=otherUser
+
+            }
+        }
+
+        // console.log(data.user1Display);
+        // console.log(data.user2Display);
+        // console.log("These are the usernames, user1 , user2  ");
+
+        document.querySelector("#chatContainer").innerHTML += html;
+
+
+    } else {
+        // var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");
+        // // audio.volume = 0.3;
+        // audio.play();
+
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Left The Conversation</p></div></div></div>";
+        container = document.querySelector("#chatContainer");
+
+        let html2 = "<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='{{user.userprofile.avatar.url}}' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>{{ user.userprofile.display_name }}</h1><div class='flex flex-row justify-center items-center'><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='mute()' id='muteButton'><i class='bx bx-microphone text-xl' id='muteButtonIcon' style='color: white;'></i></button><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='noAudio()' id='noAudioButton'><i class='bx bx-volume-full text-xl' id='noAudioButtonIcon' style='color: white;'></i></button></div></div></div>";
+
+        document.querySelector("#audio").innerHTML=html2;
+        container.innerHTML += html;
+    }
+}
+
+
+
+
+chatSocket.onclose = function(e) {
+    // Do nothing...
+}
+
+
+// Before closing
+window.addEventListener("beforeunload", function(event) {
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': "",
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "LEFT"
+        // 'email': "{{ user.email }}"
+    }));
+});
+
+
+document.querySelector('#messageSubmit').onclick = function(e) {
+
+    e.preventDefault();
+    const messageInp = document.querySelector("#messageInput");
+    const message = messageInp.value;
+
+    chatSocket.send(JSON.stringify({
+        'message': message,
+        'username': userName,
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "NORMAL"
+        // 'email': ""
+    }));
+
+    messageInp.value = "";
+    return false;
+
+}
+const inputField = document.getElementById("messageInput");
+
+inputField.addEventListener("keydown", function(e) {
+    if (event.keyCode === 13) {
+        e.preventDefault();
+        const messageInp = document.querySelector("#messageInput");
+        const message = messageInp.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'displayName': displayName,
+            'room': roomName,
+            'messageType': "NORMAL",
+            // 'email': ""
+        }));
+
+        messageInp.value = "";
+        return false;
+    }
+});
+
+
+
+
+function mute(){
+    let muteBtn=document.getElementById("muteButton");
+    muteBtn.classList.toggle("active");
+
+    let muteBtnIcon=document.getElementById('muteButtonIcon')
+
+    if(muteBtnIcon.classList.contains("bx-microphone")){
+        muteBtnIcon.classList.remove("bx-microphone");
+        muteBtnIcon.classList.add("bx-microphone-off")
+    }else{
+        muteBtnIcon.classList.remove("bx-microphone-off");
+        muteBtnIcon.classList.add("bx-microphone")
+    }
+}
+
+
+function noAudio(){
+    let muteBtn=document.getElementById("noAudioButton");
+    muteBtn.classList.toggle("active");
+
+    let muteBtnIcon=document.getElementById('noAudioButtonIcon')
+
+    if(muteBtnIcon.classList.contains("bx-volume-full")){
+        muteBtnIcon.classList.remove("bx-volume-full");
+        muteBtnIcon.classList.add("bx-volume-mute")
+    }else{
+        muteBtnIcon.classList.remove("bx-volume-mute");
+        muteBtnIcon.classList.add("bx-volume-full")
+    }
+}
+</script>
+<!-- Materialize JS -->
+{% endblock %}

@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conversafe - {% block title %}{% endblock %}</title>
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- Font Files -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Silkscreen&display=swap" rel="stylesheet">
+
+    <!-- Logo icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="loader" class="grid min-h-screen place-content-center bg-[#0C0908]">
+        <img src="{% static 'loader.svg' %}" class="lImage w-24 h-24" />
+    </div>
+    <!-- Navbar -->
+    <header class="backdrop-blur-lg bg-white text-white body-font fixed top-0 left-0 right-0 z-40 " id="navbar">
+        <div class="h-full backdrop-blur-lg container mx-auto  flex flex-wrap px-5 py-4 flex-row items-center z-40">
+
+            <!-- Logo at navbar -->
+            <a href="/" class="h-full flex title-font font-medium items-center text-white mb-4 md:mb-0">
+                <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
+                <span class="ml-3 mr-3 text-xl logo h-full scrolled" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
+            </a>
+            <!-- Navbar content for larger screens -->
+            <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base hidden lg:block justify-center">
+                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#home">Home</a>
+                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#about">About</a>
+                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#contact">Contact</a>
+            </nav>
+            <div class="hamburger w-16 h-full absolute top-[-0.7rem] md:right-0 right-[2rem] flex flex-col justify-center items-center lg:hidden z-42">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <path class="line scrolled" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                    <path class="line scrolled" d="M 20,50 H 80" />
+                    <path class="line scrolled" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar content for smaller screens -->
+    <nav class="backdrop-blur-lg w-screen h-screen flex flex-col justify-center items-center navBar lg:hidden">
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#home">Home</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#about">About</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#contact">Contact</a>
+    </nav>
+    <section class="min-h-screen flex flex-row items-center justify-center" id="form">
+        <!-- Alert -->
+        <div class="bg-white border-l-[10px] border-red-500 text-rose-600 px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline " id="alertText">Something seriously bad happened.</span>
+            <span class="absolute top-0 bottom-0 right-0 px-2 py-3 closeBtn" onclick="closeAlert()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </span>
+            <div id="progress">
+                <div id="bar"></div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        {% block content %}
+        {% endblock %}
+
+
+    </section>
+
+
+    <!-- Footer  -->
+    <footer class="text-gray-400 bg-gray-900 body-font">
+        <div class="container px-5 py-8 mx-auto flex md:items-center lg:items-start md:flex-nowrap flex-wrap flex-row">
+            <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+                <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
+                    <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
+                    <span class="ml-3 text-xl" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
+                </a>
+                <p class="mt-2 text-sm text-gray-500">Learn English Confidently & Safely</p>
+            </div>
+            <div class="flex-grow flex flex-wrap md:pl-20 -mb-2 md:mt-0 mt-2 md:text-left text-center">
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://github.com/ShibamRoy9826">Github</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://www.instagram.com/hatake_shibam/">Instagram</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white" href="https://www.linkedin.com/in/shibam-roy-509774257/">LinkedIn</a>
+                        </li>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-800 bg-opacity-75">
+            <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+                <p class="text-gray-400 text-sm text-center sm:text-left">© 2023 Conversafe —
+                    <a href="https://github.com/ShibamRoy9826" rel="noopener noreferrer" class="text-gray-500 ml-1" target="_blank">@royshibam9826</a>
+                </p>
+                <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
+                    <a class="ml-3 text-gray-400" href="https://www.instagram.com/hatake_shibam">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400" href="https://www.instagram.com/hatake_shibam">
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400" href="https://www.linkedin.com/in/shibam-roy-509774257/">
+                        <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+                            <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+                            <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                        </svg>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <!-- Js -->
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+
+    <!-- Animations AOS-->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- More Js -->
+    <script>
+    AOS.init();
+    AOS.init({
+
+        offset: 100, 
+        duration: 800
+
+    });
+
+    function IsEmail(email) {
+        var re = /\S+@\S+\.\S+/;
+        return re.test(email);
+    }
+
+    function hasNumbers(inp) {
+        var re = /[0-9]/;
+        return re.test(inp);
+    }
+
+    function hasSymbols(inp) {
+        var re = /[@_!#$%^&*()<>?/|}{~:]/;
+        return re.test(inp);
+    }
+
+    function closeAlert() {
+        {
+
+            // Fetching elements
+            var al = document.getElementById('errorAlert');
+            al.style.display = "none";
+            var bar = document.getElementById('bar');
+            bar.style.width = "100%";
+            clearTimeout(window.closeAlertTimer);
+            closeAlertTimer = null;
+
+
+
+        }
+
+    }
+
+
+    function alertUser(text) {
+        var audio = new Audio("{% static 'res/audio/error.mp3' %}");
+        audio.play();
+        // Fetching objects
+        var al = document.getElementById('errorAlert');
+        var alText = document.getElementById('alertText');
+        var progress = document.getElementById('progress');
+        var bar = document.getElementById('bar');
+
+        // Declaring Vars
+        var prog = 100;
+
+        // Setting inner text
+        alText.innerHTML = text;
+        al.style.display = "block";
+
+
+
+        bar.style.width = "100%";
+
+        setTimeout(() => {
+            bar.style.width = "0%";
+        });
+
+        window.closeAlertTimer = setTimeout(() => {
+            closeAlert();
+        }, 5500);
+
+    }
+
+    function checkForm() {
+        var password = document.getElementById("password").value;
+        var username = document.getElementById("username").value;
+        var email = document.getElementById("email").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        if (password.length < 8) {
+            alertUser("Password must contain 8 characters");
+            return false;
+        } else if (username.length > 20) {
+            alertUser("Username must be less than 20 characters");
+            return false;
+        } else if (username.length <= 3) {
+            alertUser("Username must be atleast 3 characters");
+            return false;
+        } else if (username.includes(" ")) {
+            alertUser("Username can't contain whitespace");
+            return false;
+        } else if (password != confirmPassword) {
+            alertUser("Passwords don't match");
+            return false;
+        } else if (!hasNumbers(password)) {
+            alertUser("Password must contain a digit");
+            return false;
+        } else if (!hasSymbols(password)) {
+            alertUser("Password must contain a symbol");
+            return false;
+        } else if (!IsEmail(email)) {
+            alertUser("Please enter a valid Email");
+            return false;
+        } else {
+            document.signUpForm.submit();
+        }
+
+    }
+    </script>
+    {% block alertConditions%}
+    {% endblock %}
+</body>
+
+</html>

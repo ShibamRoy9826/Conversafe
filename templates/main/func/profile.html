@@ -1,0 +1,83 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - User Profile {% endblock %}
+{% load static %}
+{% block content %}
+<!-- 
+<div class="w-[50vw] h-[2rem] bg-gray-600 flex flex-col justify-center items-center">
+    <h1 class="text-white">Hello {{user.username}}</h1>
+</div> -->
+
+
+<style type="text/css">
+#contentSection {
+    justify-content: start;
+    items-center
+}
+
+.bannerImage {
+    background-image: url(" {% static 'res/dummyBanner.jpg' %} ");
+    background-size: cover;
+    background-repeat: none;
+    background-position: center;
+    height: 10rem;
+}
+
+.verticalLine {
+    height: 1.8rem;
+    width: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-left: 2px solid rgb(107 114 128);
+}
+</style>
+<div class="w-full bannerImage">
+</div>
+<div class="flex flex-col justify-center items-center mt-8 relative" style="bottom:5rem">
+    <img src="{{user.userprofile.avatar.url}}" class="rounded-full h-24 w-24">
+    <h1 class="text-white text-2xl"> {{user.userprofile.display_name}}</h1>
+    <p class="text-gray-300 px-8 text-center">
+{{user.userprofile.short_bio}}
+       
+    </p>
+    <div class="flex flex-col lg:flex-row justify-evenly items-center mt-8 ">
+        <div class="flex flex-row justify-evenly items-center">
+        <div class="flex flex-col mx-3 justify-center items-center">
+            <h1 class="text-md text-white">{{user.userprofile.followers}}</h1>
+            <p class="text-sm text-gray-500">Followers</p>
+        </div>
+        <span class="verticalLine"></span>
+        <div class="flex flex-col mx-3 justify-center items-center">
+            <h1 class="text-md text-white">{{user.userprofile.following}}</h1>
+            <p class="text-sm text-gray-500">Following</p>
+        </div>
+        </div>
+
+
+        <span class="verticalLine hidden lg:block"></span>
+        <div class="flex flex-row items-center my-4 lg:mt-0">
+            <a href="/editProfile/" class="coolButton shadow-2xl bg-[#4C51E0] w-32 h-full  mx-3 text-center rounded-md text-white px-2 py-2 flex">Edit Profile
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700 rounded-lg shadow-xl overflow-y-scroll pb-4" style="height: auto; max-height:50vh;width: 80%;">
+   <h1 class="text-2xl text-white p-4"> About </h1>
+   <p class="text-gray-300 px-4">
+    {{user.userprofile.long_bio}}
+    
+   </p> 
+</div>
+
+<div class="my-4 flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700 rounded-lg shadow-xl overflow-y-scroll" style="height: 50vh; width: 80%;">
+   <h1 class="text-2xl text-white p-4"> Acheivements </h1>
+   <br><br>
+   <p class="text-gray-300 px-4 text-center">Coming Soon... Feature yet to be added...</p> 
+</div>
+
+
+
+{% endblock %}

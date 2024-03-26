@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Conversafe - Rooms{% endblock %}
+
+
+{% block content %}
+<h1 class="text-white text-3xl my-16">Rooms</h1>
+
+<div class="flex flex-row items-center justify-center ">
+	{% for room in rooms %}
+	<div class="flex flex-col border-2 border-gray-800 bg-gray-900 p-4 rounded-xl">
+		<h1 class="text-white text-center text-2xl ">{{ room.name }}</h1>
+		<a href="{% url 'chatRoom' room.slug %}" class="coolButton mt-2 shadow-2xl bg-[#4C51E0] w-32 my-4  mx-3 text-center rounded-md text-white px-2 py-2 flex">Join </a>
+	</div>
+
+	{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Conversafe - Contact Me{% endblock %}
+
+
+
+
+{% block content %}
+
+
+<div class="flex flex-col items-center justify-center absolute contactWrapper">
+
+<style type="text/css">
+    .contactWrapper{
+        top:1vh;
+        right: 20vw;
+    }
+
+    @media(max-width:768px){
+    .contactWrapper{
+        top: -4vh;
+        right: 0;
+    }
+}
+</style>
+         <div class="flex flex-col items-center md:relative md:left-16 sm:right-[20vw] lg:mx-0 mx-8" >
+            <h1 class="text-white text-4xl lg:text-5xl text-center pt-16 lg:pt-4 pb-4 lg:pb-4" data-aos="fade-in"><b>Facing any problems?</b></h1>
+            <p class="text-[#C8C8C8] text-center px-8 lg:px-48" data-aos="fade-in">Feel free to contact me anytime, reporting any bug or glitch<br> would be highly appreciated:)</p>
+
+            <form action="https://formspree.io/f/xwkyjjnz" method="POST" class="flex flex-col items-center bg-gray-900 mb-8 lg:mt-4 mt-8 lg:mt-16 w-[100%] lg:w-[80%] border-2 border-gray-700 rounded-lg" data-aos="flip-up">
+                <div class="flex flex-col lg:flex-row justify-ends bg-red w-[80%]">
+
+                    <div class="flex flex-row justify-evenly lg:py-4 lg:pr-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Name</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Name" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-[40vw] w-full lg:w-auto " required>
+                        </div>
+                    </div>
+                    <div class="flex flex-row justify-evenly p-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                                <b>Your Email</b>
+                            </h1>
+                            <input type="text" name="name" placeholder="Your Email" class="bg-gray-800 rounded-md border border-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:text-gray-900 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 resize-none leading-6 transition-colors duration-200 ease-in-out lg:w-[16rem] w-full px-3  " value="{{request.user.email}}" disabled >
+                        </div>
+                    </div>
+                </div>
+                <h1 class="text-md text-white text-center p-2 after:content-['*'] after:text-red-500">
+                    <b>Your Message</b>
+                </h1>
+                <textarea id="message" placeholder="Your Message" name="message" class="w-[80%] bg-gray-800  focus:text-gray-900 rounded border border-gray-700 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out h-32" required></textarea>
+                <input type="submit" class="coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6">
+                </a>
+            </form>
+        </div>
+
+        <div class="h-24  mt-8 md:w-[60vw] w-[90vw] lg:w-[70vw] bg-gray-900 flex flex-row justify-center items-center rounded-xl border-2 border-gray-700 overflow-scroll infoScroll relative left-2 lg:left-16" data-aos="flip-left">
+                <svg class="pl-4 ml-4 min-h-10 min-w-10 max-h-10 max-w-10" fill="#ffffff" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M1920 428.266v1189.54l-464.16-580.146-88.203 70.585 468.679 585.904H83.684l468.679-585.904-88.202-70.585L0 1617.805V428.265l959.944 832.441L1920 428.266ZM1919.932 226v52.627l-959.943 832.44L.045 278.628V226h1919.887Z" fill-rule="evenodd"></path>
+                    </g>
+                </svg>
+                <h1 class="p-4 text-white text-xl flex flex-row w-auto "><b> royshibam9826@gmail.com</b></h1>
+            </div>
+            <div class="h-24 mt-8 md:w-[60vw] w-[90vw] lg:w-[70vw] bg-gray-900 flex flex-row justify-center items-center rounded-xl border-2 border-gray-700 overflow-scroll infoScroll relative left-2 lg:left-16 mb-8" data-aos="flip-right">
+                <svg class="pl-4 ml-16 min-h-10 min-w-10 max-h-10 max-w-10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <defs>
+                            <style>.cls-1{fill:none;stroke:#ffffff;stroke-miterlimit:10;stroke-width:1.92px;}</style>
+                        </defs>
+                        <g id="roll_brush" data-name="roll brush">
+                            <rect class="cls-1" x="1.46" y="1.5" width="21.1" height="21.1"></rect>
+                            <polygon class="cls-1" points="22.56 7.25 16.28 7.25 14.37 7.25 1.46 7.25 1.46 1.5 22.56 1.5 22.56 7.25"></polygon>
+                            <line class="cls-1" x1="4.34" y1="4.38" x2="6.25" y2="4.38"></line>
+                            <line class="cls-1" x1="8.17" y1="4.38" x2="10.09" y2="4.38"></line>
+                            <line class="cls-1" x1="12.01" y1="4.38" x2="13.93" y2="4.38"></line>
+                        </g>
+                    </g>
+                </svg>
+                <a href="https://shibamroy9826.github.io/" class="p-4 text-white text-xl flex flex-row w-auto "><b>https://shibamroy9826.github.io/</b></a>
+            </div>
+    
+</div>
+
+{% endblock %}

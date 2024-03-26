@@ -1,0 +1,53 @@
+{% extends 'auth/baseAuth.html' %}
+{% block title %} Sign Up{% endblock %}
+
+
+{% block content %}
+
+<form class="h-[70vh] w-[80vw] md:w-[70vw] lg:w-[40vw] bg-white border border-gray-200 rounded-xl shadow-2xl flex flex-col justify-center " method="post" action="" name="signUpForm" onsubmit="return checkForm()">
+    {% csrf_token %}
+    <h1 class="text-2xl text-center text-gray-600 m-2 "><b>Sign Up</b></h1>
+    <p class="text-center text-gray-500">Already have an account? try <a href="/login" class="text-[#4C51E0] link">Logging in</a></p>
+    <div class="flex flex-col justify-center items-center py-4">
+        <input type="text" name="name" placeholder="Your Username" id="username" class="bg-white border-2 border-gray-200 rounded-md  focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-500 placeholder::text-gray-400 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out w-[80%]" {% if forms.is_bound %}value="{{ forms.name.value }}{% endif %}" required>
+    </div>
+    <div class="flex flex-col justify-center items-center py-4">
+        <!-- <label class=" text-sm text-rose-600 hidden" id="emailIssue"> Please enter a valid email</label> -->
+        <input type="text" name="email" id="email" placeholder="Your Email" class="bg-white border-2 border-gray-200 rounded-md focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-500 placeholder::text-gray-400 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out w-[80%]" {% if forms.is_bound %}value="{{ forms.email.value }}{% endif %}" required>
+    </div>
+    <!-- <label class=" text-sm text-rose-600 text-center px-16 py-0 hidden" id="passwordIssue"> Password must be atleast 8 characters long</label> -->
+    <div class="flex flex-row justify-center items-center py-4 " style="box-sizing: border-box;">
+        <input type="password" name="password" id="password" placeholder="Password" class="bg-white border-2 border-gray-200 rounded-md focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-500 placeholder::text-gray-400 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out w-[75%]" required id="password" {% if forms.is_bound %}value="{{ forms.password.value }}{% endif %}">
+        <div class="">
+            <button type="button" class="w-[5%] float-right my-1 " style="box-sizing: border-box;" id="togglePassword" onclick="togglePass()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </button>
+            <button type="button" class="w-[5%] float-right  my-1 hidden" style="box-sizing: border-box;" id="togglePassword2" onclick="togglePass()">
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+                    <path stroke-linecap='round' stroke-linejoin='round' d='M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88' /></svg>
+            </button>
+        </div>
+    </div>
+    <div class="flex flex-col justify-center items-center py-4">
+        <!-- <label class=" text-sm text-rose-600 hidden" id="cpasswordIssue"> Passwords dont match</label> -->
+        <input type="text" name="passwordConfirm" id="confirmPassword" placeholder="Confirm Password" class="bg-white border-2 border-gray-200 rounded-md focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-500 placeholder::text-gray-400 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out w-[80%]" required>
+    </div>
+    <div class="flex flex-col  justify-center items-center">
+        <input type="submit" class="coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 ">
+    </div>
+</form>
+</section>
+{% endblock %}
+
+
+{% block authConditions %}
+{% if userAlreadyExists %}
+<script>
+alertUser("User already exists");
+</script>
+{% endif %}
+
+{% endblock %}
