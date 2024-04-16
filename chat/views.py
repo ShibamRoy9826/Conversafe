@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import chatRoom,Message
 from django.contrib.auth.decorators import login_required
 from core.models import UserProfile
@@ -30,6 +31,10 @@ def room(request,slug):
 	context['notifications_count']=user.notifications.unread().count()
 	context['room']=room
 	context['messages']=messages
+
+
+	if room.users >2:
+		return HttpResponse("The room you tried to join is Full:( \n Please try joining another room...")
 	
 	return render(request,'main/chat/main.html',context)
 
@@ -73,9 +78,6 @@ def findRoom(request):
 		slug=makeName()
 		newRoom=chatRoom.objects.create(name=roomName,slug=slug,gender=profile.gender)
 		return redirect("/chat/"+slug)
-
-
-
 
 
 

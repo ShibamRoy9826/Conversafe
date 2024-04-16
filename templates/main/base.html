@@ -31,7 +31,7 @@
         <div class="h-full flex flex-row  items-center w-72 bg-[#11101D]">
             <div class="logo text-white flex flex-row justify-evenly lg:ml-0 hidden lg:flex md:flex ">
                 <!-- Username on nav -->
-                <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif;">Welcome {{user.username}}</span>
+                <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif;">Welcome {{user.username}} 🎉</span>
             </div>
         </div>
         <div class="h-full flex flex-row justify-end items-center w-full bg-[#11101D]">
@@ -72,6 +72,8 @@
                         {% endfor%}
                     </div>
                     {% else %}
+                    <div class="flex justify-center items-center" id="notifCounter">
+                    </div>
                     <div class=" flex flex-col justify-center items-center dropdown-notif hidden border-2 border-gray-600 rounded-lg shadow-xl" style="height: 5rem;" id="dropdown-notifIcon">
                         <br>
                         <p style="margin-left: 1rem;">No notifications available...</p>

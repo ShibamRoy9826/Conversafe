@@ -73,6 +73,7 @@ NEW_EMAIL_SENT_TEMPLATE  = 'auth/email/showInfo/checkEmail.html'
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'daphne',
 # Email Verification
@@ -85,6 +86,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 # Other Django apps
+    'AIChat',
     'landing',
     'core',
     'chat',

@@ -32,6 +32,7 @@ class chatRoom(models.Model):
 				  choices=GENDERS,null=True,blank=True)
 
 
+
 class Message(models.Model):
 
 	room=models.ForeignKey(chatRoom,related_name="messages",on_delete=models.CASCADE)

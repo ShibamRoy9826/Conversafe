@@ -24,6 +24,17 @@
     </div>
 </div>
 
+<div class="border-2 border-gray-700 bg-gray-800 mr-8 mt-8 pb-4 rounded-xl" style="width:90%; height: auto;">
+    <h1 class="text-white pl-4  pt-8 text-4xl">Have A Conversation With AI</h1>
+    <p class="text-[#C8C8C8] pl-4" data-aos="fade-in">Dont want to talk to people or cant find anyone online? No worries! You can talk to AI now!</p>
+    <div class="flex flex-row justify-start">
+        <a href="/createAIChat/" class="coolButton shadow-2xl bg-[#4C51E0] w-32 my-4  mx-3 text-center rounded-md text-white px-2 py-2 flex"> Start <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+            </svg>
+        </a>
+    </div>
+</div>
+
 
 <div class="border-2 border-gray-700 bg-gray-800 mr-8 mt-8 rounded-xl pb-4" style="width:90%; height: auto;">
     <h1 class="text-white pl-4 text-4xl" style="padding-top: 1rem;"><span id="randomWord"></span> Quote</h1>
@@ -35,23 +46,36 @@
 
 
 
+
+
 <script>
     
 let quote = document.getElementById("quote");
 let author = document.getElementById("author");
 let randomW=document.getElementById("randomWord");
 let randomElement="Wonderful";
-const url = "https://api.quotable.io/random";
+const url = "https://api.api-ninjas.com/v1/quotes";
 var beautifulWords = ['A Lovely','A Beautiful','A Marvellous','An Amazing','An Astonishing','A Miraculous','An Incredible','An Awesome'];
+
+// UNcomment this on production
+// let getQuote = () => {
+//   fetch(url,{headers: {'X-Api-Key': 'oFHtDPd4EO8oJ+LPO3Mf2Q==WrrNZHTOhZEDtLxW'}})
+//     .then((data) => data.json())
+//     .then((item) => {
+
+//       randomElement = beautifulWords[Math.floor(Math.random() * beautifulWords.length)];
+//       randomW.innerText=randomElement;
+//       console.log(item);
+//       quote.innerText = item[0].quote;
+//       author.innerText = item[0].author;
+//     });
+// };
 let getQuote = () => {
   fetch(url)
     .then((data) => data.json())
     .then((item) => {
-
       randomElement = beautifulWords[Math.floor(Math.random() * beautifulWords.length)];
       randomW.innerText=randomElement;
-      quote.innerText = item.content;
-      author.innerText = item.author;
     });
 };
 

@@ -39,13 +39,61 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			self.channel_name)
 
 	async def receive(self,text_data):
+
 		data=json.loads(text_data)
+
+		if data['eventType']=="":
+			await self.processChat(data)
+		else:
+
+			eventType=data['eventType']
+
+			if eventType == 'offer':
+				offerer=data['offerer']
+
+				# Sending offer to the desired client
+				await self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						'type': 'offer_received',
+						'data': {
+							'offerer':offerer,
+							'rtcMessage': data['data']['rtcMessage']
+						}
+					}
+				)
+
+			if eventType == 'answerToOffer':
+				# Sending an answer back to the client who proposed the offer
+				await self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						'type': 'offer_answered',
+						'data': {
+							'rtcMessage': data['data']['rtcMessage']
+						}
+					}
+				)
+
+			if eventType == 'ICEcandidate':
+				await self.channel_layer.group_send(
+					self.room_group_name,
+					{
+						'type': 'ICEcandidate',
+						'data': {
+							'rtcMessage': data['data']['rtcMessage']
+						}
+					}
+				)
+
+
+
+	async def processChat(self,data):
 		message=data['message']
 		username=data['username']
 		displayname=data['displayName']
 		room=data['room']
 		messageType=data['messageType']
-
 
 		if messageType=="JOINED":
 			await self.addNewUser(self.room_name,username)
@@ -53,9 +101,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			await self.removeUser(self.room_name,username)
 
 		await self.save_message(displayname,username,room,message,messageType)	
-
-		# await print(self.getUsers(self.room_name))
-		# await user1Username,user2Username,user1Pfp,user2Pfp=self.getUsers(self.room_name)
 
 		await self.getUsers(self.room_name)
 
@@ -78,6 +123,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'userCount':self.userCount
 			})
 
+	async def offer_received(self, event):
+
+		await self.send(text_data=json.dumps({
+			'eventType': 'offer_received',
+			'data': event['data'],
+			'messageType':'webRTC'
+		}))
+
+
+	async def offer_answered(self, event):
+		await self.send(text_data=json.dumps({
+			'eventType': 'offer_answered',
+			'data': event['data'],
+			'messageType':'webRTC'
+		}))
+
+
+	async def ICEcandidate(self, event):
+		await self.send(text_data=json.dumps({
+			'eventType': 'ICEcandidate',
+			'data': event['data'],
+			'messageType':'webRTC'
+		}))
+
 	async def chat_message(self,event):
 		message=event['message']
 		username=event['username']
@@ -85,10 +154,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		room=event['room']
 		msgType=event['messageType']
 
-
-		# await print(self.getUsers(self.room_name))
-
-		# await user1Username,user2Username,user1Pfp,user2Pfp=self.getUsers(self.room_name)
 
 		await self.getUsers(self.room_name)
 
@@ -144,9 +209,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			self.user2Display=obj.user2.userprofile.display_name
 			
 
-		
-
-
 	@sync_to_async
 	def checkUserCount(self,room):
 		obj=chatRoom.objects.get(slug=room)
@@ -167,12 +229,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				obj.user2=user
 
 
-		# if obj.users==1:
-		# 	if obj.user1!=user and obj.user2!=user:
-		# 		obj.user1=user
-		# else:
-		# 	if obj.user1!=user and obj.user2!=user:
-		# 		obj.user2=user
 		obj.save()
 
 	@sync_to_async

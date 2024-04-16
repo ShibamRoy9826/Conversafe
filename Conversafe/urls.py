@@ -21,6 +21,7 @@ from landing import views as landingView
 from notification import views as notificationView
 from core import views as mainView
 from chat import views as chatView
+from AIChat import views as AIView
 import notifications.urls 
 
 from django.conf import settings
@@ -62,6 +63,10 @@ urlpatterns = [
     path('rooms/',chatView.rooms,name="roomList"),
     path('chat/<slug:slug>/',chatView.room,name="chatRoom"),
     path('findRoom/',chatView.findRoom,name="findRoom"),
+
+    # ChatWithAI
+    path('chatWithAI/<slug:slug>/',AIView.AIConnect,name="AIRoomConnect"),
+    path('createAIChat/',AIView.chatWithAI,name="AIChat"),
 
     # Deleting Notifications
     path('deleteNotif/',notificationView.deleteNotif,name="deleteNotification")

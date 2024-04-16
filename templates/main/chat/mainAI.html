@@ -108,9 +108,9 @@ ul{
 
 
 </style>
-<div class="p-10 lg:p-20 text-center mt-2">
+<!-- <div class="p-10 lg:p-20 text-center mt-2">
     <h2 class="text-white text-3xl lg:text-6xl">{{ rooms.name }}</h2>
-</div>
+</div> -->
 <div class="flex flex-row justify-center items-center overflow-x-scroll " style="width:80vw;">
     <div class="flex flex-row justify-center items-center overflow-x-scroll" style="width:80vw;">
         <button class="tabOption active text-2xl lg:text-3xl text-white p-4 font-bold flex flex-row items-center" data-tab-target="#audio"> Audio <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -126,6 +126,7 @@ ul{
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
             </svg>
         </button>
+        
     </div>
 </div>
 <div class="tabContent flex flex-col justify-center items-center" style="width: 100%;height: 100%; ">
@@ -183,19 +184,7 @@ ul{
 
         {% endif %} -->
 
-        <div>
-            <div style="position:absolute; top:0; right:0; padding-right: 20px; padding-top: 20px">
-                    <video width="100px" class="border-2 border-red-600" id="localVideo" autoplay muted playsinline></video>
-                </div>
-                <div id="remoteVideoDiv">
-                    <video style="width: 500px;" class="border-2 border-red-600"  id="remoteVideo" autoplay playsinline></video>
-                </div>
-            <button onclick="offer()" class="text-white text-xl border-red-600">Offer</button>
-            <button onclick="Answer()" class="text-white text-xl border-red-600">Answer</button>
-            
-        </div>
-
-
+        
 
     </div>
 
@@ -266,12 +255,13 @@ const roomName = "{{ room.slug }}";
 const displayName = "{{ user.userprofile.display_name }}";
 const userName = "{{ user.username }}";
 
+// Imp var
+let AiIsTyping=false;
+
 // ############################## Creating Websocket and basic stuff ######################
 
 // Creating a WebSocket
-const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/' + roomName + '/');
-
-let theFirstUser=false;
+const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/ai/' + roomName + '/');
 
 // ############################## More Functions ###########################################
 
@@ -289,18 +279,18 @@ window.addEventListener("load", scrollToBottom);
 
 
 //##### Allow only 2 users at a time ############////////////////////////////////////////
-window.onload = function(e) {
-    if ({{ room.users }} > 2) {
+// window.onload = function(e) {
+//     if ({{ room.users }} > 2) {
 
-        alert("ChatRoom is already full!");
-        window.location.href = "/home/";
-    }
-};
+//         alert("ChatRoom is already full!");
+//         window.location.href = "/home/";
+//     }
+// };
 
-if ({{ room.users }} > 2) {
-    alert("ChatRoom is already full!");
-    window.location.href = "/home/";
-}
+// if ({{ room.users }} > 2) {
+//     alert("ChatRoom is already full!");
+//     window.location.href = "/home/";
+// }
 
 
 
@@ -356,10 +346,8 @@ function makeCode(display_name,pfp){
 
 // As the connection opens up
 chatSocket.onopen = function() {
+    console.log("Connection opened");
     // Checking if the newly joined user is the first user or not
-    if ( {{ room.users }} == 1){
-        theFirstUser=true;
-    }
 
     chatSocket.send(JSON.stringify({
         'username': userName,
@@ -375,28 +363,18 @@ chatSocket.onopen = function() {
 // On receiving any message
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
+    manageChat(data);
 
-
-    if (data.messageType=="webRTC"){
-        manageWebRTC(data);
-
-    }else{
-
-        manageChat(data);
-
-    }
 }
 
 
 chatSocket.onclose = function(e) {
+    // Do nothing...
 }
 
 
 // Before closing
 window.addEventListener("beforeunload", function(event) {
-    if (callInProgress) {
-        stop();
-    }
     chatSocket.send(JSON.stringify({
         'username': userName,
         'message': "",
@@ -448,6 +426,20 @@ function sendTxtMessage(e){
 function manageChat(data){
 
     if (data.messageType == "NORMAL") {
+
+        if (data.username!=userName && data.initial=="no"){
+            
+            AiIsTyping=false;
+            try{
+                typingElement=document.getElementById("AiIsTyping");
+                typingElement.remove();
+            }catch(e){
+                console.log("Some error just occured");
+                console.log(e);
+            }
+        }else{
+            AiIsTyping=true;
+        }
         
         if (userName == data.username) {
             var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
@@ -456,6 +448,13 @@ function manageChat(data){
             let html = "<div class='flex flex-row justify-end'><div class='bg-gray-600 text-white selfMessage mx-8 my-4 space-y-3  text-right w-auto max-w-[95%] lg:max-w-[45%] '><div class='p-4 bg-gray-200 selfMessage' style='text-align:right;' ><p class='font-bold text-xl w-auto'> " + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
 
             document.querySelector("#chatContainer").innerHTML += html;
+            if(AiIsTyping){
+
+
+                let html = "<div class='flex flex-row justify-start' id='AiIsTyping'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>Mr. AI</p><div class='flex flex-row items-center'><p class='w-auto font-semi-bold flex flex-row items-center'> Mr.Ai is Typing </p><div class='w-16 h-16'><img src='{% static 'typing.svg' %}' class='typingImage w-16 h-16' /></div></div></div></div></div>";
+                container = document.querySelector("#chatContainer");
+                container.innerHTML += html;
+            }
         }else {
             var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
             audio.volume = 0.3;
@@ -467,56 +466,26 @@ function manageChat(data){
 
         }
 
-
-
-
     } else if (data.messageType == "JOINED") {
 
-        // var audio = new Audio("{% static 'res/audio/userJoined.mp3' %}");
-        // // audio.volume = 0.3;
-        // audio.play();
+        var audio = new Audio("{% static 'res/audio/userJoined.mp3' %}");
+        // audio.volume = 0.3;
+        audio.play();
 
 
         let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
 
-        user1= data.user1Username
-        user2= data.user2Username
-        user1Display=data.user1Display
-        user2Display=data.user2Display
-        user1Pfp=data.user1Pfp
-        user2Pfp=data.user2Pfp
-
-        currentUser=userName
-        userCount=data.userCount
-
         audioContainer=document.getElementById("audio")
 
 
-        if(userCount>1){  //Total users=2
-            offer()
-
-            if(currentUser==user1){
-                // Do stuff with user2 as this is the otherUser
-                otherUser=makeCode(user2Display,user2Pfp);
-                audioContainer.innerHTML+=otherUser
-
-
-            }
-            else{
-                //then user2 has to be the current user and user1 is the current user
-                otherUser=makeCode(user1Display,user1Pfp);
-                audioContainer.innerHTML+=otherUser
-
-            }
-        }
-
         document.querySelector("#chatContainer").innerHTML += html;
+        
 
 
     } else {
-        // var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");
-        // // audio.volume = 0.3;
-        // audio.play();
+        var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");
+        // audio.volume = 0.3;
+        audio.play();
 
         let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Left The Conversation</p></div></div></div>";
         container = document.querySelector("#chatContainer");
@@ -529,328 +498,6 @@ function manageChat(data){
 }
 
 
-function manageWebRTC(data){
-    let type = data.eventType;
-    
-    // Offer received
-    if(type == 'offer_received') {
-        console.log(type);
-        onNewCall(data.data)
-    }
-
-    // Offer Answered by the other client
-    if(type == 'offer_answered') {
-        console.log(type);
-        onCallAnswered(data.data);
-    }
-
-    // Ice Candidates
-    if(type == 'ICEcandidate') {
-        onICECandidate(data.data);
-    }
-}
-
-
-const onNewCall = (data) =>{
-    console.log("The remote RTC Message is about to be set to:");
-    console.log(data.rtcMessage);
-    remoteRTCMessage = data.rtcMessage;
-    Answer();
-
-}
-
-const onCallAnswered = (data) =>{
-    remoteRTCMessage = data.rtcMessage
-    peerConnection.setRemoteDescription(new RTCSessionDescription(remoteRTCMessage));
-
-    console.log("Call Started. They Answered");
-
-    callProgress()
-}
-
-const onICECandidate = (data) =>{
-
-    // console.log("GOT ICE candidate");
-    let rtcMsg = data.rtcMessage
-
-    let candidate = new RTCIceCandidate({
-        sdpMLineIndex: rtcMsg.label,
-        candidate: rtcMsg.candidate
-    });
-
-    if (peerConnection) {
-        // console.log("ICE candidate Added");
-        peerConnection.addIceCandidate(candidate);
-
-    } else {
-        // console.log("ICE candidate Pushed");
-        iceCandidatesFromCaller.push(candidate);
-    }
-
-}
-
-// ##################################  Audio Functionality  ###############################################
-
-// ###Variables####
-
-// Videos
-let localVideo = document.querySelector('#localVideo');
-let remoteVideo = document.querySelector('#remoteVideo');
-
-
-// Other vars
-let otherUser;
-let remoteRTCMessage;
-
-// All IceCandidates 
-let iceCandidatesFromCaller = [];
-
-// Stream and Connection vars
-let peerConnection;
-let remoteStream;
-let localStream;
-
-// SDP Contraints
-let sdpConstraints = {
-    offerToReceiveAudio: true,
-    offerToReceiveVideo: true
-};
-
-// Media Constraints
-mediaConstraints={
-    audio: true,
-    video: true
-}
-
-
-// STUN SERVERS
-let stunServers = {
-    "iceServers":
-        [
-            
-            {"url": "stun:stun.l.google.com:19302"},
-            {"url": "stun:stun2.l.google.com:19302"},
-            {"url": "stun:stun.ideasip.com"}
-
-        ]
-};
-
-// ############################# SENDING THE OFFER ########################################
-
-// Offer to the other user
-function offer() {
-    console.log("Offer just started, offer()");
-    // Takes up user camera access
-    beReady()
-        .then(bool => {
-            // 
-            processOffer();
-        })
-}
-
-// Creates Offer and sends it to the other user via sendOffer()
-function processOffer() {
-
-    console.log("processOffer()");
-    // Creating a new offer
-    peerConnection.createOffer((sessionDescription) => {
-        peerConnection.setLocalDescription(sessionDescription);
-        // Setting up the SDP
-
-        // Send these info to the backend
-        // Contains the SDP of the current User
-        sendOffer({
-            offerer:userName
-            rtcMessage: sessionDescription
-        })
-    }, (error) => {
-        console.log("Error");
-    });
-}
-
-// Sends the created Offer
-function sendOffer(data) {
-    console.log("sendOffer()")
-    // Sending the Offer
-    chatSocket.send(JSON.stringify({
-        eventType: 'offer',
-        data
-    }));
-}
-
-
-// ############################# Accepting Offer & Sending Answer ##########################################
-
-// Sending Answer to the other user
-function Answer() {
-    console.log("Answer()");
-    // Takes up camera Access from the other User
-    beReady()
-        .then(bool => {
-            processAnswer();
-        })
-}
-
-// Receives the remote SDP and sends an Answer
-function processAnswer() {
-    console.log("ProcessAnswer()");
-    // Receive the Remote SDP
-    // remoteRTCMessage contains the remote SDP
-    peerConnection.setRemoteDescription(new RTCSessionDescription(remoteRTCMessage));
-
-    // Creating an Answer
-    peerConnection.createAnswer((sessionDescription) => {
-        peerConnection.setLocalDescription(sessionDescription);
-
-        // Setting Ice Candidates manually if not present
-        if (iceCandidatesFromCaller.length > 0) {
-            for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
-                //
-                let candidate = iceCandidatesFromCaller[i];
-                // console.log("ICE candidate Added From queue");
-                try {
-                    peerConnection.addIceCandidate(candidate).then(done => {
-                        console.log(done);
-                    }).catch(error => {
-                        console.log(error);
-                    })
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            iceCandidatesFromCaller = [];
-            // console.log("ICE candidate queue cleared");
-        } else {
-            // console.log("NO Ice candidate in queue");
-        }
-
-        // Sends the answer to the backend
-        sendAnswer({
-            rtcMessage: sessionDescription
-        })
-
-    }, (error) => {
-        console.log("Error");
-    })
-}
-
-// Sends the answer
-function sendAnswer(data) {
-    console.log("sendAnswer()");
-    chatSocket.send(JSON.stringify({
-        eventType: 'answerToOffer',
-        data
-    }));
-    callProgress();
-}
-
-// ################################ Ice Candidates ############################################
-function sendICEcandidate(data) {
-    // console.log("Send ICE candidate");
-    chatSocket.send(JSON.stringify({
-        eventType: 'ICEcandidate',
-        data
-    }));
-
-}
-
-// ################################ Video/Audio Control #############################################
-
-// Takes up user permission to access mic and camera
-function beReady() {
-    return navigator.mediaDevices.getUserMedia(mediaConstraints)
-        .then(stream => {
-            localStream = stream;
-            localVideo.srcObject = stream;
-            console.log("Set local stream");
-
-            return createConnectionAndAddStream()
-        })
-        .catch(function (e) {
-            alert('getUserMedia() error: ' + e.name);
-        });
-}
-
-// Create a new peer connection and add the local stream to the connection
-function createConnectionAndAddStream() {
-    console.log("Created new Peer connection rn");
-    createPeerConnection();
-    peerConnection.addStream(localStream);
-    return true;
-}
-
-
-// ################### More WebRTC Stuff After the connection ##########################################
-
-// Creates a new Peer connection
-function createPeerConnection() {
-    try {
-        peerConnection = new RTCPeerConnection(stunServers);
-
-        peerConnection.onicecandidate = handleIceCandidate;
-
-        peerConnection.onaddstream = handleRemoteStreamAdded;
-
-        peerConnection.onremovestream = handleRemoteStreamRemoved;
-
-        return;
-    } catch (e) {
-        console.log('Failed to create PeerConnection, exception: ' + e.message);
-        alert('Couldnt create RTCPeerConnection object.');
-        return;
-    }
-}
-
-// Handle Ice Candidate events
-function handleIceCandidate(event) {
-    if (event.candidate) {
-        // console.log("Local ICE candidate");
-        sendICEcandidate({
-            rtcMessage: {
-                label: event.candidate.sdpMLineIndex,
-                id: event.candidate.sdpMid,
-                candidate: event.candidate.candidate
-            }
-        })
-
-    } else {
-        // console.log('End of candidates.');
-    }
-}
-
-// Handle the remote stream
-function handleRemoteStreamAdded(event) {
-    console.log("Handled remote stream");
-    remoteStream = event.stream;
-    remoteVideo.srcObject = remoteStream;
-}
-
-// Remove the remote Stream
-function handleRemoteStreamRemoved(event) {
-    console.log('Remote stream removed. Event: ', event);
-    remoteVideo.srcObject = null;
-    localVideo.srcObject = null;
-}
-
-
-
-// Stop the connection
-function stop() {
-    localStream.getTracks().forEach(track => track.stop());
-    callInProgress = false;
-    peerConnection.close();
-    peerConnection = null;
-    otherUser = null;
-}
-
-function callProgress() {
-    callInProgress = true;
-}
-
-
-
-// Calling the actual thing
-offer();
     </script>
 
 <!-- Materialize JS -->
