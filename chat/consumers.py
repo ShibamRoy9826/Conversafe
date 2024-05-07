@@ -21,8 +21,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		self.user2Display=""
 		self.userCount=0
 
-
-		detectlanguage.configuration.api_key = "0c23d6e0bb1c2f62b833856dd2e96fad"
+		# API KEY IS HIDDEN, PLEASE ADD YOURS
+		detectlanguage.configuration.api_key = ""
 
 		await self.increaseUserCount(self.room_name)
 

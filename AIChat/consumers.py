@@ -20,8 +20,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			self.channel_name)
 
 		await self.accept()
-
-		genai.configure(api_key = "AIzaSyDFS_hhrIxPmD8qrag30FH7ltuKvpzegx4")
+		# API KEY IS HIDDEN, PLEASE ADD YOURS
+		genai.configure(api_key = "")
 		model = genai.GenerativeModel('gemini-pro')
 		self.chat = model.start_chat(history=[])
 
