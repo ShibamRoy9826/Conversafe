@@ -1,0 +1,969 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Chat Room {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Tabs.js -->
+<script src="{% static 'js/tab.js' %}" defer></script>
+<style type="text/css">
+.section {
+    justify-content: start;
+}
+
+.leaveButton {
+    transition: all 1s;
+    float: right;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    height: auto;
+    background-color: #D0312D;
+
+}
+
+.leaveButton:hover {
+    background-color: #900603;
+}
+.reportButton{
+    transition: all 1s;
+    margin-left: 0.3rem;
+    height: auto;
+    background-color: #CC0000;
+    border-radius: 5px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    position: relative;
+    display: inline-block;
+
+}
+.reportButton:hover {
+    background-color: #900603;
+}
+
+.reportButton::after {
+    content: attr(data-tooltip);
+    visibility: hidden;
+    width: 150px;
+    background-color: rgb(60,60,60);
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.reportButton:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.selfMessage {
+    border-radius: 0.75rem 0.2rem 0.75rem 0.75rem;
+    max-width: 65vw;
+}
+
+.selfMessage p {
+    text-align: right;
+    max-width: 65vw;
+    word-wrap: break-word;
+}
+
+.otherMessage {
+    border-radius: 0.2rem 0.75rem 0.75rem 0.75rem;
+    max-width: 65vw;
+}
+
+.otherMessage p {
+    text-align: left;
+    max-width: 65vw;
+    word-wrap: break-word;
+}
+
+.joinedLeft {
+    height: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+
+}
+
+[data-tab-content]{
+    height: 0;
+    visibility: hidden;
+}
+.active[data-tab-content]{
+    visibility: visible;
+}
+
+
+ul{
+    list-style-type: none;
+}
+
+[data-tab-target]{
+    transition: font-size 0.4s;
+    border-radius: 0.75rem 0.75rem 0 0;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    line-height: 2rem;
+    color: rgb(220,220,220);
+
+
+}
+
+.active[data-tab-target]{
+/*    background-color: white;*/
+/*    color: black;*/
+    border-top: 2px solid rgb(55,65,81);
+    border-left: 2px solid rgb(55,65,81);
+    border-right: 2px solid rgb(55,65,81);
+    border-bottom: 2px solid rgb(17,24,39);
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: white;
+    box-shadow: inset 4px 2px -2px rgba(0,0,0,0);
+}
+
+
+.tabContent{
+
+    border-top: 2px solid rgb(55,65,81);
+
+}
+
+
+#muteButton.active{
+    background-color: #D0312D;
+}
+#noAudioButton.active{
+    background-color: #D0312D;
+}
+@media (max-width:500px) {
+    .joinedLeft {
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
+
+}
+
+/*Overlay message*/
+#overlay{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000000;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+#message{
+    position: absolute;
+  left: 30%;
+  transform: translateX(-50%); 
+  margin: 0 auto; 
+  top: 50%;
+  transform: translateY(-50%);
+    text-align: center;
+    border: 2px solid white;
+    border-radius: 1rem;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+/*  background-color: white;*/
+    width: 40%;
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: #833ab4;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+}
+.someBtn{
+    background-color: #4C51E0;
+    transition: 0.4s;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.someBtn:hover{
+    background-color: rgb(26,31,174);
+}
+
+</style>
+
+
+<div id="overlay">
+    <div id="message" class="px-4 flex flex-row">
+    <h1 class="text-3xl">Thank you for reporting the user!</h1>
+        <p class="font-normal text-gray-300">We will ban the user if we find anything harmful, No worries:) </p>
+    
+        <button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="hideMessage();">Continue chat</button>
+
+        <button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="window.location.href='/home/';">Leave room</button>
+
+    </div>
+
+</div>
+
+
+
+<div class="flex flex-row justify-center items-center overflow-x-scroll " style="width:80vw;">
+    <div class="flex flex-row justify-center items-center overflow-x-scroll" style="width:80vw;">
+        <button class="tabOption active text-2xl lg:text-3xl text-white p-4 font-bold flex flex-row items-center" data-tab-target="#audio"> Audio <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+            </svg>
+        </button>
+        <button class="tabOption text-2xl lg:text-3xl text-white p-4 font-bold flex flex-row items-center" data-tab-target="#chat"> Chat
+            <svg xmlns="http://www.w3.org/2000/svg" fi1ll="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 " style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.08Z" />
+            </svg>
+        </button>
+        <button type="button" class="leaveButton shadow-2xl w-32 text-center rounded-md text-white px-2  py-3 flex" id="leaveButton"> Leave <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
+            </svg>
+        </button>
+    </div>
+</div>
+<div class="tabContent flex flex-col justify-center items-center" style="width: 100%;height: 100%; ">
+    <div id="audio" class="active" data-tab-content style="width: 80%">
+        <div>
+            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+                <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
+                <h1 class="text-2xl text-white text-center font-bold ">{{ user.userprofile.display_name }}  </h1>
+                <div class="flex flex-row justify-center items-center">
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="mute()" id="muteButton">
+                        <i class='bx bx-microphone text-xl' id="muteButtonIcon" style="color: white;"></i>
+                    </button>
+                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="noAudio()" id="noAudioButton">
+                        <i class='bx bx-volume-full text-xl' id="noAudioButtonIcon" style="color: white;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+       
+<!-- 
+        <div>
+            <div style="position:absolute; top:0; right:0; padding-right: 20px; padding-top: 20px">
+                    <video width="100px" class="border-2 border-red-600" id="localVideo" autoplay muted playsinline></video>
+                </div>
+                <div id="remoteVideoDiv">
+                    <video style="width: 500px;" class="border-2 border-red-600"  id="remoteVideo" autoplay playsinline></video>
+                </div>
+           <button onclick="offer()" class="text-white text-xl border-red-600">Offer</button>
+            <button onclick="Answer()" class="text-white text-xl border-red-600">Answer</button>
+             
+        </div>
+
+ -->
+
+    </div>
+
+<div id="chat" data-tab-content class="justify-center items-center" style="width: 80%;height: 100%;">
+<div class="my-4 flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700  shadow-xl "  style="width: 100%;height: 100%;">
+    <div id="chatContainer" class="overflow-y-scroll pb-4" style="height: 60vh; width: 100%;">
+        <div class="flex flex-row justify-center">
+            <div class='bg-gray-700 text-white selfMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%]'>
+                <div class='p-4 bg-gray-200 selfMessage'>
+                    <p class='font-bold text-xl text-right w-auto'> The Room Code is  </p>
+                    <p class="w-auto"> {{ room.slug }} </p>
+                </div>
+            </div>
+        </div>
+
+        {% for message in messages %}
+        {% if message.messageType == 'NORMAL' %}
+        {% if message.user.userprofile.display_name == user.userprofile.display_name %}
+        <div class="flex flex-row justify-end">
+            <div class='bg-gray-600 text-white selfMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 bg-gray-200 selfMessage'>
+                    <p class='font-bold text-xl text-right w-auto'> {{ message.user.userprofile.display_name }} </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex flex-row justify-start">
+            <div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 bg-gray-200 otherMessage'>
+                    <p class='font-bold text-xl w-auto flex flex-row items-center justify-center'> {{ message.user.userprofile.display_name }} <button class="reportButton text-sm font-normal" data-tooltip="Report User"  onclick='reportUser(this)' data-messageid="{{ message.id }}"><i class="bx bxs-flag-alt"></i></button> </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% elif message.messageType == 'JOINED' %}
+        <div class="flex flex-row justify-center rounded-xl joinedLeft">
+            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-gray-600 rounded-xl">
+                    <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Joined The Conversation</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex flex-row justify-center rounded-xl joinedLeft">
+            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-gray-600 rounded-xl">
+                    <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Left The Conversation</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="mt-6 mx-4 p-4 bg-gray-600 rounded-xl w-[100%] ">
+    <form method="POST" action="." class="flex" style="height: 3rem;" onkeydown="return event.key != 'Enter';">
+        {% csrf_token %}
+        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
+        <button type="button" class="coolButton shadow-2xl bg-[#4C51E0] w-32  mx-3 text-center rounded-md text-white px-2 py-3 flex" id="messageSubmit"> Send <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" w-6 h-6" style="margin-left: 0.3rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+            </svg>
+        </button>
+    </form>
+</div>
+</div>
+</div>
+
+
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username"}}
+<script type="text/javascript">
+
+// Variables from Django
+const roomName = "{{ room.slug }}";
+const displayName = "{{ user.userprofile.display_name }}";
+const userName = "{{ user.username }}";
+
+// ############################## Creating Websocket and basic stuff ######################
+
+// Creating a WebSocket
+const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/' + roomName + '/');
+
+let theFirstUser=false;
+
+// ############################## More Functions ###########################################
+
+// #### Auto Scroll Functionality ################/////////////////////////////////////////
+const scrollableElement = document.getElementById("chatContainer");
+
+const scrollToBottom = () => {
+    setTimeout(() => {
+        scrollableElement.scrollTop = scrollableElement.scrollHeight;
+    }, 0);
+};
+
+scrollableElement.addEventListener("DOMNodeInserted", scrollToBottom);
+window.addEventListener("load", scrollToBottom);
+
+
+//##### Allow only 2 users at a time ############////////////////////////////////////////
+window.onload = function(e) {
+    if ({{ room.users }} > 2) {
+
+        alert("ChatRoom is already full!");
+        window.location.href = "/home/";
+    }
+};
+
+if ({{ room.users }} > 2) {
+    alert("ChatRoom is already full!");
+    window.location.href = "/home/";
+}
+
+
+
+
+
+//### Leave Button #######################///////////////////////////////////////////////
+document.getElementById("leaveButton").addEventListener('click', () => {
+    window.location.href = '/home/';
+});
+
+
+// Report user
+function reportUser(element){
+    // console.log("Hey i am running...");
+    // userProfileName=element.parentNode.innerText;
+    // message=element.parentNode.parentNode.innerText;
+    // console.log(userProfileName);
+    // console.log(message);
+    messagePID=element.dataset.messageid;
+    showReportMessage();
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': messagePID,
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "REPORT",
+        'eventType':""
+    }));
+
+}
+
+// Mute Button and Stop speaker button ########//////////////////////////////////////////
+function mute(){
+    let muteBtn=document.getElementById("muteButton");
+    muteBtn.classList.toggle("active");
+
+    let muteBtnIcon=document.getElementById('muteButtonIcon')
+
+    if(muteBtnIcon.classList.contains("bx-microphone")){
+        muteBtnIcon.classList.remove("bx-microphone");
+        muteBtnIcon.classList.add("bx-microphone-off")
+    }else{
+        muteBtnIcon.classList.remove("bx-microphone-off");
+        muteBtnIcon.classList.add("bx-microphone")
+    }
+}
+
+
+function noAudio(){
+    let muteBtn=document.getElementById("noAudioButton");
+    muteBtn.classList.toggle("active");
+
+    let muteBtnIcon=document.getElementById('noAudioButtonIcon')
+
+    if(muteBtnIcon.classList.contains("bx-volume-full")){
+        muteBtnIcon.classList.remove("bx-volume-full");
+        muteBtnIcon.classList.add("bx-volume-mute");
+    }else{
+        muteBtnIcon.classList.remove("bx-volume-mute");
+        muteBtnIcon.classList.add("bx-volume-full");
+    }
+}
+
+function makeCode(display_name,pfp){
+    let html="<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='"+pfp+"' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>"+display_name+"</h1></div></div>";
+
+    return html
+
+}
+
+// show report user message
+function showReportMessage(){
+    let e=document.getElementById("overlay");
+    e.style.display="block";
+
+}
+function hideMessage(){
+    let e=document.getElementById("overlay");
+    e.style.display="none";
+}
+
+// ############################## webSocket events #############################################
+
+// As the connection opens up
+chatSocket.onopen = function() {
+    // Checking if the newly joined user is the first user or not
+    if ( {{ room.users }} == 1){
+        theFirstUser=true;
+    }
+
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': "",
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "JOINED",
+        'eventType':""
+    }));
+}
+
+
+// On receiving any message
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+
+
+    if (data.messageType=="webRTC"){
+        manageWebRTC(data);
+
+    }else{
+        manageChat(data);
+
+    }
+}
+
+
+chatSocket.onclose = function(e) {
+}
+
+
+// Before closing
+window.addEventListener("beforeunload", function(event) {
+    if (callInProgress) {
+        stop();
+    }
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': "",
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "LEFT",
+        'eventType':""
+    }));
+
+});
+
+
+
+// ######## Send Message ##############///////////////////////////////////////////////////////
+
+// By the send Button
+document.querySelector('#messageSubmit').onclick = function(e) {
+    sendTxtMessage(e);
+
+}
+
+// By Pressing Enter button 
+const inputField = document.getElementById("messageInput");
+inputField.addEventListener("keydown", function(e) {
+    if (event.keyCode === 13) {
+        sendTxtMessage(e);
+    }
+});
+
+// ############################ Websocket functions ####################################
+function sendTxtMessage(e){
+    e.preventDefault();
+    const messageInp = document.querySelector("#messageInput");
+    const message = messageInp.value;
+
+    chatSocket.send(JSON.stringify({
+        'message': message,
+        'username': userName,
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "NORMAL",
+        'eventType':""
+    }));
+
+    messageInp.value = "";
+    return false;
+}
+
+function manageChat(data){
+
+    if (data.messageType == "NORMAL") {
+        
+        if (userName == data.username) {
+            var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
+            audio.volume = 0.3;
+            audio.play();
+            let html = "<div class='flex flex-row justify-end'><div class='bg-gray-600 text-white selfMessage mx-8 my-4 space-y-3  text-right w-auto max-w-[95%] lg:max-w-[45%] '><div class='p-4 bg-gray-200 selfMessage' style='text-align:right;' ><p class='font-bold text-xl w-auto'> " + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
+
+            document.querySelector("#chatContainer").innerHTML += html;
+        }else {
+            var audio = new Audio("{% static 'res/audio/messageSent.mp3' %}");
+            audio.volume = 0.3;
+            audio.play();
+
+            // let html = `<div class='flex flex-row justify-start'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>${data.displayName}<button class='reportButton' onclick='reportUser(this)' data-messageid="${data.msgId}"><i class='bx bxs-flag-alt'></i></button></p><p class='w-auto'>${data.message}</p></div></div></div>`;
+
+            // console.log(`received the value ${data.msgId} as messageId`);
+
+            let html=`<div class="flex flex-row justify-start"><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'> ${data.displayName} <button class="reportButton text-sm font-normal" data-tooltip="Report User"  onclick='reportUser(this)' data-messageid=${data.msgId}><i class="bx bxs-flag-alt"></i></button> </p><p class="w-auto">${data.message}</p></div></div></div>`
+            container = document.querySelector("#chatContainer");
+            container.innerHTML += html;
+
+        }
+
+
+    } else if (data.messageType == "JOINED") {
+
+        // var audio = new Audio("{% static 'res/audio/userJoined.mp3' %}");
+        // // audio.volume = 0.3;
+        // audio.play();
+
+
+
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
+
+        user1= data.user1Username
+        user2= data.user2Username
+        user1Display=data.user1Display
+        user2Display=data.user2Display
+        user1Pfp=data.user1Pfp
+        user2Pfp=data.user2Pfp
+
+        currentUser=userName
+        userCount=data.userCount
+
+        audioContainer=document.getElementById("audio")
+
+
+        if(userCount>1){  //Total users=2
+
+            
+
+            if(currentUser==user1){
+                // Do stuff with user2 as this is the otherUser
+                otherUser=makeCode(user2Display,user2Pfp);
+                audioContainer.innerHTML+=otherUser
+
+
+            }
+            else{
+                //then user2 has to be the current user and user1 is the current user
+                otherUser=makeCode(user1Display,user1Pfp);
+                audioContainer.innerHTML+=otherUser
+
+            }
+        }
+
+        document.querySelector("#chatContainer").innerHTML += html;
+
+
+    } else {
+        // var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");
+        // // audio.volume = 0.3;
+        // audio.play();
+
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Left The Conversation</p></div></div></div>";
+        container = document.querySelector("#chatContainer");
+
+        let html2 = "<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='{{user.userprofile.avatar.url}}' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>{{ user.userprofile.display_name }}</h1><div class='flex flex-row justify-center items-center'><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='mute()' id='muteButton'><i class='bx bx-microphone text-xl' id='muteButtonIcon' style='color: white;'></i></button><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='noAudio()' id='noAudioButton'><i class='bx bx-volume-full text-xl' id='noAudioButtonIcon' style='color: white;'></i></button></div></div></div>";
+
+        document.querySelector("#audio").innerHTML=html2;
+        container.innerHTML += html;
+    }
+}
+
+
+function manageWebRTC(data){
+    let type = data.eventType;
+    
+    // Offer received
+    if(type == 'offer_received') {
+        console.log(type);
+        onNewCall(data.data)
+    }
+
+    // Offer Answered by the other client
+    if(type == 'offer_answered') {
+        console.log(type);
+        onCallAnswered(data.data);
+    }
+
+    // Ice Candidates
+    if(type == 'ICEcandidate') {
+        onICECandidate(data.data);
+    }
+}
+
+
+const onNewCall = (data) =>{
+    console.log("The remote RTC Message is about to be set to:");
+    console.log(data.rtcMessage);
+    remoteRTCMessage = data.rtcMessage;
+    Answer();
+
+}
+
+const onCallAnswered = (data) =>{
+    remoteRTCMessage = data.rtcMessage
+    peerConnection.setRemoteDescription(new RTCSessionDescription(remoteRTCMessage));
+
+    console.log("Call Started. They Answered");
+
+    callProgress()
+}
+
+const onICECandidate = (data) =>{
+
+    // console.log("GOT ICE candidate");
+    let rtcMsg = data.rtcMessage
+
+    let candidate = new RTCIceCandidate({
+        sdpMLineIndex: rtcMsg.label,
+        candidate: rtcMsg.candidate
+    });
+
+    if (peerConnection) {
+        // console.log("ICE candidate Added");
+        peerConnection.addIceCandidate(candidate);
+
+    } else {
+        // console.log("ICE candidate Pushed");
+        iceCandidatesFromCaller.push(candidate);
+    }
+
+}
+
+// ##################################  Audio Functionality  ###############################################
+
+// ###Variables####
+
+// Videos
+let localVideo = document.querySelector('#localVideo');
+let remoteVideo = document.querySelector('#remoteVideo');
+
+
+// Other vars
+let otherUser;
+let remoteRTCMessage;
+
+// All IceCandidates 
+let iceCandidatesFromCaller = [];
+
+// Stream and Connection vars
+let peerConnection;
+let remoteStream;
+let localStream;
+
+// SDP Contraints
+let sdpConstraints = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+};
+
+// Media Constraints
+mediaConstraints={
+    audio: true,
+    video: true
+}
+
+
+// STUN SERVERS
+let stunServers = {
+    "iceServers":
+        [
+            
+            {"url": "stun:stun.l.google.com:19302"},
+            {"url": "stun:stun2.l.google.com:19302"},
+            {"url": "stun:stun.ideasip.com"}
+
+        ]
+};
+
+// ############################# SENDING THE OFFER ########################################
+
+// Offer to the other user
+function offer() {
+    console.log("Offer just started, offer()");
+    // Takes up user camera access
+    beReady()
+        .then(bool => {
+            // 
+            processOffer();
+        })
+}
+
+// Creates Offer and sends it to the other user via sendOffer()
+function processOffer() {
+
+    console.log("processOffer()");
+    // Creating a new offer
+    peerConnection.createOffer((sessionDescription) => {
+        peerConnection.setLocalDescription(sessionDescription);
+        // Setting up the SDP
+
+        // Send these info to the backend
+        // Contains the SDP of the current User
+        sendOffer({
+            "offerer":userName,
+            "rtcMessage": sessionDescription
+        })
+    }, (error) => {
+        console.log("Error");
+    });
+}
+
+// Sends the created Offer
+function sendOffer(data) {
+    console.log("sendOffer()");
+    // Sending the Offer
+    chatSocket.send(JSON.stringify({
+        eventType: 'offer',
+        data:data
+    }));
+}
+
+
+// ############################# Accepting Offer & Sending Answer ##########################################
+
+// Sending Answer to the other user
+function Answer() {
+    console.log("Answer()");
+    // Takes up camera Access from the other User
+    beReady()
+        .then(bool => {
+            processAnswer();
+        })
+}
+
+// Receives the remote SDP and sends an Answer
+function processAnswer() {
+    console.log("ProcessAnswer()");
+    // Receive the Remote SDP
+    // remoteRTCMessage contains the remote SDP
+    peerConnection.setRemoteDescription(new RTCSessionDescription(remoteRTCMessage));
+
+    // Creating an Answer
+    peerConnection.createAnswer((sessionDescription) => {
+        peerConnection.setLocalDescription(sessionDescription);
+
+        // Setting Ice Candidates manually if not present
+        if (iceCandidatesFromCaller.length > 0) {
+            for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
+                //
+                let candidate = iceCandidatesFromCaller[i];
+                // console.log("ICE candidate Added From queue");
+                try {
+                    peerConnection.addIceCandidate(candidate).then(done => {
+                        console.log(done);
+                    }).catch(error => {
+                        console.log(error);
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            iceCandidatesFromCaller = [];
+            // console.log("ICE candidate queue cleared");
+        } else {
+            // console.log("NO Ice candidate in queue");
+        }
+
+        // Sends the answer to the backend
+        sendAnswer({
+            "rtcMessage": sessionDescription
+        })
+
+    }, (error) => {
+        console.log("Error");
+    })
+}
+
+// Sends the answer
+function sendAnswer(data) {
+    console.log("sendAnswer()");
+    chatSocket.send(JSON.stringify({
+        eventType: 'answerToOffer',
+        data
+    }));
+    callProgress();
+}
+
+// ################################ Ice Candidates ############################################
+function sendICEcandidate(data) {
+    // console.log("Send ICE candidate");
+    chatSocket.send(JSON.stringify({
+        eventType: 'ICEcandidate',
+        data
+    }));
+
+}
+
+// ################################ Video/Audio Control #############################################
+
+// Takes up user permission to access mic and camera
+function beReady() {
+    return navigator.mediaDevices.getUserMedia(mediaConstraints)
+        .then(stream => {
+            localStream = stream;
+            localVideo.srcObject = stream;
+            console.log("Set local stream");
+
+            return createConnectionAndAddStream()
+        })
+        .catch(function (e) {
+            alert('getUserMedia() error: ' + e.name);
+        });
+}
+
+// Create a new peer connection and add the local stream to the connection
+function createConnectionAndAddStream() {
+    console.log("Created new Peer connection rn");
+    createPeerConnection();
+    peerConnection.addStream(localStream);
+    return true;
+}
+
+
+// ################### More WebRTC Stuff After the connection ##########################################
+
+// Creates a new Peer connection
+function createPeerConnection() {
+    try {
+        peerConnection = new RTCPeerConnection(stunServers);
+
+        peerConnection.onicecandidate = handleIceCandidate;
+
+        peerConnection.onaddstream = handleRemoteStreamAdded;
+
+        peerConnection.onremovestream = handleRemoteStreamRemoved;
+
+        return;
+    } catch (e) {
+        console.log('Failed to create PeerConnection, exception: ' + e.message);
+        alert('Couldnt create RTCPeerConnection object.');
+        return;
+    }
+}
+
+// Handle Ice Candidate events
+function handleIceCandidate(event) {
+    if (event.candidate) {
+        // console.log("Local ICE candidate");
+        sendICEcandidate({
+            "rtcMessage": {
+                label: event.candidate.sdpMLineIndex,
+                id: event.candidate.sdpMid,
+                candidate: event.candidate.candidate
+            }
+        })
+
+    } else {
+        // console.log('End of candidates.');
+    }
+}
+
+// Handle the remote stream
+function handleRemoteStreamAdded(event) {
+    console.log("Handled remote stream");
+    remoteStream = event.stream;
+    remoteVideo.srcObject = remoteStream;
+}
+
+// Remove the remote Stream
+function handleRemoteStreamRemoved(event) {
+    console.log('Remote stream removed. Event: ', event);
+    remoteVideo.srcObject = null;
+    localVideo.srcObject = null;
+}
+
+
+
+// Stop the connection
+function stop() {
+    localStream.getTracks().forEach(track => track.stop());
+    callInProgress = false;
+    peerConnection.close();
+    peerConnection = null;
+    otherUser = null;
+}
+
+function callProgress() {
+    callInProgress = true;
+}
+
+
+
+// Calling the actual thing
+// offer();
+    </script>
+
+<!-- Materialize JS -->
+{% endblock %}

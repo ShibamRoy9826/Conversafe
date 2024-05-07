@@ -1,32 +1,32 @@
 from django.db import models
-# from notifications.base.models import AbstractNotification
+from landing.models import AUser
 
-# class Notification(AbstractNotification): 
-    
-#     category = models.ForeignKey('myapp.Category', on_delete=models.CASCADE) 
+class Notification(models.Model):
+	title=models.CharField(max_length=100)
+	desc=models.CharField(max_length=500)
+	link=models.CharField(max_length=500,blank=True,null=True)
+	timestamp=models.DateTimeField(auto_now_add=True)
+	
+class NotificationList(models.Model):
+	user=models.OneToOneField(AUser,on_delete=models.CASCADE,related_name="user_notification_list")
+	notifications=models.ManyToManyField(Notification, blank=True,related_name="notifications")
+	count=models.IntegerField(default=0)
 
-#     class Meta(AbstractNotification.Meta): 
-#         abstract = False
+	def __str__(self):
+		return self.user.username
 
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# from django_celery_beat.models import MINUTES, PeriodicTask, CrontabSchedule, PeriodicTasks
-# import json
-# # Create your models here.
-# class BroadcastNotification(models.Model):
-#     message = models.TextField()
-#     broadcast_on = models.DateTimeField()
-#     sent = models.BooleanField(default=False)
+	def notify(self,notification):
+		self.notifications.add(notification)
+		self.count+=1
+		self.save()
 
-#     class Meta:
-#         ordering = ['-broadcast_on']
+	def deleteNotification(self,notificationId):
+		notification = Notification.objects.get(pk=notificationId)
+		self.notifications.remove(notification)
+		self.count-=1
 
-# @receiver(post_save, sender=BroadcastNotification)
-# def notification_handler(sender, instance, created, **kwargs):
-#     # call group_send function directly to send notificatoions or you can create a dynamic task in celery beat
-#     if created:
-#         schedule, created = CrontabSchedule.objects.get_or_create(hour = instance.broadcast_on.hour, minute = instance.broadcast_on.minute, day_of_month = instance.broadcast_on.day, month_of_year = instance.broadcast_on.month)
-#         task = PeriodicTask.objects.create(crontab=schedule, name="broadcast-notification-"+str(instance.id), task="notifications_app.tasks.broadcast_notification", args=json.dumps((instance.id,)))
+	def messages(self):
+		return self.notifications.all()
 
-#     #if not created:
-
+	def allCount(self):
+		return self.count

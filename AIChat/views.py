@@ -7,6 +7,7 @@ from landing import models
 from random import shuffle
 import string
 from django.shortcuts import redirect
+from notification.utilities import allNotifications,notify
 # Create your views here.
 
 def makeName():
@@ -26,8 +27,8 @@ def AIConnect(request,slug):
 	messages=Message.objects.filter(room=room)
 	context={}
 	user = models.AUser.objects.get(pk=request.user.pk)
-	context['notifications_unread']=user.notifications.unread()
-	context['notifications_count']=user.notifications.unread().count()
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
 	context['room']=room
 	context['messages']=messages
 	return render(request,'main/chat/mainAI.html',context)

@@ -1,0 +1,338 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Conversafe - Fun Quiz {% endblock %}
+
+{% block content %}
+<style type="text/css">
+.section{
+	justify-content: flex-start;
+    align-items: end;
+}
+.topTitle{
+	justify-content: space-between;
+}
+#controls{
+	justify-content: space-between;
+}
+
+.someBtn{
+	background-color: #4C51E0;
+	transition: 0.4s;
+}
+.someBtn:hover{
+	background-color: rgb(26,31,174);
+}
+
+.option{
+	cursor: pointer;
+}
+.questionCounter{
+	position: absolute;
+  width: 50px; 
+  margin: 0 auto;
+  left:45%;
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid black;
+  color: black;
+
+}
+
+
+/*Overlay message*/
+#overlay{
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	z-index: 1000000;
+	top: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+
+#message{
+	position: absolute;
+  left: 30%;
+  transform: translateX(-50%); 
+  margin: 0 auto; 
+  top: 50%;
+  transform: translateY(-50%);
+	text-align: center;
+	border: 2px solid white;
+	border-radius: 1rem;
+	font-weight: bold;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+/*	background-color: white;*/
+	width: 40%;
+	color: white;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	background: #833ab4;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+}
+</style>
+<div id="overlay">
+	<div id="message" class="px-4 flex flex-row">
+	<h1 class="text-3xl">Here's your Score</h1>
+	<h1 class="text-xl" style="color: rgb(200,200,200);">Correct: <span id="Score">0</span></h1>
+	<h1 class="text-xl" style="color: rgb(200,200,200);">InCorrect: <span id="wrongScore">0</span></h1>
+	<h1 class="text-xl mb-4" style="color: rgb(200,200,200);">UnAttempted: <span id="noScore">0</span></h1>
+	
+		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="hideMessage();">Resume game</button>
+		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.reload(true);">Play Again</button>
+		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.href='/events';">Go back to Events</button>
+
+</div>
+</div>
+<div class="border-2 border-gray-700 bg-gray-800 mr-8 mt-8 pb-4 rounded-xl relative flex flex-col" style="width:90%; height: auto;">
+
+	<!-- Heading -->
+	<div class="topTitle flex flex-row items-center">
+
+    <h1 class="text-white pl-4  pt-8 text-4xl ">Quiz🎮</h1>
+    <span class="text-white pl-4  pt-8 text-2xl mr-4">Correct ✅: <span id="correctCount">0</span>  |  Incorrect ❌: <span id="incorrectCount">0</span></span>
+	</div>
+
+	<!-- Controls -->
+	<div id="controls" class="flex flex-row items-center mx-8 mt-2 relative" style="justify-content: space-between;">
+
+		<div class="text-white questionCounter flex flex-row justify-center items-center font-bold" ><span id="questionC"></span>/10</div>
+		<button class="someBtn text-white rounded-full px-2 py-1 shadow-xl" onclick="prevQues();">
+    	<i class='bx bx-chevron-left'></i>
+    	</button>
+    	<button class="someBtn text-white rounded-full px-2 py-1 shadow-xl" onclick="nextQues();">
+    		<i class='bx bx-chevron-right'></i>
+    	</button>
+	</div>
+    
+
+    <!-- Question container -->
+    <div class="border-2 border-gray-700 bg-gray-900 mx-8 my-4 pb-4 rounded-xl  flex flex-col" style="width:90%; height: auto;">
+
+    	<div class="pt-8 flex-col"><h2 class="text-center text-white text-2xl">Q<span id="questionNo">1</span>. <span id="questionText">The question is still loading please wait</span></h2></div>
+
+    	<div class="optionContainer">
+    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    	</div>
+	</div>
+<div class="flex flex-row items-center justify-center">
+	<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="showMessage();">Submit All Questions</button>
+</div>
+<script>
+let questionNo=1;
+
+qNo=document.getElementById("questionNo");
+qNoC=document.getElementById("questionC");
+q=document.getElementById("questionText");
+
+correctCount=document.getElementById("correctCount")
+incorrectCount=document.getElementById("incorrectCount")
+let questions;
+let allOptions=[];
+// Going to constantly change
+let optionArr;
+let correctAnswers=0;
+let IncorrectAnswers=0;
+let attemptedQuestions=[];
+let userAnswers={};
+
+
+function showMessage(){
+	let e=document.getElementById("overlay");
+	e.style.display="block";
+	score=document.getElementById("Score");
+	scoreUnattempted=document.getElementById("noScore");
+	scoreWrong=document.getElementById("wrongScore");
+
+	score.innerText=correctAnswers;
+	scoreWrong.innerText=IncorrectAnswers;
+	scoreUnattempted.innerText=10-attemptedQuestions.length;
+}
+function hideMessage(){
+	let e=document.getElementById("overlay");
+	e.style.display="none";
+}
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function optionsForQuestion(questionIndex){
+	let obj=questions[questionIndex];
+
+	let arr=[];
+
+	arr.push(obj['correct_answer'])
+	for(let optionCount=0;optionCount<3;optionCount++){
+		arr.push(obj['incorrect_answers'][optionCount]);
+	}
+	shuffleArray(arr);
+	return arr;
+}
+
+function generateOptionArr(){
+	let op;
+	for(let i=0;i<10;i++){
+		op=optionsForQuestion(i);
+		allOptions.push(op);
+	}
+	return op;
+
+}
+
+function setOptions(questionNum){
+	let optionElements=document.querySelectorAll('.option');
+	let optionElement;
+	for (let i = 0; i < optionElements.length; i++) {
+	  optionElement = optionElements[i];
+	  optionElement.innerHTML=allOptions[questionNum][i];
+	  // console.log(`set the value of ${i}th option`);
+	  // console.log(`Question number: ${questionNum}`);
+	  // console.log(`option value:${allOptions[questionNum][i]}`);
+	  // console.log("\n");
+
+	}
+}
+function getQuestions(){
+	// fetch('https://opentdb.com/api.php?amount=10&category=9&type=multiple')
+	fetch('https://opentdb.com/api.php?amount=10&type=multiple')
+    .then((data) => data.json())
+    .then((item) => {
+      questions=item['results'];
+      // console.log(questions);
+      // Setting the first question
+			qNo.innerText=questionNo;
+			qNoC.innerText=questionNo;
+			q.innerHTML=questions[questionNo-1]['question'];
+			optionArr=optionsForQuestion(0);
+			generateOptionArr();
+			console.log(allOptions);
+			setOptions(0);
+
+    });
+}
+
+
+
+
+getQuestions();
+
+
+
+function nextQues(){
+	if(questionNo<10){
+		questionNo+=1;
+		setOptions(questionNo-1);
+		qNo.innerText=questionNo;
+		qNoC.innerText=questionNo;
+		q.innerHTML=questions[questionNo-1]['question'];
+		lastTicked(questionNo);
+
+	}
+}
+function prevQues(){
+	if(questionNo>1){
+		questionNo-=1;
+		setOptions(questionNo-1);
+		qNo.innerText=questionNo;
+		qNoC.innerText=questionNo;
+		q.innerHTML=questions[questionNo-1]['question'];
+		lastTicked(questionNo);
+		
+	}
+}
+
+function lastTicked(qaNo){
+	disColor()
+	if(attemptedQuestions.includes(qaNo)){
+		let yourOption=userAnswers[qaNo];
+		if(yourOption==questions[qaNo-1]['correct_answer']){
+			highlightCorrect(questionNo-1);
+		}else{
+			highlightCorrect(questionNo-1);
+			highlightIncorrect(yourOption);
+		}
+	}
+}
+
+function tickOption(element){
+	if(!attemptedQuestions.includes(questionNo)){
+		attemptedQuestions.push(questionNo);
+		userAnswers[questionNo]=element.innerHTML;
+		console.log(userAnswers);
+		if(isCorrect(element.innerHTML,questionNo-1)){
+			element.style.backgroundColor="#16c60c";
+			correctAnswers+=1;
+			correctCount.innerText=correctAnswers;
+		}
+		else{
+			element.style.backgroundColor="#f03a17";
+			IncorrectAnswers+=1;
+			incorrectCount.innerText=IncorrectAnswers;
+			highlightCorrect(questionNo-1);
+		}
+	}
+}
+
+
+function highlightCorrect(qaNo){
+	let optionEle=document.querySelectorAll('.option');
+	let ele;
+	for(let i=0; i<optionEle.length;++i){
+		ele=optionEle[i];
+
+		if(ele.innerHTML==questions[qaNo]['correct_answer']){
+			ele.style.backgroundColor="#16c60c";
+		}
+	}
+}
+function highlightIncorrect(desiredOption){
+	let optionEle=document.querySelectorAll('.option');
+	let ele;
+	for(let i=0; i<optionEle.length;++i){
+		ele=optionEle[i];
+
+		if(ele.innerHTML==desiredOption){
+			ele.style.backgroundColor="#f03a17";
+		}
+	}
+}
+
+function disColor(){
+	let optionEle=document.querySelectorAll('.option');
+	let ele;
+	for(let i=0; i<optionEle.length;++i){
+		ele=optionEle[i];
+		ele.style.backgroundColor="#1f2937";
+	}
+}
+
+function isCorrect(yourOption,questionNo){
+	if(questions[questionNo]['correct_answer']==yourOption){
+		return true;
+	}
+	else{
+		console.log(`Actually you wrote ${yourOption} , but the correct_answer was ${questions[questionNo]['correct_answer']}`)
+	
+		return false;
+	}
+}
+
+
+
+
+</script>
+
+{% endblock %}

@@ -22,21 +22,67 @@
 .leaveButton:hover {
     background-color: #900603;
 }
+.reportButton{
+    transition: all 1s;
+    margin-left: 0.3rem;
+    height: auto;
+    background-color: #CC0000;
+    border-radius: 5px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    position: relative;
+    display: inline-block;
+
+}
+.reportButton:hover {
+    background-color: #900603;
+}
+
+.reportButton::after {
+    content: attr(data-tooltip);
+    visibility: hidden;
+    width: 150px;
+    background-color: rgb(60,60,60);
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.reportButton:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
 
 .selfMessage {
     border-radius: 0.75rem 0.2rem 0.75rem 0.75rem;
+    max-width: 65vw;
 }
 
 .selfMessage p {
     text-align: right;
+    max-width: 65vw;
+    word-wrap: break-word;
 }
 
 .otherMessage {
     border-radius: 0.2rem 0.75rem 0.75rem 0.75rem;
+    max-width: 65vw;
 }
 
 .otherMessage p {
     text-align: left;
+    max-width: 65vw;
+    word-wrap: break-word;
 }
 
 .joinedLeft {
@@ -106,8 +152,71 @@ ul{
 
 }
 
+/*Overlay message*/
+#overlay{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000000;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+#message{
+    position: absolute;
+  left: 30%;
+  transform: translateX(-50%); 
+  margin: 0 auto; 
+  top: 50%;
+  transform: translateY(-50%);
+    text-align: center;
+    border: 2px solid white;
+    border-radius: 1rem;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+/*  background-color: white;*/
+    width: 40%;
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: #833ab4;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+}
+.someBtn{
+    background-color: #4C51E0;
+    transition: 0.4s;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.someBtn:hover{
+    background-color: rgb(26,31,174);
+}
 
 </style>
+
+
+<div id="overlay">
+    <div id="message" class="px-4 flex flex-row">
+    <h1 class="text-3xl">Thank you for reporting the user!</h1>
+        <p class="font-normal text-gray-300">We will ban the user if we find anything harmful, No worries:) </p>
+    
+        <button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="hideMessage();">Continue chat</button>
+
+        <button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="window.location.href='/home/';">Leave room</button>
+
+    </div>
+
+</div>
+
+
 <div class="p-10 lg:p-20 text-center mt-2">
     <h2 class="text-white text-3xl lg:text-6xl">{{ rooms.name }}</h2>
 </div>
@@ -133,7 +242,7 @@ ul{
         <div>
             <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
                 <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
-                <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
+                <h1 class="text-2xl text-white text-center font-bold ">{{ user.userprofile.display_name }}  </h1>
                 <div class="flex flex-row justify-center items-center">
                     <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="mute()" id="muteButton">
                         <i class='bx bx-microphone text-xl' id="muteButtonIcon" style="color: white;"></i>
@@ -144,45 +253,8 @@ ul{
                 </div>
             </div>
         </div>
-        <!-- {% if room.users > 1 %}
-
-        {% if room.user1.username == user.username  and room.user2.username == None %}
-        {% elif room.user2.username == user.username  and room.user1.username == None %}
-        {% else %}
-        <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
-                {% if room.user1.username != user.username %}
-                <img src="{{ room.user1.userprofile.avatar.url }}" class="rounded-full" style="width:5rem;height: 5rem;">
-                <h1 class="text-2xl text-white text-center font-bold">if {{ room.user1.userprofile.display_name }}</h1>
-
-                {% else %}
-                <img src="{{room.user2.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
-                <h1 class="text-2xl text-white text-center font-bold">else {{ room.user2.userprofile.display_name }}</h1>
-                
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-        {% endif %}   -->  
-
-       <!--  {% if room.users > 1 %}
-        <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
-                <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
-                <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
-                <div class="flex flex-row justify-center items-center">
-                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="mute()" id="muteButton">
-                        <i class='bx bx-microphone text-xl' id="muteButtonIcon" style="color: white;"></i>
-                    </button>
-                    <button class="shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex" onclick="noAudio()" id="noAudioButton">
-                        <i class='bx bx-volume-full text-xl' id="noAudioButtonIcon" style="color: white;"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        {% endif %} -->
-
+       
+<!-- 
         <div>
             <div style="position:absolute; top:0; right:0; padding-right: 20px; padding-top: 20px">
                     <video width="100px" class="border-2 border-red-600" id="localVideo" autoplay muted playsinline></video>
@@ -190,12 +262,12 @@ ul{
                 <div id="remoteVideoDiv">
                     <video style="width: 500px;" class="border-2 border-red-600"  id="remoteVideo" autoplay playsinline></video>
                 </div>
-            <button onclick="offer()" class="text-white text-xl border-red-600">Offer</button>
+           <button onclick="offer()" class="text-white text-xl border-red-600">Offer</button>
             <button onclick="Answer()" class="text-white text-xl border-red-600">Answer</button>
-            
+             
         </div>
 
-
+ -->
 
     </div>
 
@@ -217,7 +289,7 @@ ul{
         <div class="flex flex-row justify-start">
             <div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
                 <div class='p-4 bg-gray-200 otherMessage'>
-                    <p class='font-bold text-xl w-auto'> {{ message.user.userprofile.display_name }} </p>
+                    <p class='font-bold text-xl w-auto flex flex-row items-center justify-center'> {{ message.user.userprofile.display_name }} <button class="reportButton text-sm font-normal" data-tooltip="Report User"  onclick='reportUser(this)' data-messageid="{{ message.id }}"><i class="bx bxs-flag-alt"></i></button> </p>
                     <p class="w-auto"> {{ message.content }} </p>
                 </div>
             </div>
@@ -312,6 +384,25 @@ document.getElementById("leaveButton").addEventListener('click', () => {
 });
 
 
+// Report user
+function reportUser(element){
+    // console.log("Hey i am running...");
+    // userProfileName=element.parentNode.innerText;
+    // message=element.parentNode.parentNode.innerText;
+    // console.log(userProfileName);
+    // console.log(message);
+    messagePID=element.dataset.messageid;
+    showReportMessage();
+    chatSocket.send(JSON.stringify({
+        'username': userName,
+        'message': messagePID,
+        'displayName': displayName,
+        'room': roomName,
+        'messageType': "REPORT",
+        'eventType':""
+    }));
+
+}
 
 // Mute Button and Stop speaker button ########//////////////////////////////////////////
 function mute(){
@@ -352,6 +443,17 @@ function makeCode(display_name,pfp){
 
 }
 
+// show report user message
+function showReportMessage(){
+    let e=document.getElementById("overlay");
+    e.style.display="block";
+
+}
+function hideMessage(){
+    let e=document.getElementById("overlay");
+    e.style.display="none";
+}
+
 // ############################## webSocket events #############################################
 
 // As the connection opens up
@@ -381,7 +483,6 @@ chatSocket.onmessage = function(e) {
         manageWebRTC(data);
 
     }else{
-
         manageChat(data);
 
     }
@@ -461,13 +562,15 @@ function manageChat(data){
             audio.volume = 0.3;
             audio.play();
 
-            let html = "<div class='flex flex-row justify-start'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>" + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
+            // let html = `<div class='flex flex-row justify-start'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>${data.displayName}<button class='reportButton' onclick='reportUser(this)' data-messageid="${data.msgId}"><i class='bx bxs-flag-alt'></i></button></p><p class='w-auto'>${data.message}</p></div></div></div>`;
+
+            // console.log(`received the value ${data.msgId} as messageId`);
+
+            let html=`<div class="flex flex-row justify-start"><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'> ${data.displayName} <button class="reportButton text-sm font-normal" data-tooltip="Report User"  onclick='reportUser(this)' data-messageid=${data.msgId}><i class="bx bxs-flag-alt"></i></button> </p><p class="w-auto">${data.message}</p></div></div></div>`
             container = document.querySelector("#chatContainer");
             container.innerHTML += html;
 
         }
-
-
 
 
     } else if (data.messageType == "JOINED") {
@@ -475,6 +578,7 @@ function manageChat(data){
         // var audio = new Audio("{% static 'res/audio/userJoined.mp3' %}");
         // // audio.volume = 0.3;
         // audio.play();
+
 
 
         let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
@@ -493,7 +597,8 @@ function manageChat(data){
 
 
         if(userCount>1){  //Total users=2
-            offer()
+
+            
 
             if(currentUser==user1){
                 // Do stuff with user2 as this is the otherUser
@@ -660,8 +765,8 @@ function processOffer() {
         // Send these info to the backend
         // Contains the SDP of the current User
         sendOffer({
-            offerer:userName
-            rtcMessage: sessionDescription
+            "offerer":userName,
+            "rtcMessage": sessionDescription
         })
     }, (error) => {
         console.log("Error");
@@ -670,11 +775,11 @@ function processOffer() {
 
 // Sends the created Offer
 function sendOffer(data) {
-    console.log("sendOffer()")
+    console.log("sendOffer()");
     // Sending the Offer
     chatSocket.send(JSON.stringify({
         eventType: 'offer',
-        data
+        data:data
     }));
 }
 
@@ -726,7 +831,7 @@ function processAnswer() {
 
         // Sends the answer to the backend
         sendAnswer({
-            rtcMessage: sessionDescription
+            "rtcMessage": sessionDescription
         })
 
     }, (error) => {
@@ -806,7 +911,7 @@ function handleIceCandidate(event) {
     if (event.candidate) {
         // console.log("Local ICE candidate");
         sendICEcandidate({
-            rtcMessage: {
+            "rtcMessage": {
                 label: event.candidate.sdpMLineIndex,
                 id: event.candidate.sdpMid,
                 candidate: event.candidate.candidate
@@ -850,7 +955,7 @@ function callProgress() {
 
 
 // Calling the actual thing
-offer();
+// offer();
     </script>
 
 <!-- Materialize JS -->

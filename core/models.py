@@ -5,6 +5,7 @@ from landing.models import AUser
 
 class UserProfile(models.Model):
     user = models.OneToOneField(AUser, on_delete=models.CASCADE)
+    url=models.SlugField(unique=True)
     display_name = models.TextField(default="GuestUser",null=True,blank=True,max_length=30)
 
     short_bio=models.TextField(default="A new Conversafe user",max_length=100)
@@ -18,8 +19,6 @@ class UserProfile(models.Model):
         (FEMALE, "Female"),
         (OTHER, "Other")
     )
-
-
 
     gender=models.CharField(max_length=6,
                   choices=GENDERS,null=True,blank=True)
@@ -46,3 +45,11 @@ class UserProfile(models.Model):
         img.thumbnail(output_size)
         # overwrite the larger image
         img.save(self.avatar.path)
+
+class LearningSource(models.Model):
+    siteName=models.CharField(max_length=30)
+    siteUrl=models.CharField(max_length=500)
+    urlNoProtocol=models.CharField(max_length=450)
+    siteType=models.CharField(max_length=30)
+
+

@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 # Models
 from .models import *
 from core.models import UserProfile
+from friends.models import FriendList
+from notification.models import NotificationList
 # Forms
 from .forms import *
 
@@ -26,8 +28,7 @@ from django.core.mail import EmailMessage
 from verify_email.email_handler import send_verification_email
 
 # Notifications
-from notifications.signals import notify
-
+from notification.utilities import notify
 
 
 # User Model
@@ -58,20 +59,24 @@ def signup(request):
 			password=form.get_user_info()['password']
 			name=form.get_user_info()['username']
 
+			
+
 			# Checking if user exists
 			if AUser.objects.filter(email=email.lower()).exists():
+				print("Its a unique user... and no such user already exists")
 				return render(request,"auth/signup.html",{"userAlreadyExists":True})
 
 			# Sending Verification Email
+			print("Sending verification email...")
 			inactive_user = send_verification_email(request, form)
 			context={}
 			context['text']="A Verification email has been sent to {}".format(email)
+			print("Email sent")
 			return render(request,"auth/email/showInfo/checkEmail.html",context)
 		
 		return render(request,"auth/signup.html",{"form":form,"userAlreadyExists":True})
 	
 	return render(request,"auth/signup.html",{"userAlreadyExists":False,"form":form})
-
 
 
 # Login Page
@@ -85,10 +90,10 @@ def Login(request):
 		email=request.POST.get("email")
 		password=request.POST.get("password")
 
+
 		# Authenticating user
 		user=authenticate(request, email=email, password=password)
 
-		
 
 		# If everything is okay...
 
@@ -97,8 +102,9 @@ def Login(request):
 			if obj.firstLogin=="No":
 				obj.firstLogin="Yes"
 				obj.save()
-				UserProfile.objects.create(user=user)
-			# 	print("PROFILE CREATED SUCCESSFULLY")
+				UserProfile.objects.create(user=user,url=user.username)
+				FriendList.objects.create(user=user)
+				NotificationList.objects.create(user=user)
 			login(request,user)
 			# notify.send(request.user,recipient=request.user,verb="Welcome to Conversafe!",description="Enjoy the application and let me know through feedback! Thank you:)")
 			return redirect("/home/")

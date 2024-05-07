@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Notifications {% endblock %}
+{% block content %}
+<style type="text/css">
+.friendsContainer {
+    height: 80vh;
+    overflow: scroll;
+}
+
+.friendRequestContainer{
+    height: 40vh;
+    overflow: scroll;
+
+}
+
+.notificationList li {
+    border-bottom: rgb(50, 50, 50);
+}
+
+.notificationList li:hover {
+    background-color: rgb(55, 65, 81);
+}
+
+.closeButton {
+    transition: all 0.5s;
+}2
+
+.closeButton:hover {
+    color: white;
+}
+</style>
+
+{% csrf_token %}
+<h1 class="text-white text-4xl text-center font-bold mt-2"> Search Friends </h1>
+
+<form class="SearchBox w-[50vw] mb-4 mt-2 flex flex-row items-center justify-center" action="/searchUsers/" method="POST">
+    {% csrf_token %}
+    <input type="text" name="searchQuery" id="searchQuery" placeholder="Search the other person with their username" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-2 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-full mb-16" required>
+
+
+    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6" onclick="searchUsers();">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+    </button>
+
+</form>
+
+<div class="flex flex-col justify-center items-center">
+
+    {% if results %}
+    <div class="flex flex-col w-[80vw] " >
+    <div class="flex flex-col " >
+        <ol class="bg-gray-700 notificationList" id="notification-list">
+            {% for result in results %}
+            <li>
+                <div class="flex flex-row items-center border-2 border-gray-700 py-8 relative">
+                    <img src="{{ result.userprofile.avatar.url}}" class="ml-4 rounded-full w-16 h-16" >
+                    <a href="/profile/{{result.userprofile.url}}" class="ml-4">
+                        <div class="flex flex-col justify-center ">
+                            <h1 class="text-left text-white text-xl">{{ result.userprofile.display_name }}
+                            </h1>
+                            <p class="text-gray-500 text-left">
+                               {{ result.userprofile.short_bio }}
+                            </p>
+                        </div>
+                    </a>
+                    <!-- <p class="text-gray-500 text-left absolute top-2 " style="right: 0.5rem;">
+                        
+                    </p> -->
+
+                    
+                </div>
+            </li>
+            
+            {% endfor %}
+
+        </ol>
+    </div>
+
+    {% else %}
+    <div class="flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center friendsContainer text-center">
+
+        <h1 class="text-gray-400 text-center">Sorry... No results found:(</h1>
+    </div>
+    {% endif %}
+
+
+   
+
+{% endblock %}

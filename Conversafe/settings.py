@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +46,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'emails.conversafe@gmail.com'
-EMAIL_HOST_PASSWORD = 'zmhx zueq cjfz gguq'
+EMAIL_HOST_PASSWORD = 'fgdw nufo xmun gixw'
 
 
 EXPIRE_AFTER = "1d"
@@ -86,17 +87,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 # Other Django apps
+    'friends',
     'AIChat',
     'landing',
     'core',
     'chat',
-    # 'notification',
+    'notification',
 
 # Browser auto reload App
     # 'django_browser_reload'
 
     # Django notifications
-    'notifications',
+    # 'notifications',
     'django_celery_beat'
 ]
 

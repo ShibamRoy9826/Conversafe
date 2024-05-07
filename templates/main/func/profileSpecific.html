@@ -1,0 +1,141 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - User Profile {% endblock %}
+{% load static %}
+{% block content %}
+<!-- 
+<div class="w-[50vw] h-[2rem] bg-gray-600 flex flex-col justify-center items-center">
+    <h1 class="text-white">Hello {{user.username}}</h1>
+</div> -->
+
+
+<style type="text/css">
+#contentSection {
+    justify-content: start;
+    items-center
+}
+
+.bannerImage {
+    background-image: url(" {% static 'res/dummyBanner.jpg' %} ");
+    background-size: cover;
+    background-repeat: none;
+    background-position: center;
+    height: 10rem;
+}
+
+.verticalLine {
+    height: 1.8rem;
+    width: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-left: 2px solid rgb(107 114 128);
+}
+</style>
+<div class="w-full bannerImage">
+</div>
+<div class="flex flex-col justify-center items-center mt-8 relative" style="bottom:5rem">
+    <img src="{{profile.avatar.url}}" class="rounded-full h-24 w-24">
+    <h1 class="text-white text-2xl"> {{profile.display_name}}</h1>
+    <p class="text-gray-300 px-8 text-center">
+{{profile.short_bio}}
+       
+    </p>
+    <div class="flex flex-col lg:flex-row justify-evenly items-center mt-8 ">
+        <div class="flex flex-row justify-evenly items-center">
+        <div class="flex flex-col mx-3 justify-center items-center">
+            <h1 class="text-md text-white">{{profile.followers}}</h1>
+            <p class="text-sm text-gray-500">Followers</p>
+        </div>
+        <span class="verticalLine"></span>
+        <div class="flex flex-col mx-3 justify-center items-center">
+            <h1 class="text-md text-white">{{profile.following}}</h1>
+            <p class="text-sm text-gray-500">Following</p>
+        </div>
+        </div>
+
+
+        <span class="verticalLine hidden lg:block"></span>
+        <div class="flex flex-row items-center my-4 lg:mt-0">
+    {% if isFriend %}
+    <div onclick="unFriend()" id="addFriendBtn" class="coolButton shadow-2xl bg-[#4C51E0] w-32 h-full  mx-3 text-center rounded-md text-white px-2 py-2 flex">Unfriend
+        <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 ml-3'><path stroke-linecap='round' stroke-linejoin='round' d='m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' /></svg>
+    </div>
+
+    {% elif friendRequestPending %}
+
+    <div onclick="CancelRequest()" id="addFriendBtn" class="coolButton shadow-2xl bg-[#4C51E0] w-32 h-full  mx-3 text-center rounded-md text-white px-2 py-2 flex">Cancel Request
+        <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 ml-3'><path stroke-linecap='round' stroke-linejoin='round' d='m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' /></svg>
+        
+    </div>
+
+    {% else %}
+
+    <div onclick="SendFriendRequest()" id="addFriendBtn" class="coolButton shadow-2xl bg-[#4C51E0] w-32 h-full  mx-3 text-center rounded-md text-white px-2 py-2 flex">Add Friend
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20px" height="25px">
+            <path d="M6 12H18M12 6V18" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </div>
+    {% endif %}
+
+</div>
+</div>
+</div>
+
+<div class="flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700 rounded-lg shadow-xl overflow-y-scroll pb-4" style="height: auto; max-height:50vh;width: 80%;">
+   <h1 class="text-2xl text-white p-4"> About </h1>
+   <p class="text-gray-300 px-4">
+    {{profile.long_bio}}
+    
+   </p> 
+</div>
+
+<div class="my-4 flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700 rounded-lg shadow-xl overflow-y-scroll" style="height: 50vh; width: 80%;">
+   <h1 class="text-2xl text-white p-4"> Acheivements </h1>
+   <br><br>
+   <p class="text-gray-300 px-4 text-center">Coming Soon... Feature yet to be added...</p> 
+</div>
+
+<script type="text/javascript">
+
+function SendFriendRequest(){
+    btn=document.getElementById("addFriendBtn");
+    btn.innerHTML="Cancel Request <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 ml-3'><path stroke-linecap='round' stroke-linejoin='round' d='m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' /></svg>";
+    btn.onclick=unFriend;
+    $.ajax({
+        type: "POST",
+        url: "/sendFriendRequest/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', userToAdd: "{{ profile.user.username }}" },
+    });
+}
+
+
+function unFriend(){
+    btn=document.getElementById("addFriendBtn");
+    btn.innerHTML="Add Friend <svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' width='20px' height='25px'><path d='M6 12H18M12 6V18' stroke='currentColor' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' /></svg>";
+    btn.onclick=SendFriendRequest;
+    $.ajax({
+        type: "POST",
+        url: "/unFriend/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', userToUnFriend: "{{ profile.user.username }}" },
+    });
+}
+
+
+
+function CancelRequest(){
+    btn=document.getElementById("addFriendBtn");
+    btn.innerHTML="Add Friend <svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' width='20px' height='25px'><path d='M6 12H18M12 6V18' stroke='currentColor' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' /></svg>";
+    $.ajax({
+        type: "POST",
+        url: "/cancelRequest/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', userCancelRequest: "{{ profile.user.username }}" },
+    });
+}
+</script>
+
+{% endblock %}

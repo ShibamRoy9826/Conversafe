@@ -22,8 +22,7 @@ from notification import views as notificationView
 from core import views as mainView
 from chat import views as chatView
 from AIChat import views as AIView
-import notifications.urls 
-
+from friends import views as friendView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -46,10 +45,24 @@ urlpatterns = [
 
     # Login required
     path('home/',mainView.home,name="home"),
+
+    # User Profiles
     path('profile/',mainView.profile,name="profile"),
-    path('friends/',mainView.friends,name="friends"),
+    path('profile/<username>/',mainView.profileSpecific,name="profileSpecific"),
+
+    # Friends
+    path('sendFriendRequest/',friendView.sendFriendRequest,name="sendFriendRequest"),
+    path('unFriend/',friendView.unFriend,name="unFriend"),
+    path('cancelRequest/',friendView.CancelRequest,name="cancelRequest"),
+    path('acceptReq/',friendView.AcceptRequest,name="cancelRequest"),
+    path('declineReq/',friendView.DeclineRequest,name="cancelRequest"),
+    path('searchUsers/',friendView.searchPeople,name="searchUsers"),
+
+
+
+    path('friends/',friendView.friends,name="friends"),
     path('notifications/',mainView.notifications,name="notifications"),
-    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    # path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('contact/',mainView.contact,name="contact"),
     path('feedback/',mainView.feedback,name="feedback"),
     path('editProfile/',mainView.editProfile,name="edit_profile"),
@@ -58,10 +71,16 @@ urlpatterns = [
     path('settings/',mainView.settings,name="settings"),
     path("logout/",mainView.logOut,name="logout"),
 
+    # Fun Quiz
+    path('startQuiz/',mainView.startQuiz,name="quiz"),
+
 
     # Chat
-    path('rooms/',chatView.rooms,name="roomList"),
+    # path('rooms/',chatView.rooms,name="roomList"),
+    path('privateRoomMenu/',chatView.privateRoomCreator,name="privateRoomMenu"),
     path('chat/<slug:slug>/',chatView.room,name="chatRoom"),
+    path('chat/private/<slug:slug>/',chatView.roomJoinPrivate,name="chatRoomPrivate"),
+    path('createPrivateRoom/',chatView.createPrivateRoom,name="chatRoomCreatePrivate"),
     path('findRoom/',chatView.findRoom,name="findRoom"),
 
     # ChatWithAI

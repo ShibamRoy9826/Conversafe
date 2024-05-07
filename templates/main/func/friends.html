@@ -1,14 +1,176 @@
 {% extends 'main/base.html' %}
-
-{% block title %} Conversafe - Friends {% endblock %}
-
-
-
-
+{% block title %} Conversafe - Notifications {% endblock %}
 {% block content %}
+<style type="text/css">
+.friendsContainer {
+    height: 80vh;
+    overflow: scroll;
+}
+
+.friendRequestContainer{
+    height: 40vh;
+    overflow: scroll;
+
+}
+
+.notificationList li {
+    border-bottom: rgb(50, 50, 50);
+}
+
+.notificationList li:hover {
+    background-color: rgb(55, 65, 81);
+}
+
+.closeButton {
+    transition: all 0.5s;
+}2
+
+.closeButton:hover {
+    color: white;
+}
+</style>
+
+{% csrf_token %}
+<h1 class="text-white text-4xl text-center font-bold mt-2"> Search Friends </h1>
+
+<form class="SearchBox w-[50vw] mb-4 mt-2 flex flex-row items-center justify-center" action="/searchUsers/" method="POST">
+    {% csrf_token %}
+    <input type="text" name="searchQuery" id="searchQuery" placeholder="Search the other person with their username" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-2 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-full mb-16" required>
 
 
-<div><h1 class="text-2xl text-white">You can use this page to find other users, and make new friends!</h1></div>
+    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6" onclick="searchUsers();">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+    </button>
+
+</form>
+<div class="flex flex-col justify-center items-center">
+    <h1 class="text-white text-3xl mb-4 " id="button">Your Friends</h1>
+
+    {% if friends %}
+    <div class="flex flex-col w-[80vw] " >
+    <div class="flex flex-col " >
+        <ol class="bg-gray-700 notficationList" id="notification-list">
+            {% for friend in friends %}
+            
+            <li>
+                <div class="flex flex-row items-center border-2 border-gray-700 py-8 relative">
+                    <img src="{{friend.userprofile.avatar.url}}" class="ml-4 rounded-full w-16 h-16" >
+                    <a href="/profile/{{friend.userprofile.url}}" class="ml-4">
+                        <div class="flex flex-col justify-center ">
+                            <h1 class="text-left text-white text-xl">{{ friend.userprofile.display_name }}
+                            </h1>
+                            <p class="text-gray-500 text-left">
+                               {{ friend.userprofile.short_bio }}
+                            </p>
+                        </div>
+                    </a>
+                    <!-- <p class="text-gray-500 text-left absolute top-2 " style="right: 0.5rem;">
+                        
+                    </p> -->
+
+                    
+                </div>
+            </li>
+            
+            {% endfor %}
+
+        </ol>
+    </div>
+
+    {% else %}
+    <div class="flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center friendsContainer text-center">
+
+        <h1 class="text-gray-400 text-center">You dont seem to have friends,<br> Why don't you make some?</h1>
+    </div>
+    {% endif %}
+<hr class="border border-gray-700" style="width: 100%; height: 100%; margin-top: 2rem;"/>
+
+    <h1 class="text-white text-3xl mb-4" style="margin-top: 1rem;" id="FriendRequests">Friend Requests</h1>
+
+    <div class="friendRequestContainer flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center ">
+        <!-- <h1 class="text-gray-400 text-center">No Friend Requests at the moment...</h1> -->
+        {% if friendRequests %}
+       
+
+        <div class="flex flex-col w-[80vw] " >
+        <ol class="bg-gray-700 notficationList" id="notification-list">
+            {% for friendR in friendRequests %}
+            {% if friendR.isActive %}
+            <li>
+                <div class=" flex flex-row items-center  border-2 border-gray-700 py-8 relative">
+                    
+                    <a href="/profile/{{ friendR.sender.username }}" class="ml-4">
+                        <div class="flex flex-col justify-center ">
+                            <h1 class="text-left text-white text-xl">{{ friendR.sender.username }}
+                            </h1>
+                            <p class="text-gray-500 text-left">
+                                There's a new friend request by {{ friendR.sender.username }}
+                            </p>
+                        </div>
+                    </a>
+                    <p class="text-gray-500 text-left absolute top-2 " style="right: 0.5rem;">
+                        {{ friendR.time }}
+                    </p>
+
+                    <button onclick="acceptReq(this);"  id="acceptBtn" class=" rounded-xl border-2 border-gray-700 py-4 px-4 mx-3 flex flex-row items-center justify-center" style="background-color: #03C04A;" data-requestusername="{{ friendR.sender.username }}" >
+                        <svg viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.5 12.5L10.167 17L19.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                    </button>
+
+                    <button onclick="declineReq(this);" id="declineBtn" class=" rounded-xl border-2 border-gray-700 py-4 px-4 mx-3 flex flex-row items-center justify-center" style="background-color: #D21404;" data-requestusername="{{ friendR.sender.username }}" >
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 8L8 16M8.00001 8L16 16" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                    </button>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+        </ol>
+    </div>
+    {% else %}
+    <div class="flex flex-col justify-center items-center"><p class="text-white text-xl text-center ">You have no friend requests at the moment...</p></div>
+    {% endif %}
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+
+function acceptReq(element){
+    
+    const otherUser = element.dataset.requestusername; 
+
+    $.ajax({
+        type: "POST",
+        url: "/acceptReq/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', userAccept: otherUser },
+    });
+    element.parentNode.parentNode.remove();
+} 
 
 
+function declineReq(element){
+    const otherUser = element.dataset.requestusername; 
+
+    $.ajax({
+        type: "POST",
+        url: "/declineReq/",
+        dataType: "text",
+        async: true,
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', userDecline: otherUser },
+    });
+
+    element.parentNode.parentNode.remove();
+}
+
+
+</script>
 {% endblock %}

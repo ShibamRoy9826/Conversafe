@@ -1,9 +1,11 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .models import chatRoom,Message
+from .models import chatRoom,Message,ReportedMessage
 from landing.models import AUser
 from django.utils import timezone
+import detectlanguage
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -18,6 +20,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		self.user1Display=""
 		self.user2Display=""
 		self.userCount=0
+
+
+		detectlanguage.configuration.api_key = "0c23d6e0bb1c2f62b833856dd2e96fad"
 
 		await self.increaseUserCount(self.room_name)
 
@@ -97,10 +102,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 		if messageType=="JOINED":
 			await self.addNewUser(self.room_name,username)
+		elif messageType=="REPORT":
+			await self.checkMessage(message, username)
 		elif messageType=="LEFT":
 			await self.removeUser(self.room_name,username)
 
-		await self.save_message(displayname,username,room,message,messageType)	
+		messageId=await self.save_message(displayname,username,room,message,messageType)
 
 		await self.getUsers(self.room_name)
 
@@ -111,6 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'type':'chat_message',
 			'displayName':displayname,
 			'message':message,
+			'msgId':messageId,
 			'username':username,
 			'room':room,
 			'messageType':messageType,
@@ -153,17 +161,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		displayname=event['displayName']
 		room=event['room']
 		msgType=event['messageType']
+		msgId=event['msgId']
 
 
 		await self.getUsers(self.room_name)
-
-
+		try:
+			lang=detectlanguage.simple_detect(message)!="en"
+			if msgType=='NORMAL' and lang:
+				print("NON ENGLISH CHAT DETECTED!!!!")
+		except:
+			pass
 
 		await self.send(text_data=json.dumps({
 			'message':message,
 			'displayName':displayname,
 			'username':username,
 			'room':room,
+			'msgId':msgId,
 			'messageType':msgType,
 			'user1Username':self.user1Username,
 			'user2Username':self.user2Username,
@@ -207,7 +221,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			self.user2Pfp=obj.user2.userprofile.avatar.url
 			self.user1Display=obj.user1.userprofile.display_name
 			self.user2Display=obj.user2.userprofile.display_name
-			
+
+
+	@sync_to_async
+	def checkMessage(self,messagePid,reporter):
+		msg=Message.objects.get(id=messagePid)
+		reporter=AUser.objects.get(username=username)
+		report=ReportedMessage.objects.create(message=msg,reporter=reporter)
+
 
 	@sync_to_async
 	def checkUserCount(self,room):
@@ -278,5 +299,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		user=AUser.objects.get(username=username)
 		roomName=chatRoom.objects.get(slug=room)
 
-		Message.objects.create(displayName=display,user=user,room=roomName,content=message,messageType=messageType)
-
+		msg=Message.objects.create(displayName=display,user=user,room=roomName,content=message,messageType=messageType)
+		return msg.id

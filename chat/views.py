@@ -6,6 +6,7 @@ from core.models import UserProfile
 from landing import models
 from random import shuffle
 import string
+from notification.utilities import allNotifications, notify
 from django.shortcuts import redirect
 # Create your views here.
 
@@ -14,9 +15,8 @@ from django.shortcuts import redirect
 def rooms(request):
 	rooms=chatRoom.objects.all()
 	context={}
-	user = models.AUser.objects.get(pk=request.user.pk)
-	context['notifications_unread']=user.notifications.unread()
-	context['notifications_count']=user.notifications.unread().count()
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
 	context['rooms']=rooms
 
 	return render(request,'main/chat/rooms.html',context)
@@ -26,9 +26,8 @@ def room(request,slug):
 	room=chatRoom.objects.get(slug=slug)
 	messages=Message.objects.filter(room=room)
 	context={}
-	user = models.AUser.objects.get(pk=request.user.pk)
-	context['notifications_unread']=user.notifications.unread()
-	context['notifications_count']=user.notifications.unread().count()
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
 	context['room']=room
 	context['messages']=messages
 
@@ -56,18 +55,24 @@ def findRoom(request):
 	rooms2=chatRoom.objects.filter(users=0)
 	context={}
 	user = models.AUser.objects.get(pk=request.user.pk)
-	context['notifications_unread']=user.notifications.unread()
-	context['notifications_count']=user.notifications.unread().count()
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
+
 
 	# Connecting users to chatrooms with available users
 	if rooms.exists():
 		firstRoom=rooms.first()
 		return redirect("/chat/"+firstRoom.slug)
 
-	# If there's an empty chatroom, connect to that
+	# If there's an empty chatroom, delete that , and connect to a new one
 	elif rooms2.exists():
-		secondRoom=rooms2.first()
+		rooms2.delete()
+
 		profile=UserProfile.objects.get(user=user)
+		roomName=makeName()
+		slug=makeName()
+		secondRoom=chatRoom.objects.create(name=roomName,slug=slug,gender=profile.gender)
+				
 		secondRoom.gender=profile.gender
 		return redirect("/chat/"+secondRoom.slug)
 
@@ -81,7 +86,35 @@ def findRoom(request):
 
 
 
+@login_required(login_url="login")
+def createPrivateRoom(request):
+	user = models.AUser.objects.get(pk=request.user.pk)
+	roomName=makeName()
+	slug=makeName()
+	profile=UserProfile.objects.get(user=user)
+	r=chatRoom.objects.create(name=roomName,slug=slug,gender=profile.gender)
+	return redirect("/chat/private/"+slug)
+
+@login_required(login_url="login")
+def privateRoomCreator(request):
+	context={}
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
+	
+	return render(request,'main/chat/createOrJoin.html',context)
+	
+@login_required(login_url="login")
+def roomJoinPrivate(request,slug):
+	room=chatRoom.objects.get(slug=slug)
+	messages=Message.objects.filter(room=room)
+	context={}
+	context['notifications_unread']=allNotifications(request.user.pk)
+	context['notifications_count']=allNotifications(request.user.pk).count()
+	context['room']=room
+	context['messages']=messages
 
 
-
-
+	if room.users >2:
+		return HttpResponse("The room you tried to join is Full:( \n Please try joining another room...")
+	
+	return render(request,'main/chat/mainPrivate.html',context)

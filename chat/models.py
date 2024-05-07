@@ -56,3 +56,8 @@ class Message(models.Model):
 
 	class Meta:
 		ordering=('time',)
+
+
+class ReportedMessage(models.Model):
+	message=models.ForeignKey(Message,related_name="reported_messages",on_delete=models.CASCADE)
+	reporter=models.ForeignKey(AUser,related_name="reporter",on_delete=models.CASCADE,null=True,blank=True)
