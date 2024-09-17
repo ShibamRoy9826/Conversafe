@@ -59,7 +59,7 @@ Running this project locally is very easy.
 3. Install necessary dependencies (Its suggested to make a virtual environment to run the project. Recommended Python Version : 3.10.5 )
  You should also have npm installed.
 ```bash
-  pip install requirements.txt
+  pip install -r requirements.txt
 ```
 4. Install TailwindCss
 
