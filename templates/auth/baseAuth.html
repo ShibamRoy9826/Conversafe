@@ -23,29 +23,29 @@
 
 <body>
     <!-- Loader -->
-    <div id="loader" class="grid min-h-screen place-content-center bg-[#0C0908]">
+    <div id="loader" class="grid min-h-screen place-content-center bg-[#11111b]">
         <img src="{% static 'loader.svg' %}" class="lImage w-24 h-24" />
     </div>
     <!-- Navbar -->
-    <header class="backdrop-blur-lg bg-white text-white body-font fixed top-0 left-0 right-0 z-40 " id="navbar">
+    <header class="backdrop-blur-lg bg-[#11111b] text-[#cdd6f4] body-font fixed top-0 left-0 right-0 z-40 " id="navbar">
         <div class="h-full backdrop-blur-lg container mx-auto  flex flex-wrap px-5 py-4 flex-row items-center z-40">
 
             <!-- Logo at navbar -->
-            <a href="/" class="h-full flex title-font font-medium items-center text-white mb-4 md:mb-0">
+            <a href="/" class="h-full flex title-font font-medium items-center text-[#cdd6f4] mb-4 md:mb-0">
                 <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
-                <span class="ml-3 mr-3 text-xl logo h-full scrolled" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
+                <span class="ml-3 mr-3 text-xl logo h-full" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
             </a>
             <!-- Navbar content for larger screens -->
             <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base hidden lg:block justify-center">
-                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#home">Home</a>
-                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#about">About</a>
-                <a class="mr-3 ml-4 navLink text-center scrolled" href="/#contact">Contact</a>
+                <a class="mr-3 ml-4 navLink text-center text-[#cdd6f4]" href="/#home">Home</a>
+                <a class="mr-3 ml-4 navLink text-center text-[#cdd6f4]" href="/#about">About</a>
+                <a class="mr-3 ml-4 navLink text-center text-[#cdd6f4]" href="/#contact">Contact</a>
             </nav>
             <div class="hamburger w-16 h-full absolute top-[-0.7rem] md:right-0 right-[2rem] flex flex-col justify-center items-center lg:hidden z-42">
                 <svg width="100" height="100" viewBox="0 0 100 100">
-                    <path class="line scrolled" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
-                    <path class="line scrolled" d="M 20,50 H 80" />
-                    <path class="line scrolled" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                    <path class="line" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                    <path class="line" d="M 20,50 H 80" />
+                    <path class="line" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
                 </svg>
             </div>
         </div>
@@ -53,13 +53,13 @@
 
     <!-- Navbar content for smaller screens -->
     <nav class="backdrop-blur-lg w-screen h-screen flex flex-col justify-center items-center navBar lg:hidden">
-        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#home">Home</a>
-        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#about">About</a>
-        <a class="mr-3 ml-4 navLinkSmall text-center" href="/#contact">Contact</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center text-[#cdd6f4]" href="/#home">Home</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center text-[#cdd6f4]" href="/#about">About</a>
+        <a class="mr-3 ml-4 navLinkSmall text-center text-[#cdd6f4]" href="/#contact">Contact</a>
     </nav>
     <section class="min-h-screen flex flex-row items-center justify-center" id="form">
         <!-- Alert -->
-        <div class="bg-white border-l-[10px] border-red-500 text-rose-600 px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
+        <div class="bg-[#11111b] border-[#f38ba8] text-[#eba0ac] px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
             <strong class="font-bold">Error!</strong>
             <span class="block sm:inline " id="alertText">Something seriously bad happened.</span>
             <span class="absolute top-0 bottom-0 right-0 px-2 py-3 closeBtn" onclick="closeAlert()">
@@ -81,10 +81,10 @@
 
 
     <!-- Footer  -->
-    <footer class="text-gray-400 bg-gray-900 body-font">
+    <footer class="text-gray-400 bg-[#11111b] body-font">
         <div class="container px-5 py-8 mx-auto flex md:items-center lg:items-start md:flex-nowrap flex-wrap flex-row">
             <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-                <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
+                <a class="flex title-font font-medium items-center md:justify-start justify-center text-[#cdd6f4]">
                     <img src="{% static 'logoNav.png' %}" class="w-8 h-8">
                     <span class="ml-3 text-xl" style="font-family: 'Pacifico',sans-serif;">Conversafe</span>
                 </a>
@@ -94,19 +94,19 @@
                 <div class="lg:w-1/4 md:w-1/2 w-full px-4">
                     <nav class="list-none mb-10">
                         <li>
-                            <a class="text-gray-400 hover:text-white" href="https://github.com/ShibamRoy9826">Github</a>
+                            <a class="text-gray-400 hover:text-[#cdd6f4]" href="https://github.com/ShibamRoy9826">Github</a>
                         </li>
                         <li>
-                            <a class="text-gray-400 hover:text-white" href="https://www.instagram.com/hatake_shibam/">Instagram</a>
+                            <a class="text-gray-400 hover:text-[#cdd6f4]" href="https://www.instagram.com/hatake_shibam/">Instagram</a>
                         </li>
                         <li>
-                            <a class="text-gray-400 hover:text-white" href="https://www.linkedin.com/in/shibam-roy-509774257/">LinkedIn</a>
+                            <a class="text-gray-400 hover:text-[#cdd6f4]" href="https://www.linkedin.com/in/shibam-roy-509774257/">LinkedIn</a>
                         </li>
                     </nav>
                 </div>
             </div>
         </div>
-        <div class="bg-gray-800 bg-opacity-75">
+        <div class="bg-[#1e1e2e]">
             <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
                 <p class="text-gray-400 text-sm text-center sm:text-left">© 2023 Conversafe —
                     <a href="https://github.com/ShibamRoy9826" rel="noopener noreferrer" class="text-gray-500 ml-1" target="_blank">@royshibam9826</a>

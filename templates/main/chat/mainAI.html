@@ -15,7 +15,7 @@
     margin-left: 1rem;
     margin-right: 1rem;
     height: auto;
-    background-color: #D0312D;
+    background-color: #d20f39;
 
 }
 
@@ -24,7 +24,8 @@
 }
 
 .selfMessage {
-	background-color: #11131d;
+	background-color: #1e1e2e;
+    color: #cdd6f4;
     border-radius: 0.75rem 0.2rem 0.75rem 0.75rem;
 }
 
@@ -33,7 +34,8 @@
 }
 
 .otherMessage {
-	background-color: #111827;
+	background-color: #45475a;
+    color: #cdd6f4;
     border-radius: 0.2rem 0.75rem 0.75rem 0.75rem;
 }
 
@@ -95,10 +97,10 @@ ul{
 
 
 #muteButton.active{
-    background-color: #D0312D;
+    background-color: #d20f39;
 }
 #noAudioButton.active{
-    background-color: #D0312D;
+    background-color: #d20f39;
 }
 @media (max-width:500px) {
     .joinedLeft {
@@ -107,7 +109,6 @@ ul{
     }
 
 }
-
 
 </style>
 <!-- <div class="p-10 lg:p-20 text-center mt-2">
@@ -134,7 +135,7 @@ ul{
 <div class="tabContent flex flex-col justify-center items-center" style="width: 100%;height: 100%; ">
     <div id="audio" class="active" data-tab-content style="width: 80%">
         <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+            <div class="bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
                 <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
                 <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
                 <div class="flex flex-row justify-center items-center">
@@ -148,9 +149,9 @@ ul{
             </div>
         </div>
         <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+            <div class="bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
                 <img src="{% static 'res/aiPfp.jpg' %}" class="rounded-full" style="width:5rem;height: 5rem;">
-                <h1 class="text-2xl text-white text-center font-bold">Mr. AI</h1>
+                <h1 class="text-2xl text-white text-center font-bold">AI</h1>
                 
             </div>
         </div>
@@ -160,7 +161,7 @@ ul{
         {% elif room.user2.username == user.username  and room.user1.username == None %}
         {% else %}
         <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+            <div class="bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
                 {% if room.user1.username != user.username %}
                 <img src="{{ room.user1.userprofile.avatar.url }}" class="rounded-full" style="width:5rem;height: 5rem;">
                 <h1 class="text-2xl text-white text-center font-bold">if {{ room.user1.userprofile.display_name }}</h1>
@@ -177,7 +178,7 @@ ul{
 
        <!--  {% if room.users > 1 %}
         <div>
-            <div class="bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
+            <div class="bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl" style="width:100%;height: 100%;">
                 <img src="{{user.userprofile.avatar.url}}" class="rounded-full" style="width:5rem;height: 5rem;">
                 <h1 class="text-2xl text-white text-center font-bold">{{ user.userprofile.display_name }}</h1>
                 <div class="flex flex-row justify-center items-center">
@@ -198,7 +199,7 @@ ul{
     </div>
 
 <div id="chat" data-tab-content class="justify-center items-center" style="width: 80%;height: 100%;">
-<div class="my-4 flex flex-col bg-gray-800 rounded-xl border-2 border-gray-700  shadow-xl "  style="width: 100%;height: 100%;">
+<div class="my-4 flex flex-col bg-[#11111b] rounded-xl border-2 border-gray-700  shadow-xl "  style="width: 100%;height: 100%;">
     <div id="chatContainer" class="overflow-y-scroll pb-4" style="height: 60vh; width: 100%;">
         {% for message in messages %}
         {% if message.messageType == 'NORMAL' %}
@@ -213,7 +214,7 @@ ul{
         </div>
         {% else %}
         <div class="flex flex-row justify-start">
-            <div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+            <div class='bg-[#1e1e2e] text-white otherMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
                 <div class='p-4 bg-gray-200 otherMessage'>
                     <p class='font-bold text-xl w-auto'> {{ message.user.userprofile.display_name }} </p>
                     <p class="w-auto"> {{ message.content }} </p>
@@ -223,16 +224,16 @@ ul{
         {% endif %}
         {% elif message.messageType == 'JOINED' %}
         <div class="flex flex-row justify-center rounded-xl joinedLeft">
-            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
-                <div class="p-2 bg-gray-600 rounded-xl">
+            <div class="bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-[#1e1e2e] rounded-xl">
                     <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Joined The Conversation</p>
                 </div>
             </div>
         </div>
         {% else %}
         <div class="flex flex-row justify-center rounded-xl joinedLeft">
-            <div class="bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full">
-                <div class="p-2 bg-gray-600 rounded-xl">
+            <div class="bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full">
+                <div class="p-2 bg-[#1e1e2e] rounded-xl">
                     <p class=" text-sm text-center"> {{ message.user.userprofile.display_name }} Left The Conversation</p>
                 </div>
             </div>
@@ -241,10 +242,10 @@ ul{
         {% endfor %}
     </div>
 </div>
-<div class="mt-6 mx-4 p-4 bg-gray-600 rounded-xl w-[100%] ">
+<div class="mt-6 mx-4 p-4 bg-[#1e1e2e] rounded-xl w-[100%] ">
     <form method="POST" action="." class="flex" style="height: 3rem;" onkeydown="return event.key != 'Enter';">
         {% csrf_token %}
-        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
+        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="bg-[#11111b] rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
         <button type="button" class="coolButton shadow-2xl bg-[#4C51E0] w-32  mx-3 text-center rounded-md text-white px-2 py-3 flex" id="messageSubmit"> Send <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" w-6 h-6" style="margin-left: 0.3rem;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
             </svg>
@@ -345,7 +346,7 @@ function noAudio(){
 }
 
 function makeCode(display_name,pfp){
-    let html="<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='"+pfp+"' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>"+display_name+"</h1></div></div>";
+    let html="<div><div class='bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='"+pfp+"' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>"+display_name+"</h1></div></div>";
 
     return html
 
@@ -460,7 +461,7 @@ function manageChat(data){
             if(AiIsTyping){
 
 
-                let html = "<div class='flex flex-row justify-start' id='AiIsTyping'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>Mr. AI</p><div class='flex flex-row items-center'><p class='w-auto font-semi-bold flex flex-row items-center'> Mr.Ai is Typing </p><div class='w-16 h-16'><img src='{% static 'typing.svg' %}' class='typingImage w-16 h-16' /></div></div></div></div></div>";
+                let html = "<div class='flex flex-row justify-start' id='AiIsTyping'><div class='bg-[#1e1e2e] text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'> AI</p><div class='flex flex-row items-center'><p class='w-auto font-semi-bold flex flex-row items-center'> AI is Typing </p><div class='w-16 h-16'><img src='{% static 'typing.svg' %}' class='typingImage w-16 h-16' /></div></div></div></div></div>";
                 container = document.querySelector("#chatContainer");
                 container.innerHTML += html;
             }
@@ -469,7 +470,7 @@ function manageChat(data){
             audio.volume = 0.3;
             audio.play();
 
-            let html = "<div class='flex flex-row justify-start'><div class='bg-gray-600 text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>" + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
+            let html = "<div class='flex flex-row justify-start'><div class='bg-[#1e1e2e] text-white otherMessage mx-8 my-4 space-y-3  text-left w-auto max-w-[95%] lg:max-w-[45%]'><div class='p-4 bg-gray-200 otherMessage'><p class='font-bold text-xl w-auto'>" + data.displayName + "</p><p class='w-auto'>" + data.message + "</p></div></div></div>";
             container = document.querySelector("#chatContainer");
             container.innerHTML += html;
 
@@ -482,7 +483,7 @@ function manageChat(data){
         audio.play();
 
 
-        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-[#1e1e2e] rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Joined The Conversation</p></div></div></div>";
 
         audioContainer=document.getElementById("audio")
 
@@ -496,10 +497,10 @@ function manageChat(data){
         // audio.volume = 0.3;
         audio.play();
 
-        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-gray-600 text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-gray-600 rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Left The Conversation</p></div></div></div>";
+        let html = "<div class='flex flex-row justify-center rounded-xl joinedLeft' style='height: 0.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem;'><div class='bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full'><div class='p-2 bg-[#1e1e2e] rounded-xl'><p class=' text-sm text-center'> " + data.displayName + " Left The Conversation</p></div></div></div>";
         container = document.querySelector("#chatContainer");
 
-        let html2 = "<div><div class='bg-gray-800 rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='{{user.userprofile.avatar.url}}' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>{{ user.userprofile.display_name }}</h1><div class='flex flex-row justify-center items-center'><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='mute()' id='muteButton'><i class='bx bx-microphone text-xl' id='muteButtonIcon' style='color: white;'></i></button><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='noAudio()' id='noAudioButton'><i class='bx bx-volume-full text-xl' id='noAudioButtonIcon' style='color: white;'></i></button></div></div></div>";
+        let html2 = "<div><div class='bg-[#11111b] rounded-xl flex flex-col  justify-center items-center p-2 my-4 border-2 border-gray-700 shadow-xl' style='width:100%;height: 100%;'><img src='{{user.userprofile.avatar.url}}' class='rounded-full' style='width:5rem;height: 5rem;'><h1 class='text-2xl text-white text-center font-bold'>{{ user.userprofile.display_name }}</h1><div class='flex flex-row justify-center items-center'><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='mute()' id='muteButton'><i class='bx bx-microphone text-xl' id='muteButtonIcon' style='color: white;'></i></button><button class='shadow-2xl bg-[#4C51E0]  m-3 text-center rounded-full  text-white p-4 flex' onclick='noAudio()' id='noAudioButton'><i class='bx bx-volume-full text-xl' id='noAudioButtonIcon' style='color: white;'></i></button></div></div></div>";
 
         document.querySelector("#audio").innerHTML=html2;
         container.innerHTML += html;

@@ -16,7 +16,7 @@
 }
 
 .someBtn{
-	background-color: #4C51E0;
+	background-color: #89b4fa;
 	transition: 0.4s;
 }
 .someBtn:hover{
@@ -73,9 +73,8 @@
 	color: white;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
-	background: #833ab4;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);  /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+	background: #1e1e2e;  /* fallback for old browsers */
+	
 }
 </style>
 <div id="overlay">
@@ -85,48 +84,48 @@
 	<h1 class="text-xl" style="color: rgb(200,200,200);">InCorrect: <span id="wrongScore">0</span></h1>
 	<h1 class="text-xl mb-4" style="color: rgb(200,200,200);">UnAttempted: <span id="noScore">0</span></h1>
 	
-		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="hideMessage();">Resume game</button>
-		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.reload(true);">Play Again</button>
-		<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.href='/events';">Go back to Events</button>
+		<button class="someBtn text-[#11111b] rounded-xl px-4 py-2 shadow-xl" onclick="hideMessage();">Resume game</button>
+		<button class="someBtn text-[#11111b] rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.reload(true);">Play Again</button>
+		<button class="someBtn text-[#11111b] rounded-xl px-4 py-2 shadow-xl mt-2" onclick="window.location.href='/events';">Go back to Events</button>
 
 </div>
 </div>
-<div class="border-2 border-gray-700 bg-gray-800 mr-8 mt-8 pb-4 rounded-xl relative flex flex-col" style="width:90%; height: auto;">
+<div class="border-2 border-gray-700 bg-[#11111b] mr-8 mt-8 pb-4 rounded-xl relative flex flex-col" style="width:90%; height: auto;">
 
 	<!-- Heading -->
 	<div class="topTitle flex flex-row items-center">
 
-    <h1 class="text-white pl-4  pt-8 text-4xl ">Quiz🎮</h1>
-    <span class="text-white pl-4  pt-8 text-2xl mr-4">Correct ✅: <span id="correctCount">0</span>  |  Incorrect ❌: <span id="incorrectCount">0</span></span>
+    <h1 class="text-[#cad3f5] pl-4  pt-8 text-4xl ">Quiz🎮</h1>
+    <span class="text-[#cad3f5] pl-4  pt-8 text-2xl mr-4">Correct ✅: <span id="correctCount">0</span>  |  Incorrect ❌: <span id="incorrectCount">0</span></span>
 	</div>
 
 	<!-- Controls -->
 	<div id="controls" class="flex flex-row items-center mx-8 mt-2 relative" style="justify-content: space-between;">
 
-		<div class="text-white questionCounter flex flex-row justify-center items-center font-bold" ><span id="questionC"></span>/10</div>
-		<button class="someBtn text-white rounded-full px-2 py-1 shadow-xl" onclick="prevQues();">
-    	<i class='bx bx-chevron-left'></i>
+		<div class="text-[#cad3f5] questionCounter flex flex-row justify-center items-center font-bold" ><span id="questionC"></span>/10</div>
+		<button class="someBtn text-[#cad3f5] rounded-full px-2 py-1 shadow-xl" onclick="prevQues();">
+    	<i class='bx bx-chevron-left text-[#11111b]'></i>
     	</button>
-    	<button class="someBtn text-white rounded-full px-2 py-1 shadow-xl" onclick="nextQues();">
-    		<i class='bx bx-chevron-right'></i>
+    	<button class="someBtn text-[#cad3f5] rounded-full px-2 py-1 shadow-xl" onclick="nextQues();">
+    		<i class='bx bx-chevron-right text-[#11111b]'></i>
     	</button>
 	</div>
     
 
     <!-- Question container -->
-    <div class="border-2 border-gray-700 bg-gray-900 mx-8 my-4 pb-4 rounded-xl  flex flex-col" style="width:90%; height: auto;">
+    <div class="border-2 border-gray-700 bg-[#1e1e2e] mx-8 my-4 pb-4 rounded-xl  flex flex-col" style="width:90%; height: auto;">
 
-    	<div class="pt-8 flex-col"><h2 class="text-center text-white text-2xl">Q<span id="questionNo">1</span>. <span id="questionText">The question is still loading please wait</span></h2></div>
+    	<div class="pt-8 flex-col"><h2 class="text-center text-[#cad3f5] text-2xl">Q<span id="questionNo">1</span>. <span id="questionText">The question is still loading please wait</span></h2></div>
 
     	<div class="optionContainer">
-    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
-    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
-    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
-    		<div class="option text-center text-xl text-white border-2 border-gray-700 bg-gray-800 mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-[#cad3f5] border-2 border-gray-700 bg-[#181825] mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-[#cad3f5] border-2 border-gray-700 bg-[#181825] mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-[#cad3f5] border-2 border-gray-700 bg-[#181825] mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
+    		<div class="option text-center text-xl text-[#cad3f5] border-2 border-gray-700 bg-[#181825] mx-8 my-4 py-4 rounded-xl flex flex-col items-center justify-center" onclick="tickOption(this);"></div>
     	</div>
 	</div>
 <div class="flex flex-row items-center justify-center">
-	<button class="someBtn text-white rounded-xl px-4 py-2 shadow-xl" onclick="showMessage();">Submit All Questions</button>
+	<button class="coolButton text-[#cad3f5] rounded-xl px-4 py-2 shadow-xl" onclick="showMessage();">Submit</button>
 </div>
 <script>
 let questionNo=1;
@@ -273,12 +272,12 @@ function tickOption(element){
 		userAnswers[questionNo]=element.innerHTML;
 		console.log(userAnswers);
 		if(isCorrect(element.innerHTML,questionNo-1)){
-			element.style.backgroundColor="#16c60c";
+			element.style.backgroundColor="#40a02b";
 			correctAnswers+=1;
 			correctCount.innerText=correctAnswers;
 		}
 		else{
-			element.style.backgroundColor="#f03a17";
+			element.style.backgroundColor="#d20f39";
 			IncorrectAnswers+=1;
 			incorrectCount.innerText=IncorrectAnswers;
 			highlightCorrect(questionNo-1);
@@ -294,7 +293,7 @@ function highlightCorrect(qaNo){
 		ele=optionEle[i];
 
 		if(ele.innerHTML==questions[qaNo]['correct_answer']){
-			ele.style.backgroundColor="#16c60c";
+			ele.style.backgroundColor="#40a02b";
 		}
 	}
 }
@@ -305,7 +304,7 @@ function highlightIncorrect(desiredOption){
 		ele=optionEle[i];
 
 		if(ele.innerHTML==desiredOption){
-			ele.style.backgroundColor="#f03a17";
+			ele.style.backgroundColor="#d20f39";
 		}
 	}
 }
@@ -315,7 +314,7 @@ function disColor(){
 	let ele;
 	for(let i=0; i<optionEle.length;++i){
 		ele=optionEle[i];
-		ele.style.backgroundColor="#1f2937";
+		ele.style.backgroundColor="#181825";
 	}
 }
 

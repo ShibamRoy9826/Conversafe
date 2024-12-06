@@ -23,20 +23,20 @@
 
 <body>
     <!-- Loader -->
-    <div id="loader" class="grid min-h-screen place-content-center bg-[#0C0908]">
+    <div id="loader" class="grid min-h-screen place-content-center bg-[#11111b]">
         <img src="{% static 'loader.svg' %}" class="lImage w-24 h-24" />
     </div>
     <!-- Navbar -->
-    <header class="fixed top-0 left-0 right-0 z-30 w-screen text-white h-16 bg-gray-900 flex flex-row">
-        <div class="h-full flex flex-row  items-center w-72 bg-[#11101D]">
-            <div class="logo text-white flex flex-row justify-evenly lg:ml-0 hidden lg:flex md:flex ">
+    <header class="fixed top-0 left-0 right-0 z-30 w-screen text-white h-16 bg-[#11111b] flex flex-row">
+        <div class="h-full flex flex-row  items-center w-72 bg-[#11111b]">
+            <div class="logo text-[#cdd6f4] flex flex-row justify-evenly lg:ml-0 hidden lg:flex md:flex ">
                 <!-- Username on nav -->
                 <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif;">Welcome {{user.username}} 🎉</span>
             </div>
         </div>
-        <div class="h-full flex flex-row justify-end items-center w-full bg-[#11101D]">
+        <div class="h-full flex flex-row justify-end items-center w-full bg-[#11111b]">
             <!-- Search  -->
-            <div class="px-4 text-gray-300 svgButton">
+            <div class="px-4 text-[#cdd6f4] svgButton">
 				<a href="/friends/">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -44,7 +44,7 @@
 				</a>
             </div>
             <!-- Notifications -->
-            <div class="px-4 text-gray-300 svgButton dropdown relative inline-block">
+            <div class="px-4 text-[#cdd6f4] svgButton dropdown relative inline-block">
                 <button class="dropbtn relative" onclick="dropdownNotif()" id="dropdownNotif">
                     
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -62,7 +62,7 @@
                     <div class="dropdown-notif hidden justify-center items-center overflow-y-scroll border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-notifIcon">
                         {% for notif in notifications_unread %}
                         <div class="flex flex-row changeBG" style="border-bottom: 2px solid rgb(31 41 55);" id="toRemove">
-                            <div class="text-gray-400 closeButton flex flex-col justify-center items-center" style="padding-left: 0.5rem;padding-right: 0.5rem;" onclick="hideNotification(this);deleteNotification(this);" data-notificationid="{{notif.uniqueID}}" >
+                            <div class="text-[#585b70] closeButton flex flex-col justify-center items-center" style="padding-left: 0.5rem;padding-right: 0.5rem;" onclick="hideNotification(this);deleteNotification(this);" data-notificationid="{{notif.uniqueID}}" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
@@ -94,7 +94,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="px-2 w-8 h-8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg></button>
-                    <div class="dropdown-content hidden border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-icon" style="background-color: rgb(55, 65, 81);">
+                    <div class="dropdown-content hidden border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-icon" style="background-color: #11111b;">
                         <a href="/settings/">Settings</a>
                         <a href="/logout/">Logout</a>
                     </div>
@@ -196,7 +196,8 @@
         position: absolute;
         top: 2.5rem;
         right: 1rem;
-        background-color: rgb(55, 65, 81);
+/*        background-color: rgb(55, 65, 81);*/
+        background-color: #1e1e2e;
         min-width: 15rem;
         height: 15rem;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -204,7 +205,7 @@
     }
 
     .dropdown-notif a {
-        color: white;
+        color: #cdd6f4;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
@@ -212,7 +213,8 @@
     }
 
     .dropdown-notif a:hover {
-        background-color: rgb(31 41 55);
+/*        background-color: rgb(31 41 55);*/
+        background-color: #7f849c;
     }
     .closeButton{
         transition: all 1s;
@@ -221,7 +223,8 @@
         color: white;
     }
    .changeBG:hover .closeButton{
-        background-color: rgb(31,41,55);
+/*        background-color: rgb(31,41,55);*/
+        background-color: #45475a;
     }
 
     @media (max-width:768px) {
@@ -248,14 +251,15 @@
 .dropdown-content {
   position: absolute;
   right: 1rem;
-  background-color: rgb(55, 65, 81);
+/*  background-color: rgb(55, 65, 81);*/
+    background-color: #11111b;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
 .dropdown-content a {
-  color: white;
+  color: #cdd6f4;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
@@ -263,7 +267,8 @@
 }
 
 .dropdown-content a:hover {
-  background-color: rgb(31 41 55);
+/*  background-color: rgb(31 41 55);*/
+    background-color: #6c7086;
 }
 
 #dropdown-icon.dropdown-visible {
@@ -283,7 +288,7 @@
 }
 
     </style>
-    <section class="section mt-16 bg-gray-900 flex flex-col justify-center items-center w-[95vw]" id="contentSection">
+    <section class="section mt-16 bg-[#1e1e2e] flex flex-col justify-center items-center w-[95vw]" id="contentSection">
         <!-- Alert -->
         <div class="bg-white border-l-[10px] border-red-500 text-rose-600 px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
             <strong class="font-bold">Error!</strong>

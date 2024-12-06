@@ -1,186 +1,232 @@
 ###  Libraries and stuff ############################################################
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+import random  # For random initial messages
+
 from asgiref.sync import sync_to_async
-# Some Model objects
-from .models import AIRoom,Message
+from channels.generic.websocket import AsyncWebsocketConsumer
+from gtts import gTTS
+from pygame import mixer
+from transformers import BlenderbotForConditionalGeneration  # For AI Models
+from transformers import BlenderbotTokenizer
+
 from landing.models import AUser
-import random # For random initial messages
-from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration # For AI Models
+
+# Some Model objects
+from .models import AIRoom, Message
+
 ####################################################################################
 
+mixer.init()
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
-	# Connecting client with server
-	async def connect(self):
-		self.room_name=self.scope['url_route']['kwargs']['room_name']
-		self.room_group_name='chat_%s' % self.room_name
+    # Connecting client with server
+    async def connect(self):
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = "chat_%s" % self.room_name
 
-		await self.channel_layer.group_add(
-			self.room_group_name,
-			self.channel_name)
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-		await self.accept()
+        await self.accept()
 
-		#Initializing the bot
-		self.tokenizer = BlenderbotTokenizer.from_pretrained("facebook/blenderbot-400M-distill")
-		self.model = BlenderbotForConditionalGeneration.from_pretrained("facebook/blenderbot-400M-distill")
+        # Initializing the bot
+        self.tokenizer = BlenderbotTokenizer.from_pretrained(
+            "facebook/blenderbot-400M-distill"
+        )
+        self.model = BlenderbotForConditionalGeneration.from_pretrained(
+            "facebook/blenderbot-400M-distill"
+        )
 
-	# Handles Chat prompts with the model
-	def chat(self,prompt):
-		inputs = self.tokenizer(prompt, return_tensors="pt")
-		reply = self.model.generate(**inputs)
-		return self.tokenizer.decode(reply[0], skip_special_tokens=True)
+    # Handles Chat prompts with the model
+    def chat(self, prompt):
+        inputs = self.tokenizer(prompt, return_tensors="pt")
+        reply = self.model.generate(**inputs)
+        return self.tokenizer.decode(reply[0], skip_special_tokens=True)
 
-	# Disconnects client from server
-	async def disconnect(self,code):
-		await self.channel_layer.group_discard(
-			self.room_group_name,
-			self.channel_name)
+    # Disconnects client from server
+    async def disconnect(self, code):
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-	# Receiving data from client to server
-	async def receive(self,text_data):
-		# Storing all received data
-		data=json.loads(text_data)
-		message=data['message']
-		username=data['username']
-		displayname=data['displayName']
-		room=data['room']
-		messageType=data['messageType']
+    # Receiving data from client to server
+    async def receive(self, text_data):
+        # Storing all received data
+        data = json.loads(text_data)
+        message = data["message"]
+        username = data["username"]
+        displayname = data["displayName"]
+        room = data["room"]
+        messageType = data["messageType"]
 
-		# Checking Message type for further processing
-		if messageType=="JOINED":
-			await self.addNewUser(self.room_name,username)
-		elif messageType=="LEFT":
-			await self.removeUser(self.room_name,username)
+        # Checking Message type for further processing
+        if messageType == "JOINED":
+            await self.addNewUser(self.room_name, username)
+        elif messageType == "LEFT":
+            await self.removeUser(self.room_name, username)
 
-		# Saving Received message
-		await self.save_message(displayname,username,room,message,messageType)	
+        # Saving Received message
+        await self.save_message(displayname, username, room, message, messageType)
 
-		# Sending back the message to all clients
-		await self.channel_layer.group_send(
-			self.room_group_name,
-			{
-			'type':'chat_message',
-			'displayName':displayname,
-			'message':message,
-			'username':username,
-			'room':room,
-			'messageType':messageType,
-			})
+        # Sending back the message to all clients
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "chat_message",
+                "displayName": displayname,
+                "message": message,
+                "username": username,
+                "room": room,
+                "messageType": messageType,
+            },
+        )
 
-		# Sending Initial message on joining and giving reply to any prompt 
-		if messageType=="JOINED":
-			await self.channel_layer.group_send(
-				self.room_group_name,
-				{
-				'type':'send_initial',
-				'displayName':"Mr. AI",
-				'userPrompt':displayname,
-				'username':"Mr AI",
-				'room':room,
-				'messageType':'NORMAL'
+        # Sending Initial message on joining and giving reply to any prompt
+        if messageType == "JOINED":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "send_initial",
+                    "displayName": "AI",
+                    "userPrompt": displayname,
+                    "username": "Mr AI",
+                    "room": room,
+                    "messageType": "NORMAL",
+                },
+            )
 
-				})
-		
-		if messageType=="NORMAL":
-			await self.channel_layer.group_send(
-				self.room_group_name,
-				{
-				'type':'ai_reply',
-				'displayName':"Mr. AI",
-				'userPrompt':message,
-				'username':"Mr AI",
-				'room':room,
-				'messageType':'NORMAL'
-				})
+        if messageType == "NORMAL":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "ai_reply",
+                    "displayName": "AI",
+                    "userPrompt": message,
+                    "username": "Mr AI",
+                    "room": room,
+                    "messageType": "NORMAL",
+                },
+            )
 
-	# Generating reply by the AI Model
-	async def ai_reply(self,event):
-		def cleanReply(text):
-			if "X 20 20 px" in text:
-				text=text.replace("X 20 20 px","")
-			if "*" in text:
-				text=text.replace('*',"")
-			return text
-		error=False
-		userPrompt=event['userPrompt']
-		AiUsername=event['username']
-		AiDisplayname=event['displayName']
-		room=event['room']
-		msgType=event['messageType']
+    # Generating reply by the AI Model
+    async def ai_reply(self, event):
+        def cleanReply(text):
+            if "X 20 20 px" in text:
+                text = text.replace("X 20 20 px", "")
+            if "*" in text:
+                text = text.replace("*", "")
+            return text
 
-		AiReply=self.chat(userPrompt)
-		AiReply=cleanReply(AiReply)
-		
+        error = False
+        userPrompt = event["userPrompt"]
+        AiUsername = event["username"]
+        AiDisplayname = event["displayName"]
+        room = event["room"]
+        msgType = event["messageType"]
 
-		await self.save_message(AiDisplayname,AiUsername,room,AiReply,msgType)	
+        AiReply = self.chat(userPrompt)
+        AiReply = cleanReply(AiReply)
 
-		await self.send(text_data=json.dumps({
-			'message':AiReply,
-			'displayName':AiDisplayname,
-			'username':AiUsername,
-			'room':room,
-			'messageType':msgType,
-			'initial':'no'
-			}))
+        try:
+            a = gTTS(AiReply, lang="en")
+            a.save("temp/temp.mp3")
+            mixer.music.load("temp/temp.mp3")
+            mixer.music.play()
+        except Exception as e:
+            print("ERROR: ",e)
 
-	# Initial greeting
-	async def send_initial(self,event):
-		userPrompt=event['userPrompt']
-		AiUsername=event['username']
-		AiDisplayname=event['displayName']
-		room=event['room']
-		msgType=event['messageType']
-		replies=["Hey there!  What's going on today? 😃","You seem like an interesting person... tell me something unexpected! ✨","What secret talents are you hiding? I won't tell a soul!😊"]
-		AiReply=random.choice(replies)
+        await self.save_message(AiDisplayname, AiUsername, room, AiReply, msgType)
 
-		await self.save_message(AiDisplayname,AiUsername,room,AiReply,msgType)	
-		
-		await self.send(text_data=json.dumps({
-			'message':AiReply,
-			'displayName':AiDisplayname,
-			'username':AiUsername,
-			'room':room,
-			'messageType':msgType,
-			'initial':'yes'
-			}))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "message": AiReply,
+                    "displayName": AiDisplayname,
+                    "username": AiUsername,
+                    "room": room,
+                    "messageType": msgType,
+                    "initial": "no",
+                }
+            )
+        )
 
-	# Function that handles sending messages to client
-	async def chat_message(self,event):
-		message=event['message']
-		username=event['username']
-		displayname=event['displayName']
-		room=event['room']
-		msgType=event['messageType']
+    # Initial greeting
+    async def send_initial(self, event):
+        userPrompt = event["userPrompt"]
+        AiUsername = event["username"]
+        AiDisplayname = event["displayName"]
+        room = event["room"]
+        msgType = event["messageType"]
+        replies = [
+            "Hey there!  What's going on today? 😃",
+            "You seem like an interesting person... tell me something unexpected! ✨",
+            "What secret talents are you hiding? I won't tell a soul!😊",
+            "Hello! What’s on your mind today? ",
+            "Hey! I’m here to help, chat, or just listen. What’s up? ",
+            "Did you know an octopus has three hearts? What’s a fun fact you know? ",
+        ]
+        AiReply = random.choice(replies)
+        try:
+            a = gTTS(AiReply[:-1], lang="en")
+            a.save("temp/temp.mp3")
+            mixer.music.load("temp/temp.mp3")
+            mixer.music.play()
+        except Exception as e:
+            print("ERROR: ",e)
 
-		await self.send(text_data=json.dumps({
-			'message':message,
-			'displayName':displayname,
-			'username':username,
-			'room':room,
-			'messageType':msgType,
-			'initial':'no'
-			}))
+        await self.save_message(AiDisplayname, AiUsername, room, AiReply, msgType)
 
-######## Important functions ##############################################
-	@sync_to_async
-	def addNewUser(self,room,username):
-		obj=AIRoom.objects.get(slug=room)
-		user=AUser.objects.get(username=username)
-		obj.userConnected=True
-		obj.save()
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "message": AiReply,
+                    "displayName": AiDisplayname,
+                    "username": AiUsername,
+                    "room": room,
+                    "messageType": msgType,
+                    "initial": "yes",
+                }
+            )
+        )
 
-	@sync_to_async
-	def removeUser(self,room,username):
-		obj=AIRoom.objects.get(slug=room)
-		user=AUser.objects.get(username=username)
-		obj.userConnected=False
-		obj.save()
+    # Function that handles sending messages to client
+    async def chat_message(self, event):
+        message = event["message"]
+        username = event["username"]
+        displayname = event["displayName"]
+        room = event["room"]
+        msgType = event["messageType"]
 
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "message": message,
+                    "displayName": displayname,
+                    "username": username,
+                    "room": room,
+                    "messageType": msgType,
+                    "initial": "no",
+                }
+            )
+        )
 
-	@sync_to_async
-	def save_message(self,display,username,room,message,messageType):
-		roomName=AIRoom.objects.get(slug=room)
+    ######## Important functions ##############################################
+    @sync_to_async
+    def addNewUser(self, room, username):
+        obj = AIRoom.objects.get(slug=room)
+        user = AUser.objects.get(username=username)
+        obj.userConnected = True
+        obj.save()
 
-		Message.objects.create(displayName=display,room=roomName,content=message,messageType=messageType)
+    @sync_to_async
+    def removeUser(self, room, username):
+        obj = AIRoom.objects.get(slug=room)
+        user = AUser.objects.get(username=username)
+        obj.userConnected = False
+        obj.save()
 
+    @sync_to_async
+    def save_message(self, display, username, room, message, messageType):
+        roomName = AIRoom.objects.get(slug=room)
+
+        Message.objects.create(
+            displayName=display, room=roomName, content=message, messageType=messageType
+        )

@@ -31,22 +31,25 @@
 </style>
 
 {% csrf_token %}
-<h1 class="text-white text-4xl text-center font-bold mt-2"> Search Friends </h1>
+<h1 class="text-[#cad3f5] text-4xl text-center font-bold" style="margin: 2rem;"> Search Friends </h1>
 
 <form class="SearchBox w-[50vw] mb-4 mt-2 flex flex-row items-center justify-center" action="/searchUsers/" method="POST">
     {% csrf_token %}
+
+    <div class="w-full flex flex-row ">
     <input type="text" name="searchQuery" id="searchQuery" placeholder="Search the other person with their username" class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-2 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-full mb-16" required>
 
 
-    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-white px-4 py-2 mx-8 my-6" onclick="searchUsers();">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-[#11111b] px-4 py-2 mx-8 " onclick="searchUsers();" style="max-height: 3rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#11111b" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
     </button>
+</div>
 
 </form>
 <div class="flex flex-col justify-center items-center">
-    <h1 class="text-white text-3xl mb-4 " id="button">Your Friends</h1>
+    <h1 class="text-[#cad3f5] text-3xl mb-4 " id="button">Your Friends</h1>
 
     {% if friends %}
     <div class="flex flex-col w-[80vw] " >
@@ -59,7 +62,7 @@
                     <img src="{{friend.userprofile.avatar.url}}" class="ml-4 rounded-full w-16 h-16" >
                     <a href="/profile/{{friend.username}}" class="ml-4">
                         <div class="flex flex-col justify-center ">
-                            <h1 class="text-left text-white text-xl">{{ friend.userprofile.display_name }}
+                            <h1 class="text-left text-[#cad3f5] text-xl">{{ friend.userprofile.display_name }}
                             </h1>
                             <p class="text-gray-500 text-left">
                                {{ friend.userprofile.short_bio }}
@@ -87,7 +90,7 @@
     {% endif %}
 <hr class="border border-gray-700" style="width: 100%; height: 100%; margin-top: 2rem;"/>
 
-    <h1 class="text-white text-3xl mb-4" style="margin-top: 1rem;" id="FriendRequests">Friend Requests</h1>
+    <h1 class="text-[#cad3f5] text-3xl mb-4" style="margin-top: 1rem;" id="FriendRequests">Friend Requests</h1>
 
     <div class="friendRequestContainer flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center ">
         <!-- <h1 class="text-gray-400 text-center">No Friend Requests at the moment...</h1> -->
@@ -103,7 +106,7 @@
                     
                     <a href="/profile/{{ friendR.sender.username }}" class="ml-4">
                         <div class="flex flex-col justify-center ">
-                            <h1 class="text-left text-white text-xl">{{ friendR.sender.username }}
+                            <h1 class="text-left text-[#cad3f5] text-xl">{{ friendR.sender.username }}
                             </h1>
                             <p class="text-gray-500 text-left">
                                 There's a new friend request by {{ friendR.sender.username }}
@@ -133,7 +136,7 @@
         </ol>
     </div>
     {% else %}
-    <div class="flex flex-col justify-center items-center"><p class="text-white text-xl text-center ">You have no friend requests at the moment...</p></div>
+    <div class="flex flex-col justify-center items-center"><p class="text-[#cad3f5] text-xl text-center ">You have no friend requests at the moment...</p></div>
     {% endif %}
 
     </div>
