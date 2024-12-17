@@ -13,36 +13,38 @@ from notification.utils import notifs, notifCount # For notifications
 
 # Generates random room name
 def makeName():
-	s=string.ascii_letters+string.digits
-	a=[x for x in s]
-	shuffle(a)
-	newString=""
-	for i in a:
-		newString+=i
+    s=string.ascii_letters+string.digits
+    a=[x for x in s]
+    shuffle(a)
+    newString=""
+    for i in a:
+        newString+=i
 
-	return newString[:16]
+    return newString[:16]
 
 
 # AI Chat page
 @login_required(login_url="login")
 def AIConnect(request,slug):
-	room=AIRoom.objects.get(slug=slug)
-	messages=Message.objects.filter(room=room)
-	context={}
-	user = models.AUser.objects.get(pk=request.user.pk)
-	context['notifications_unread']=notifs(request.user)
-	context['notifications_count']=notifCount(request.user)
-	context['room']=room
-	context['messages']=messages
-	return render(request,'main/chat/mainAI.html',context)
+    room=AIRoom.objects.get(slug=slug)
+    messages=Message.objects.filter(room=room)
+    context={}
+    user = models.AUser.objects.get(pk=request.user.pk)
+    context['notifications_unread']=notifs(request.user)
+    context['notifications_count']=notifCount(request.user)
+    context['room']=room
+    context['messages']=messages
+    user_profile = UserProfile.objects.get(user=user)
+    context["lang"]=user_profile.language
+    return render(request,'main/chat/mainAI.html',context)
 
 # Connecting to a particular room
 @login_required(login_url="login")
 def chatWithAI(request):
-	# Temporary workaround
-	allRooms=AIRoom.objects.all().delete()
+    # Temporary workaround
+    allRooms=AIRoom.objects.all().delete()
 
-	slug=makeName()
-	room=AIRoom.objects.create(slug=slug)
-	return redirect('/chatWithAI/'+slug)
+    slug=makeName()
+    room=AIRoom.objects.create(slug=slug)
+    return redirect('/chatWithAI/'+slug)
 

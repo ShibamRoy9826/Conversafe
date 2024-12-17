@@ -1,0 +1,123 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Word Search{% endblock %}
+{% block content %}
+
+<style>
+.heading{
+  color: #cdd6f4;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.subheading{
+  color: #a6adc8;
+}
+.mainContent{
+  color:#cdd6f4;
+}
+.mainContentDiv{
+  margin-top: 1.5rem;
+  padding: 2rem;
+  
+}
+</style>
+
+<script>
+
+  function playPhonetic(){
+    var audio = new Audio("{{phonetic}}");
+    audio.volume = 0.5;
+    audio.play();
+  }
+
+</script>
+
+{% csrf_token %}
+<h1 class="text-[#cad3f5] text-4xl text-center font-bold" style="margin: 2rem;"> Search Words</h1>
+
+<form class="SearchBox w-[95%] lg:w-[50vw] mb-2 mt-2 flex flex-row items-center justify-center" action="/wordSearch/" method="POST">
+    {% csrf_token %}
+
+    <div class="w-full flex flex-row ">
+    <input type="text" name="word" id="word" placeholder="Search for any word about which you want to know..." class="bg-gray-800 rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 py-2 resize-none leading-6 transition-colors duration-200 ease-in-out px-4 w-full mb-16" required>
+
+
+    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-[#11111b] px-4 py-2 mx-8 " onclick="searchUsers();" style="max-height: 3rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#11111b" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+    </button>
+</div>
+
+</form>
+
+<div class="flex flex-col lg:flex-row justify-center items-center w-full ">
+
+<div class="flex flex-col border-2 border-gray-700 bg-[#181825] w-[95%] lg:w-[40%] p-4 rounded-lg m-4 min-h-[50vh]" >
+  <h1 class="heading">Word Meaning 
+    {% if phonetic %}
+    <button class="px-4 text-gray-300 svgButton coolButton shadow-2xl bg-[#4C51E0]  rounded-lg text-[#11111b] px-4 py-2 mx-8 " style="max-height: 3rem;" onclick="playPhonetic();">
+<svg fill="#11111b" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" stroke="#11111b" class="w-6 h-6"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M1129.432 113v1694.148H936.638l-451.773-451.773h-315.45C76.01 1355.375 0 1279.365 0 1185.96V734.187c0-93.404 76.01-169.414 169.415-169.414h315.45L936.638 113h192.794Zm-112.943 112.943h-33.093l-418.68 418.68v630.901l418.68 418.68h33.093V225.944Zm655.488 135.114C1831.904 521.097 1920 733.77 1920 960.107c0 226.226-88.096 438.898-248.023 598.938l-79.851-79.85c138.694-138.695 214.93-323.018 214.93-519.087 0-196.183-76.236-380.506-214.93-519.2Zm-239.112 239.745c95.663 97.018 148.294 224.644 148.294 359.272s-52.631 262.254-148.294 359.272l-80.529-79.286c74.769-75.785 115.88-175.175 115.88-279.986 0-104.811-41.111-204.201-115.88-279.986Zm-981.092 76.914H169.415c-31.06 0-56.472 25.3-56.472 56.471v451.773c0 31.172 25.412 56.472 56.472 56.472h282.358V677.716Z" fill-rule="evenodd"></path> </g></svg>
+    </button>
+    {% endif %}
+
+  </h1>
+
+  <p class="subheading">Meaning of the the word</p>
+  <div class='bg-[#1e1e2e] border-gray-700 border-2 mainContentDiv rounded-lg'>
+    <ol class="mainContent">
+
+      {% if meaning_count != 0 %}
+      {% for meaning in word_meanings %}
+      <li>{{meaning}}</li>
+
+      {% endfor %}
+      {% else %}
+      <li>Please enter a word to see its word meaning!<li>
+
+      {% endif%}
+    </ol>
+  </div>
+</div>
+
+
+
+<div class="flex flex-col border-2 border-gray-700 bg-[#181825]  w-[95%] lg:w-[40%] p-4 rounded-lg m-4 min-h-[50vh]" >
+
+<div class="mb-4" >
+  <h1 class="heading">Synonyms</h1>
+  <p class="subheading">Words with similar meaning/ related words</p>
+  <div class='bg-[#1e1e2e] border-gray-700 border-2 mainContentDiv rounded-lg'>
+    <ol class="mainContent">
+      {% if similar_count != 0 %}
+      {% for word in similar_words %}
+      <li>{{word}}</li>
+      {% endfor %}
+      {% else %}
+      <li>Please enter a word to see its word meaning!<li>
+      {% endif%}
+    </ol>
+  </div>
+</div>
+
+<div class="" >
+  <h1 class="heading">Homophones</h1>
+  <p class="subheading">Words with similar sound</p>
+  <div class='bg-[#1e1e2e] border-gray-700 border-2 mainContentDiv rounded-lg'>
+    <ol class="mainContent">
+      {% if similar_sound_count != 0 %}
+      {% for sound in similar_sounds %}
+      <li>{{sound}}</li>
+      {% endfor %}
+      {% else %}
+      <li>Please enter a word to see its word meaning!<li>
+      {% endif %}
+    </ol>
+  </div>
+</div>
+</div>
+
+
+
+</div> 
+
+{% endblock %}

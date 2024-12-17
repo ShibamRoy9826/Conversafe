@@ -115,6 +115,7 @@ parso==0.8.4
 pexpect==4.9.0
 pillow==10.4.0
 pip==24.2
+pygame==2.6.1
 platformdirs==4.3.2
 prometheus_client==0.20.0
 prompt_toolkit==3.0.47

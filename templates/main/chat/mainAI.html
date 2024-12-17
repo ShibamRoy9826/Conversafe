@@ -3,6 +3,8 @@
 {% block content %}
 {% load static %}
 <!-- Tabs.js -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 <script src="{% static 'js/tab.js' %}" defer></script>
 <style type="text/css">
 .section {
@@ -109,6 +111,46 @@ ul{
     }
 
 }
+
+.hg-theme-default .hg-button {
+  background: #1e1e2e;
+  border: 2px solid #45475a;   
+  border-radius: 5px; 
+  color: #cdd6f4;    
+  font-size: 18px;      
+  font-weight: bold;     
+  padding: 15px;          
+  margin: 5px;             
+  cursor: pointer;          
+  transition: transform 0.7s, background-color 0.7s; /* Smooth animations */
+}
+
+.hg-theme-default .hg-button:hover{
+  background-color: #181825; 
+}
+.hg-theme-default .hg-button:active{
+  background-color: #89b4fa; 
+}
+
+
+.catppuccin-theme{
+  background-color: #11111b; 
+}
+
+#keyboardDiv{
+  width: 90vw;
+  background-color: #11111b; 
+  box-shadow: 5px 5px 15px black;
+
+}
+
+@media (max-width:1024px) {
+  #keyboardDiv{
+    width: 100vw;
+  }
+
+}
+
 
 </style>
 <!-- <div class="p-10 lg:p-20 text-center mt-2">
@@ -230,6 +272,17 @@ ul{
                 </div>
             </div>
         </div>
+
+        {% elif message.messageType == 'SUGGEST' %}
+        <div class="flex flex-row justify-end">
+            <div class='text-white selfMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 selfMessage'>
+                    <p class='font-bold text-xl text-right w-auto'> Corrections/Suggestions </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+
         {% else %}
         <div class="flex flex-row justify-center rounded-xl joinedLeft">
             <div class="bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full">
@@ -256,9 +309,59 @@ ul{
 </div>
 
 
+<div class="simple-keyboard"  id="keyboardDiv" ></div>
+<!-- <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard-layouts@latest/build/index.min.js"></script>
+
 {{ room.slug|json_script:"json-roomname" }}
 {{ request.user.username|json_script:"json-username"}}
 <script type="text/javascript">
+
+const Keyboard = window.SimpleKeyboard.default;
+const KeyboardLayouts = window.SimpleKeyboardLayouts.default;
+keyboardDiv=document.getElementById("keyboardDiv")
+
+const langDict={
+  "en":"english",
+  "hi":"hindi",
+  "bn":"bengali",
+  "de":"german",
+  "es":"spanish"
+}
+
+const layout = new KeyboardLayouts().get(langDict["{{lang}}"]);
+
+
+const keyboard = new Keyboard({
+  theme: "hg-theme-default hg-layout-default",
+  onChange: input => onChange(input),
+  onKeyPress: button => onKeyPress(button),
+  ...layout
+});
+
+
+document.querySelector(".input").addEventListener("input", event => {
+  keyboard.setInput(event.target.value);
+});
+
+
+function onChange(input) {
+  document.querySelector(".input").value = input;
+}
+
+function onKeyPress(button) {
+  if (button === "{shift}" || button === "{lock}") handleShift();
+}
+
+function handleShift() {
+  let currentLayout = keyboard.options.layoutName;
+  let shiftToggle = currentLayout === "default" ? "shift" : "default";
+
+  keyboard.setOptions({
+    layoutName: shiftToggle
+  });
+}
 
 // Variables from Django
 const roomName = "{{ room.slug }}";
@@ -489,8 +592,15 @@ function manageChat(data){
 
 
         document.querySelector("#chatContainer").innerHTML += html;
-        
 
+    } else if (data.messageType == "SUGGEST") {
+            let msg = data.message;
+
+            let html = "<div class='flex flex-row justify-end'><div class='text-white selfMessage mx-8 my-4 space-y-3  text-right w-auto h-auto max-w-[95%] lg:max-w-[45%] '><div class='p-4 selfMessage h-auto' style='text-align:left;' ><p class='font-bold text-xl w-auto text-[#89b4fa]'> Corrections/Suggestions </p><p class='w-auto h-auto' style='text-align:left;'>" + msg + "</p></div></div></div>";
+
+        audioContainer=document.getElementById("audio")
+
+        document.querySelector("#chatContainer").innerHTML += html;
 
     } else {
         var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");

@@ -48,6 +48,8 @@ urlpatterns = [
 	path("logout/",mainView.logOut,name="logout"),
 
 	path('startQuiz/',mainView.startQuiz,name="quiz"),
+	path('startVocab/',mainView.startVocab,name="vocab_quiz"),
+	path('wordSearch/',mainView.wordSearch,name="vocab_quiz"),
 
 	# Chat
 	# path('rooms/',chatView.rooms,name="roomList"), # Only for debugging

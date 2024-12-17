@@ -8,7 +8,31 @@
 {% block content %}
 
 
-<div><h1 class="text-2xl text-white">Coming soon:)</h1></div>
 
+<form class="m-4" method="post" action="" name="settingsForm">
+    {% csrf_token %}
+  <div class="m-4 flex flex-col items-center justify-center">
+  <label for="language" class="text-2xl text-[#cdd6f4] m-4 text-center" data-translate>Language learning medium:</label>
+  <select id="language" name="language" class="p-2 bg-[#11111b] text-white" default="{{lang}}">
+    <option value="en" {% if lang == "en" %}selected{% endif %}>🇺🇸  English</option>
+    <option value="hi" {% if lang == "hi" %}selected{% endif %}>🇮🇳  Hindi</option>
+    <option value="bn" {% if lang == "bn" %}selected{% endif %}>🇮🇳  Bengali</option>
+    <option value="de" {% if lang == "de" %}selected{% endif %}>🇩🇪  German</option>
+    <option value="es" {% if lang == "es" %}selected{% endif %}>🇪🇸  Spanish</option>
+  </select>
+  <label for="learn_lang" class="text-2xl text-[#cdd6f4] m-4 text-center" data-translate>Want to learn :</label>
+  <select id="learn_lang" name="learn_lang" class="p-2 bg-[#11111b] text-white" default="{{langtolearn}}">
+    <option value="en" {% if langtolearn == "en" %}selected{% endif %}>🇺🇸  English</option>
+    <option value="hi" {% if langtolearn == "hi" %}selected{% endif %}>🇮🇳  Hindi</option>
+    <option value="bn" {% if langtolearn == "bn" %}selected{% endif %}>🇮🇳  Bengali</option>
+    <option value="de" {% if langtolearn == "de" %}selected{% endif %}>🇩🇪  German</option>
+    <option value="es" {% if langtolearn == "es" %}selected{% endif %}>🇪🇸  Spanish</option>
+  </select>
+  </div>
+<form>
+
+  <div class="w-full flex flex-col justify-center items-center m-4">
+	<button class="coolButton text-[#cad3f5] rounded-xl px-4 py-2 shadow-xl" data-translate>Change</button>
+  <div>
 
 {% endblock %}

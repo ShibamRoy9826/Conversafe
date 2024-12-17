@@ -1,6 +1,7 @@
 ###  Libraries and stuff ############################################################
 import json
 import random  # For random initial messages
+from requests import get
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -9,7 +10,11 @@ from pygame import mixer
 from transformers import BlenderbotForConditionalGeneration  # For AI Models
 from transformers import BlenderbotTokenizer
 
+# For Spellchecker
+from spellchecker import SpellChecker
+
 from landing.models import AUser
+# from core.models import UserProfile
 
 # Some Model objects
 from .models import AIRoom, Message
@@ -17,6 +22,21 @@ from .models import AIRoom, Message
 ####################################################################################
 
 mixer.init()
+s=SpellChecker()
+translateUrl= "http://127.0.0.1:5000/translate"
+translateHeaders = {
+    "Content-Type": "application/json"
+}
+
+def translate(txt,lang):
+    data = {
+        "q": "",
+        "source": "en",
+        "target": lang,
+        "format": "text",
+        "api_key": ""
+    }
+    response = requests.post(translateUrl, data=json.dumps(data), headers=translateHeaders)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -78,6 +98,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "messageType": messageType,
             },
         )
+        if messageType=="NORMAL":
+            errors=s.unknown(message.split(" "))
+            corrections=[]
+            for i in errors:
+                corrections.append(s.correction(i))
+
+            if len(errors)!=0:
+                msg="Some corrections to the last sentence:<br><ul class='flex flex-col'>"
+                for ind,i in enumerate(errors):
+                    if msg!=f"<li>  -> i</li>":
+                        msg+=f"<li style='list-style-type: circle;margin-left: 1rem;'> {i} -> {corrections[ind]}</li>"
+                msg+="</ul>"
+                print(msg)
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "chat_message",
+                        "displayName": "Corrections",
+                        "message": msg,
+                        "username": username,
+                        "room": room,
+                        "messageType": "SUGGEST",
+                    },
+                )
 
         # Sending Initial message on joining and giving reply to any prompt
         if messageType == "JOINED":
@@ -113,6 +157,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 text = text.replace("X 20 20 px", "")
             if "*" in text:
                 text = text.replace("*", "")
+
             return text
 
         error = False
@@ -124,6 +169,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         AiReply = self.chat(userPrompt)
         AiReply = cleanReply(AiReply)
+
 
         try:
             a = gTTS(AiReply, lang="en")

@@ -31,7 +31,7 @@
         <div class="h-full flex flex-row  items-center w-72 bg-[#11111b]">
             <div class="logo text-[#cdd6f4] flex flex-row justify-evenly lg:ml-0 hidden lg:flex md:flex ">
                 <!-- Username on nav -->
-                <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif;">Welcome {{user.username}} 🎉</span>
+                <span class="text-xl logo h-full ml-24 mr-6 w-72" style="font-family: 'Pacifico',sans-serif; data-translate" data-translate>Welcome {{user.username}} 🎉</span>
             </div>
         </div>
         <div class="h-full flex flex-row justify-end items-center w-full bg-[#11111b]">
@@ -67,7 +67,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </div>
-                            <a href="/notifications/">{{notif.title}}</a>
+                            <a href="/notifications/" data-translate>{{notif.title}}</a>
 
                             
                         </div>
@@ -78,7 +78,7 @@
                     </div>
                     <div class=" flex flex-col justify-center items-center dropdown-notif hidden border-2 border-gray-600 rounded-lg shadow-xl" style="height: 5rem;" id="dropdown-notifIcon">
                         <br>
-                        <p style="margin-left: 1rem;">No notifications available...</p>
+                        <p style="margin-left: 1rem;" data-translate>No notifications available...</p>
                     </div>
                     {% endif %}
                 </button>
@@ -95,8 +95,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg></button>
                     <div class="dropdown-content hidden border-2 border-gray-600 rounded-lg shadow-xl" id="dropdown-icon" style="background-color: #11111b;">
-                        <a href="/settings/">Settings</a>
-                        <a href="/logout/">Logout</a>
+                        <a href="/settings/" data-translate>Settings</a>
+                        <a href="/logout/" data-translate>Logout</a>
                     </div>
                 </div>
             </div>
@@ -119,63 +119,63 @@
             <li>
                 <a href="/home/">
                     <i class='bx bx-home homeIcon' id="homeIcon"></i>
-                    <span class="links_name">Home</span>
+                    <span class="links_name" data-translate>Home</span>
                 </a>
                 <!-- <span class="tooltip">Home</span> -->
             </li>
             <li>
                 <a href="/events">
                     <i class='bx bx-game'></i>
-                    <span class="links_name">Games & Events</span>
+                    <span class="links_name" data-translate>Games & Events</span>
                 </a>
                 <!-- <span class="tooltip">Games & Events</span> -->
             </li>
             <li>
                 <a href="/friends">
                     <i class='bx bx-user'></i>
-                    <span class="links_name">Friends</span>
+                    <span class="links_name" data-translate>Friends</span>
                 </a>
                 <!-- <span class="tooltip">Friends</span> -->
             </li>
             <li>
                 <a href="/notifications/">
                     <i class='bx bx-bell'></i>
-                    <span class="links_name">Notifications</span>
+                    <span class="links_name" data-translate>Notifications</span>
                 </a>
                 <!-- <span class="tooltip">Notifications</span> -->
             </li>
             <li>
                 <a href="/profile/">
                     <i class='bx bx-user-circle'></i>
-                    <span class="links_name">Profile</span>
+                    <span class="links_name" data-translate>Profile</span>
                 </a>
                 <!-- <span class="tooltip">User Profile</span> -->
             </li>
             <li>
                 <a href="/settings/">
                     <i class='bx bx-cog'></i>
-                    <span class="links_name">Settings</span>
+                    <span class="links_name" data-translate>Settings</span>
                 </a>
                 <!-- <span class="tooltip">Settings</span> -->
             </li>
             <li>
                 <a href="/feedback/">
                     <i class='bx bx-heart'></i>
-                    <span class="links_name">Feedback</span>
+                    <span class="links_name" data-translate>Feedback</span>
                 </a>
                 <!-- <span class="tooltip">Feedback</span> -->
             </li>
             <li>
                 <a href="/contact/">
                     <i class='bx bx-envelope'></i>
-                    <span class="links_name">Contact</span>
+                    <span class="links_name" data-translate>Contact</span>
                 </a>
                 <!-- <span class="tooltip">Contact Me:)</span> -->
             </li>
             <li>
                 <a href="/logout/">
                     <i class='bx bx-log-out'></i>
-                    <span class="links_name">Log Out</span>
+                    <span class="links_name" data-translate>Log Out</span>
                 </a>
                 <!-- <span class="tooltip">Log Out</span> -->
             </li>
@@ -291,8 +291,8 @@
     <section class="section mt-16 bg-[#1e1e2e] flex flex-col justify-center items-center w-[95vw]" id="contentSection">
         <!-- Alert -->
         <div class="bg-white border-l-[10px] border-red-500 text-rose-600 px-8 py-3 rounded absolute top-20 lg:right-[3rem]  w-[23rem] hidden" id="errorAlert" role="alert">
-            <strong class="font-bold">Error!</strong>
-            <span class="block sm:inline " id="alertText">Something seriously bad happened.</span>
+            <strong class="font-bold" data-translate>Error!</strong>
+            <span class="block sm:inline " id="alertText" data-translate>Something seriously bad happened.</span>
             <span class="absolute top-0 bottom-0 right-0 px-2 py-3 closeBtn" onclick="closeAlert()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -308,6 +308,8 @@
         {% endblock %}
 
     </section>
+
+   
     <!-- Sidebar end -->
     <script type="text/javascript">
 
@@ -437,6 +439,85 @@ function closeAlert() {
         }, 5500);
 
     }
+
+
+async function translateText(text, sourceLang, targetLang) {
+    const response = await fetch("http://127.0.0.1:5000/translate", {
+        method: "POST",
+        body: JSON.stringify({
+            q: text,
+            source: sourceLang,
+            target: targetLang,
+            format: "text",
+            api_key: ""
+        }),
+        headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await response.json();
+    return data.translatedText || text; 
+}
+
+
+async function translatePage(sourceLang = "en", targetLang = "bn") {
+    const elements = document.querySelectorAll("[data-translate]"); 
+    for (const el of elements) {
+        const originalText = el.innerText || el.textContent;
+        const translatedText = await translateText(originalText, sourceLang, targetLang);
+        el.innerText = translatedText; 
+    }
+}
+    async function translateSpecific(sourceLang="en"){
+      const elementsEng= document.querySelectorAll("[data-translate-en]")
+      if(sourceLang!="en"){
+        for (const el of elementsEng){
+          const txt=el.innerText || el.textContent;
+          const translated = await translateText(txt,sourceLang,"en")
+          el.innerText = translated;
+        }
+      }
+
+      if(sourceLang!="bn"){
+        const elementsBng= document.querySelectorAll("[data-translate-bn]")
+        for (const el of elementsBng){
+          const txt=el.innerText || el.textContent;
+          const translated = await translateText(txt,sourceLang,"bn")
+          el.innerText = translated;
+        }}
+
+      if(sourceLang!="hi"){
+        const elementsHi = document.querySelectorAll("[data-translate-hi]")
+        for (const el of elementsHi){
+          const txt=el.innerText || el.textContent;
+          const translated = await translateText(txt,sourceLang,"hi")
+          el.innerText = translated;
+        }
+}
+    if(sourceLang!="es"){
+        const elementsEs = document.querySelectorAll("[data-translate-es]")
+        for (const el of elementsEs){
+          const txt=el.innerText || el.textContent;
+          const translated = await translateText(txt,sourceLang,"es")
+          el.innerText = translated;
+        }}
+
+    if(sourceLang!="de"){
+        const elementsDe = document.querySelectorAll("[data-translate-de]")
+        for (const el of elementsDe){
+          const txt=el.innerText || el.textContent;
+          const translated = await translateText(txt,sourceLang,"de")
+          el.innerText = translated;
+        }}
+    }
+
+// Call the function when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+  if ("{{lang}}"!="en"){
+    translatePage("en", "{{lang}}"); // Set the source and target languages
+  }
+  translateSpecific();
+  
+});
     </script>
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

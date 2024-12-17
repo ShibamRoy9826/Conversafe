@@ -1,5 +1,5 @@
 {% extends 'main/base.html' %}
-{% block title %} Conversafe - Notifications {% endblock %}
+{% block title %} Conversafe - Friends {% endblock %}
 {% block content %}
 <style type="text/css">
 .friendsContainer {
@@ -31,7 +31,7 @@
 </style>
 
 {% csrf_token %}
-<h1 class="text-[#cad3f5] text-4xl text-center font-bold" style="margin: 2rem;"> Search Friends </h1>
+<h1 class="text-[#cad3f5] text-4xl text-center font-bold" style="margin: 2rem;" data-translate> Search Friends </h1>
 
 <form class="SearchBox w-[50vw] mb-4 mt-2 flex flex-row items-center justify-center" action="/searchUsers/" method="POST">
     {% csrf_token %}
@@ -49,7 +49,7 @@
 
 </form>
 <div class="flex flex-col justify-center items-center">
-    <h1 class="text-[#cad3f5] text-3xl mb-4 " id="button">Your Friends</h1>
+    <h1 class="text-[#cad3f5] text-3xl mb-4 " id="button" data-translate>Your Friends</h1>
 
     {% if friends %}
     <div class="flex flex-col w-[80vw] " >
@@ -85,12 +85,12 @@
     {% else %}
     <div class="flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center friendsContainer text-center">
 
-        <h1 class="text-gray-400 text-center">You dont seem to have friends,<br> Why don't you make some?</h1>
+      <h1 class="text-gray-400 text-center"><span data-translate>You dont seem to have friends,</span><br><span data-translate>Why don't you make some?</span></h1>
     </div>
     {% endif %}
 <hr class="border border-gray-700" style="width: 100%; height: 100%; margin-top: 2rem;"/>
 
-    <h1 class="text-[#cad3f5] text-3xl mb-4" style="margin-top: 1rem;" id="FriendRequests">Friend Requests</h1>
+    <h1 class="text-[#cad3f5] text-3xl mb-4" style="margin-top: 1rem;" id="FriendRequests" data-translate>Friend Requests</h1>
 
     <div class="friendRequestContainer flex flex-col  border-2 border-gray-700 w-[80vw] justify-center items-center ">
         <!-- <h1 class="text-gray-400 text-center">No Friend Requests at the moment...</h1> -->
@@ -109,7 +109,7 @@
                             <h1 class="text-left text-[#cad3f5] text-xl">{{ friendR.sender.username }}
                             </h1>
                             <p class="text-gray-500 text-left">
-                                There's a new friend request by {{ friendR.sender.username }}
+                            <span data-translate>There's a new friend request by </span>{{ friendR.sender.username }}
                             </p>
                         </div>
                     </a>
@@ -136,7 +136,7 @@
         </ol>
     </div>
     {% else %}
-    <div class="flex flex-col justify-center items-center"><p class="text-[#cad3f5] text-xl text-center ">You have no friend requests at the moment...</p></div>
+    <div class="flex flex-col justify-center items-center"><p class="text-[#cad3f5] text-xl text-center " data-translate>You have no friend requests at the moment...</p></div>
     {% endif %}
 
     </div>

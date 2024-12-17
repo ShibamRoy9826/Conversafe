@@ -3,7 +3,10 @@
 {% block content %}
 {% load static %}
 <!-- Tabs.js -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 <script src="{% static 'js/tab.js' %}" defer></script>
+
 <style type="text/css">
 .section {
     justify-content: start;
@@ -202,6 +205,45 @@ ul{
     background-color: rgb(26,31,174);
 }
 
+.hg-theme-default .hg-button {
+  background: #1e1e2e;
+  border: 2px solid #45475a;   
+  border-radius: 5px; 
+  color: #cdd6f4;    
+  font-size: 18px;      
+  font-weight: bold;     
+  padding: 15px;          
+  margin: 5px;             
+  cursor: pointer;          
+  transition: transform 0.7s, background-color 0.7s; /* Smooth animations */
+}
+
+.hg-theme-default .hg-button:hover{
+  background-color: #181825; 
+}
+.hg-theme-default .hg-button:active{
+  background-color: #89b4fa; 
+}
+
+
+.catppuccin-theme{
+  background-color: #11111b; 
+}
+
+#keyboardDiv{
+  width: 90vw;
+  background-color: #11111b; 
+  box-shadow: 5px 5px 15px black;
+
+}
+
+@media (max-width:1024px) {
+  #keyboardDiv{
+    width: 100vw;
+  }
+
+}
+
 </style>
 
 
@@ -306,20 +348,73 @@ ul{
 <div class="mt-6 mx-4 p-4 bg-[#1e1e2e] rounded-xl w-[100%] ">
     <form method="POST" action="." class="flex" style="height: 3rem;" onkeydown="return event.key != 'Enter';">
         {% csrf_token %}
-        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="bg-[#11111b] rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
+        <input type="text" id="messageInput" name="messageInput" placeholder="Your message" class="input bg-[#11111b] rounded-md border border-gray-700 focus:border-indigo-500 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-indigo-200  text-base outline-none text-gray-300 resize-none leading-6 transition-colors duration-200 ease-in-out px-2  " style="width: 100%;">
         <button type="button" class="coolButton shadow-2xl bg-[#4C51E0] w-32  mx-3 text-center rounded-md text-white px-2 py-3 flex" id="messageSubmit"> Send <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" w-6 h-6" style="margin-left: 0.3rem;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
             </svg>
         </button>
     </form>
 </div>
+
 </div>
 </div>
+
+<div class="simple-keyboard"  id="keyboardDiv" ></div>
+<!-- <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard-layouts@latest/build/index.min.js"></script>
+  
 
 
 {{ room.slug|json_script:"json-roomname" }}
 {{ request.user.username|json_script:"json-username"}}
 <script type="text/javascript">
+
+const Keyboard = window.SimpleKeyboard.default;
+const KeyboardLayouts = window.SimpleKeyboardLayouts.default;
+keyboardDiv=document.getElementById("keyboardDiv")
+
+const langDict={
+  "en":"english",
+  "hi":"hindi",
+  "bn":"bengali",
+  "de":"german",
+  "es":"spanish"
+}
+
+const layout = new KeyboardLayouts().get(langDict["{{lang}}"]);
+
+
+const keyboard = new Keyboard({
+  theme: "hg-theme-default hg-layout-default",
+  onChange: input => onChange(input),
+  onKeyPress: button => onKeyPress(button),
+  ...layout
+});
+
+
+document.querySelector(".input").addEventListener("input", event => {
+  keyboard.setInput(event.target.value);
+});
+
+
+function onChange(input) {
+  document.querySelector(".input").value = input;
+}
+
+function onKeyPress(button) {
+  if (button === "{shift}" || button === "{lock}") handleShift();
+}
+
+function handleShift() {
+  let currentLayout = keyboard.options.layoutName;
+  let shiftToggle = currentLayout === "default" ? "shift" : "default";
+
+  keyboard.setOptions({
+    layoutName: shiftToggle
+  });
+}
+
 
 // Variables from Django
 const roomName = "{{ room.slug }}";
@@ -374,7 +469,7 @@ document.getElementById("leaveButton").addEventListener('click', () => {
 
 // Report user
 function reportUser(element){
-    console.log("Hey i am running...");
+    console.log("Successfully reported user!");
     userProfileName=element.parentNode.innerText;
     message=element.parentNode.parentNode.innerText;
     console.log(userProfileName);
