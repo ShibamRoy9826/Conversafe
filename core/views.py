@@ -314,6 +314,16 @@ def wordSearch(request):
         context['similar_sound_count']=0
         return render(request,"main/func/word_search.html",context)
 
+@login_required(login_url="login")
+def showLetters(request):
+    context={}
+    user = AUser.objects.get(pk=request.user.pk)
+    context['notifications_unread']=notifs(request.user)
+    context['notifications_count']=notifCount(request.user)
+    user_profile = UserProfile.objects.get(user=user)
+    context["lang"]=user_profile.language
+    context["langtolearn"]=user_profile.learn_lang
+    return render(request, f"main/func/letters/{context['langtolearn']}.html",context)
 
 # Logout function
 def logOut(request):

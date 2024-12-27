@@ -50,6 +50,7 @@ urlpatterns = [
 	path('startQuiz/',mainView.startQuiz,name="quiz"),
 	path('startVocab/',mainView.startVocab,name="vocab_quiz"),
 	path('wordSearch/',mainView.wordSearch,name="vocab_quiz"),
+	path('showLetters/',mainView.showLetters,name="show_letters"),
 
 	# Chat
 	# path('rooms/',chatView.rooms,name="roomList"), # Only for debugging

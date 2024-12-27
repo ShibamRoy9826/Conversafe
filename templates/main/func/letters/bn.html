@@ -1,0 +1,305 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Learn Bengali Letters {% endblock %}
+{% load static %}
+{% block content %}
+
+
+<style>
+.capContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  width:100%;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
+}
+.letter{
+  background-color: #11111b;
+  border-radius: 20px;
+  border: 2px solid #45475a;
+  padding: 2rem;
+  color:white;
+  font-size: 3rem;
+  cursor:pointer;
+  margin: 1.3rem;
+}
+h1{
+  color:white;
+  font-size: 3rem;
+}
+hr{
+  margin:2rem;
+}
+
+#allContainer{
+  margin-top: 2rem;
+}
+
+</style>
+
+
+<div id="allContainer" class="capContainer">
+<div id="CapitalLetters" class="capContainer">
+  <h1><b data-translate>Vowels</b>(স্বরবর্ণ)</h1>
+  <div class="row">
+    <div class="letter" id="o" onclick="playThisSmall(this);">
+      অ
+    </div>
+
+    <div class="letter" id="aa" onclick="playThisSmall(this);">
+      আ
+    </div>
+
+    <div class="letter" id="roshoi" onclick="playThisSmall(this);">
+     ই 
+    </div>
+
+    <div class="letter" id="dirghoi" onclick="playThisSmall(this);">
+     ঈ
+    </div>
+
+    <div class="letter" id="roshuu" onclick="playThisSmall(this);">
+     উ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="dirghou" onclick="playThisSmall(this);">
+      ঊ
+    </div>
+
+    <div class="letter" id="ree" onclick="playThisSmall(this);">
+      ঋ
+    </div>
+
+    <div class="letter" id="a" onclick="playThisSmall(this);">
+      এ
+    </div>
+
+    <div class="letter" id="oi" onclick="playThisSmall(this);">
+      ঐ
+    </div>
+
+    <div class="letter" id="oo" onclick="playThisSmall(this);">
+      ও
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+      ঔ
+    </div>
+  </div>
+</div>
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+<div id="SmallLetters" class="capContainer">
+  <h1><b data-translate>Consonants</b>(ব্যঞ্জনবর্ণ)</h1>
+
+  <div class="row">
+    <div class="letter" id="ka" onclick="playThis(this);">
+      ক
+    </div>
+
+    <div class="letter" id="kha" onclick="playThis(this);">
+      খ
+    </div>
+
+    <div class="letter" id="ga" onclick="playThis(this);">
+      গ
+    </div>
+
+    <div class="letter" id="gha" onclick="playThis(this);">
+      ঘ
+    </div>
+
+    <div class="letter" id="uo" onclick="playThis(this);">
+      ঙ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="cha" onclick="playThis(this);">
+      চ
+    </div>
+
+    <div class="letter" id="chha" onclick="playThis(this);">
+      ছ
+    </div>
+
+    <div class="letter" id="ja" onclick="playThis(this);">
+      জ
+    </div>
+
+    <div class="letter" id="jha" onclick="playThis(this);">
+      ঝ
+    </div>
+
+    <div class="letter" id="ea" onclick="playThis(this);">
+      ঞ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ta" onclick="playThis(this);">
+      ট
+    </div>
+
+    <div class="letter" id="tha" onclick="playThis(this);">
+      ঠ
+    </div>
+
+    <div class="letter" id="dha" onclick="playThis(this);">
+      ড
+    </div>
+
+    <div class="letter" id="dhha" onclick="playThis(this);">
+      ঢ
+    </div>
+
+    <div class="letter" id="na" onclick="playThis(this);">
+      ণ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ta" onclick="playThis(this);">
+      ত
+    </div>
+
+    <div class="letter" id="tha" onclick="playThis(this);">
+      থ
+    </div>
+
+    <div class="letter" id="da" onclick="playThis(this);">
+      দ
+    </div>
+
+    <div class="letter" id="dha" onclick="playThis(this);">
+      ধ
+    </div>
+
+    <div class="letter" id="dontanno" onclick="playThis(this);">
+      ন
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="po" onclick="playThis(this);">
+      প
+    </div>
+
+    <div class="letter" id="fa" onclick="playThis(this);">
+      ফ
+    </div>
+
+    <div class="letter" id="ba" onclick="playThis(this);">
+      ব
+    </div>
+
+    <div class="letter" id="bha" onclick="playThis(this);">
+      ভ
+    </div>
+
+    <div class="letter" id="mo" onclick="playThis(this);">
+      ম
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ontostojo" onclick="playThis(this);">
+      য
+    </div>
+
+    <div class="letter" id="ro" onclick="playThis(this);">
+      র
+    </div>
+
+    <div class="letter" id="lo" onclick="playThis(this);">
+      ল
+    </div>
+
+    <div class="letter" id="talibassho" onclick="playThis(this);">
+      শ
+    </div>
+
+    <div class="letter" id="mordhinnosho" onclick="playThis(this);">
+      ষ
+    </div>
+
+    <div class="letter" id="dontassho" onclick="playThis(this);">
+      স
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ho" onclick="playThis(this);">
+      হ
+    </div>
+
+
+    <div class="letter" id="doishindro" onclick="playThis(this);">
+      ড়
+    </div>
+
+    <div class="letter" id="dhoishindro" onclick="playThis(this);">
+      ঢ়
+    </div>
+
+    <div class="letter" id="ontostiyo" onclick="playThis(this);">
+      য়
+    </div>
+  </div>
+
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+<div id="ExConsonants" class="capContainer">
+  <h1><b data-translate>Additional Consonants</b>(ব্যঞ্জনবর্ণ)</h1>
+
+  </div>
+  <div class="row">
+
+    <div class="letter" id="khondotto" onclick="playThis(this);">
+      ৎ
+    </div>
+
+    <div class="letter" id="onuswar" onclick="playThis(this);">
+ং
+    </div>
+
+    <div class="letter" id="bishorgo" onclick="playThis(this);">
+      ঃ 	
+    </div>
+
+    <div class="letter" id="chondrobindu" onclick="playThis(this);">
+      ঁ
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+
+  function playThis(element){
+    const mainDir="{% static 'res/audio/letters/bn/benjonborno' %}";
+    let eId=element.id;
+    let aud= new Audio(mainDir+"/"+eId.toLowerCase()+".mp3");
+    aud.play();
+  }
+
+  function playThisSmall(element){
+    const mainDir="{% static 'res/audio/letters/bn/swarborno' %}";
+    let eId=element.id;
+    let aud= new Audio(mainDir+"/"+eId.toLowerCase()+".mp3");
+    aud.play();
+  }
+
+</script>
+
+{% endblock %}
