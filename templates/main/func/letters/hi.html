@@ -1,0 +1,417 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Learn Hindi Letters {% endblock %}
+{% load static %}
+{% block content %}
+
+
+<style>
+.capContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  width:100%;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
+}
+.letter{
+  background-color: #11111b;
+  border-radius: 20px;
+  border: 2px solid #45475a;
+  padding: 2rem;
+  color:white;
+  font-size: 3rem;
+  cursor:pointer;
+  margin: 1.3rem;
+}
+h1{
+  color:white;
+  font-size: 3rem;
+  text-align:center;
+}
+hr{
+  margin:2rem;
+}
+
+#allContainer{
+  margin-top: 2rem;
+}
+
+</style>
+
+
+<div id="allContainer" class="capContainer">
+<div id="CapitalLetters" class="capContainer">
+  <h1><b data-translate>Vowels</b>(स्वरों)</h1>
+  <div class="row">
+    <div class="letter" id="अ" onclick="playThisSmall(this);">
+    अ
+      
+    </div>
+
+    <div class="letter" id="आ" onclick="playThisSmall(this);">
+      आ
+    </div>
+
+    <div class="letter" id="इ" onclick="playThisSmall(this);">
+      इ
+    </div>
+
+    <div class="letter" id="ई" onclick="playThisSmall(this);">
+     ई
+    </div>
+
+    <div class="letter" id="उ" onclick="playThisSmall(this);">
+     उ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ऊ" onclick="playThisSmall(this);">
+      ऊ
+    </div>
+
+    <div class="letter" id="ए" onclick="playThisSmall(this);">
+      ए
+    </div>
+
+    <div class="letter" id="ऐ" onclick="playThisSmall(this);">
+      ऐ
+    </div>
+
+    <div class="letter" id="ओ" onclick="playThisSmall(this);">
+      ओ
+    </div>
+
+    <div class="letter" id="औ" onclick="playThisSmall(this);">
+      औ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="अं" onclick="playThisSmall(this);">
+      अं
+    </div>
+    
+    <div class="letter" id="अः" onclick="playThisSmall(this);">
+अः
+    </div>
+
+    <div class="letter" id="ऋ" onclick="playThisSmall(this);">
+      ऋ
+    </div>
+
+    <div class="letter" id="ॠ" onclick="playThisSmall(this);">
+      ॠ
+    </div>
+  </div>
+
+  <div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+  <h1><b data-translate>Dependent Vowels</b>(स्वरों)</h1>
+  <div class="row">
+    <div class="letter" id="o" onclick="playThisSmall(this);">
+      ा
+    </div>
+
+    <div class="letter" id="aa" onclick="playThisSmall(this);">
+      ि
+    </div>
+
+    <div class="letter" id="roshoi" onclick="playThisSmall(this);">
+      ी
+    </div>
+
+    <div class="letter" id="dirghoi" onclick="playThisSmall(this);">
+     ु
+    </div>
+
+    <div class="letter" id="roshuu" onclick="playThisSmall(this);">
+     ू
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="dirghou" onclick="playThisSmall(this);">
+      ृ
+    </div>
+
+    <div class="letter" id="ree" onclick="playThisSmall(this);">
+      ॄ
+    </div>
+
+    <div class="letter" id="a" onclick="playThisSmall(this);">
+      ॅ
+    </div>
+
+    <div class="letter" id="oi" onclick="playThisSmall(this);">
+      ॆ
+    </div>
+
+    <div class="letter" id="oo" onclick="playThisSmall(this);">
+      े
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+      ै
+    </div>
+    
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+ ॉ
+    </div>
+
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+      ॊ
+    </div>
+
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+      ो
+    </div>
+
+    <div class="letter" id="ou" onclick="playThisSmall(this);">
+ौ
+
+    </div>
+  </div>
+  </div>
+</div>
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+<div id="SmallLetters" class="capContainer">
+  <h1><b data-translate>Consonants</b>(व्यंजन)</h1>
+
+  <div class="row">
+    <div class="letter" id="क" onclick="playThis(this);">
+      क
+    </div>
+
+    <div class="letter" id="ख" onclick="playThis(this);">
+      ख
+    </div>
+
+    <div class="letter" id="ग" onclick="playThis(this);">
+      ग
+    </div>
+
+    <div class="letter" id="घ" onclick="playThis(this);">
+      घ
+    </div>
+
+    <div class="letter" id="ङ" onclick="playThis(this);">
+      ङ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="च" onclick="playThis(this);">
+      च
+    </div>
+
+    <div class="letter" id="छ" onclick="playThis(this);">
+      छ
+    </div>
+
+    <div class="letter" id="ज" onclick="playThis(this);">
+      ज
+    </div>
+
+    <div class="letter" id="झ" onclick="playThis(this);">
+      झ
+    </div>
+
+    <div class="letter" id="ञ" onclick="playThis(this);">
+      ञ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="ट" onclick="playThis(this);">
+      ट
+    </div>
+
+    <div class="letter" id="ठ" onclick="playThis(this);">
+      ठ
+    </div>
+
+    <div class="letter" id="ड" onclick="playThis(this);">
+      ड
+    </div>
+
+    <div class="letter" id="ढ" onclick="playThis(this);">
+      ढ
+    </div>
+
+    <div class="letter" id="ढ" onclick="playThis(this);">
+      ढ
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="त" onclick="playThis(this);">
+      त
+    </div>
+
+    <div class="letter" id="थ" onclick="playThis(this);">
+      थ
+    </div>
+
+    <div class="letter" id="द" onclick="playThis(this);">
+      द
+    </div>
+
+    <div class="letter" id="ध" onclick="playThis(this);">
+      ध
+    </div>
+
+    <div class="letter" id="न" onclick="playThis(this);">
+      न
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="प" onclick="playThis(this);">
+      प
+    </div>
+
+    <div class="letter" id="फ" onclick="playThis(this);">
+      फ
+    </div>
+
+    <div class="letter" id="ब" onclick="playThis(this);">
+      ब
+    </div>
+
+    <div class="letter" id="भ" onclick="playThis(this);">
+      भ
+    </div>
+
+    <div class="letter" id="म" onclick="playThis(this);">
+      म
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="य" onclick="playThis(this);">
+      य
+    </div>
+
+    <div class="letter" id="र" onclick="playThis(this);">
+      र
+    </div>
+
+    <div class="letter" id="ल" onclick="playThis(this);">
+      ल
+    </div>
+
+    <div class="letter" id="व" onclick="playThis(this);">
+      व
+    </div>
+
+    <div class="letter" id="श" onclick="playThis(this);">
+      श
+    </div>
+
+    <div class="letter" id="ष" onclick="playThis(this);">
+      ष
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="स" onclick="playThis(this);">
+      स
+    </div>
+
+
+    <div class="letter" id="ह" onclick="playThis(this);">
+      ह
+    </div>
+
+    <div class="letter" id="क्ष" onclick="playThis(this);">
+      क्ष
+    </div>
+
+    <div class="letter" id="त्र" onclick="playThis(this);">
+      त्र
+    </div>
+
+    <div class="letter" id="ज्ञ" onclick="playThis(this);">
+     ज्ञ
+    </div>
+  </div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+  <h1><b data-translate>Hindi Numerals</b>(अंक)</h1>
+  <div class="row">
+    <div class="letter" id="o" onclick="playThisSmall(this);">
+०
+    </div>
+
+    <div class="letter" id="aa" onclick="playThisSmall(this);">
+१
+    </div>
+
+    <div class="letter" id="roshoi" onclick="playThisSmall(this);">
+२
+    </div>
+
+    <div class="letter" id="dirghoi" onclick="playThisSmall(this);">
+३
+    </div>
+
+    <div class="letter" id="roshuu" onclick="playThisSmall(this);">
+४
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="o" onclick="playThisSmall(this);">
+५
+    </div>
+
+    <div class="letter" id="aa" onclick="playThisSmall(this);">
+६
+    </div>
+
+    <div class="letter" id="roshoi" onclick="playThisSmall(this);">
+७
+    </div>
+
+    <div class="letter" id="dirghoi" onclick="playThisSmall(this);">
+८
+    </div>
+
+    <div class="letter" id="roshuu" onclick="playThisSmall(this);">
+९
+    </div>
+  </div>
+
+
+
+</div>
+
+<script>
+
+  function playThis(element){
+    const mainDir="{% static 'res/audio/letters/hi/byanjan' %}";
+    let eId=element.id;
+    let aud= new Audio(mainDir+"/"+eId.toLowerCase()+".mp3");
+    aud.play();
+  }
+
+  function playThisSmall(element){
+    const mainDir="{% static 'res/audio/letters/hi/swar' %}";
+    let eId=element.id;
+    let aud= new Audio(mainDir+"/"+eId.toLowerCase()+".mp3");
+    aud.play();
+  }
+
+</script>
+
+{% endblock %}

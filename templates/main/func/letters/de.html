@@ -1,0 +1,372 @@
+{% extends 'main/base.html' %}
+{% block title %} Conversafe - Learn German alphabets{% endblock %}
+{% load static %}
+{% block content %}
+
+
+<style>
+.capContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  width:100%;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
+}
+.letter{
+  background-color: #11111b;
+  border-radius: 20px;
+  border: 2px solid #45475a;
+  padding: 2rem;
+  color:white;
+  font-size: 3rem;
+  cursor:pointer;
+  margin: 1.3rem;
+}
+h1{
+  color:white;
+  font-size: 3rem;
+}
+
+h2{
+  color:white;
+  font-size: 2.5rem;
+}
+hr{
+  margin:2rem;
+}
+
+#allContainer{
+  margin-top: 2rem;
+}
+
+</style>
+
+
+<div id="allContainer" class="capContainer">
+<div id="CapitalLetters" class="capContainer">
+  <h1><b data-translate>The German Alphabets</b>(das deutsche Alphabet)</h1>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+  <h2><b data-translate>Capital Letters</b>(Majuscule forms)</h2>
+  <div class="row">
+    <div class="letter" id="A" onclick="playThis(this);">
+      A
+    </div>
+
+    <div class="letter" id="B" onclick="playThis(this);">
+      B
+    </div>
+
+    <div class="letter" id="C" onclick="playThis(this);">
+      C
+    </div>
+
+    <div class="letter" id="D" onclick="playThis(this);">
+      D
+    </div>
+
+    <div class="letter" id="E" onclick="playThis(this);">
+      E
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="F" onclick="playThis(this);">
+      F
+    </div>
+
+    <div class="letter" id="G" onclick="playThis(this);">
+      G
+    </div>
+
+    <div class="letter" id="H" onclick="playThis(this);">
+      H
+    </div>
+
+    <div class="letter" id="I" onclick="playThis(this);">
+      I
+    </div>
+
+    <div class="letter" id="J" onclick="playThis(this);">
+      J
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="K" onclick="playThis(this);">
+      K
+    </div>
+
+    <div class="letter" id="L" onclick="playThis(this);">
+      L
+    </div>
+
+    <div class="letter" id="M" onclick="playThis(this);">
+      M
+    </div>
+
+    <div class="letter" id="N" onclick="playThis(this);">
+      N
+    </div>
+
+    <div class="letter" id="O" onclick="playThis(this);">
+      O
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="letter" id="P" onclick="playThis(this);">
+      P
+    </div>
+
+    <div class="letter" id="Q" onclick="playThis(this);">
+      Q
+    </div>
+
+    <div class="letter" id="R" onclick="playThis(this);">
+      R
+    </div>
+
+    <div class="letter" id="S" onclick="playThis(this);">
+      S
+    </div>
+
+    <div class="letter" id="T" onclick="playThis(this);">
+      T
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="letter" id="U" onclick="playThis(this);">
+      U
+    </div>
+
+    <div class="letter" id="V" onclick="playThis(this);">
+      V
+    </div>
+
+    <div class="letter" id="W" onclick="playThis(this);">
+      W
+    </div>
+
+    <div class="letter" id="X" onclick="playThis(this);">
+      X
+    </div>
+
+    <div class="letter" id="Y" onclick="playThis(this);">
+      Y
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="letter" id="Z" onclick="playThis(this);">
+      Z
+    </div>
+
+  </div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+  <h2><b>Umlaut</b></h2>
+  <div class="row">
+
+    <div class="letter" id="Ä" onclick="playThis(this);">
+      Ä
+    </div>
+
+    <div class="letter" id="Ö" onclick="playThis(this);">
+      Ö
+    </div>
+
+    <div class="letter" id="Ü" onclick="playThis(this);">
+      Ü
+    </div>
+
+  </div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+  <h2><b>Eszett</b></h2>
+  <div class="row">
+    <div class="letter" id="ẞ" onclick="playThis(this);">
+      ẞ
+    </div>
+  </div>
+</div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+<div id="SmallLetters" class="capContainer">
+  <h2><b>Small Letters</b>(Minuscule forms)</h2>
+
+  <div class="row">
+    <div class="letter" id="a" onclick="playThis(this);">
+      a
+    </div>
+
+    <div class="letter" id="b" onclick="playThis(this);">
+      b
+    </div>
+
+    <div class="letter" id="c" onclick="playThis(this);">
+      c
+    </div>
+
+    <div class="letter" id="d" onclick="playThis(this);">
+      d
+    </div>
+
+    <div class="letter" id="e" onclick="playThis(this);">
+      e
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="f" onclick="playThis(this);">
+      f
+    </div>
+
+    <div class="letter" id="g" onclick="playThis(this);">
+      g
+    </div>
+
+    <div class="letter" id="h" onclick="playThis(this);">
+      h
+    </div>
+
+    <div class="letter" id="i" onclick="playThis(this);">
+      i
+    </div>
+
+    <div class="letter" id="j" onclick="playThis(this);">
+      j
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="letter" id="k" onclick="playThis(this);">
+      k
+    </div>
+
+    <div class="letter" id="l" onclick="playThis(this);">
+      l
+    </div>
+
+    <div class="letter" id="m" onclick="playThis(this);">
+      m
+    </div>
+
+    <div class="letter" id="n" onclick="playThis(this);">
+      n
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="letter" id="o" onclick="playThis(this);">
+      o
+    </div>
+    <div class="letter" id="p" onclick="playThis(this);">
+      p
+    </div>
+
+    <div class="letter" id="q" onclick="playThis(this);">
+      q
+    </div>
+
+    <div class="letter" id="r" onclick="playThis(this);">
+      r
+    </div>
+
+    <div class="letter" id="s" onclick="playThis(this);">
+      s
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="letter" id="t" onclick="playThis(this);">
+      t
+    </div>
+    <div class="letter" id="u" onclick="playThis(this);">
+      u
+    </div>
+
+    <div class="letter" id="v" onclick="playThis(this);">
+      v
+    </div>
+
+    <div class="letter" id="w" onclick="playThis(this);">
+      w
+    </div>
+
+    <div class="letter" id="x" onclick="playThis(this);">
+      x
+    </div>
+
+
+  </div>
+  <div class="row">
+
+    <div class="letter" id="y" onclick="playThis(this);">
+      y
+    </div>
+    <div class="letter" id="z" onclick="playThis(this);">
+      z
+    </div>
+  </div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+  <h2><b>Umlaut</b></h2>
+  <div class="row">
+
+    <div class="letter" id="ä" onclick="playThis(this);">
+      ä
+    </div>
+
+    <div class="letter" id="ö" onclick="playThis(this);">
+      ö
+    </div>
+
+    <div class="letter" id="ü" onclick="playThis(this);">
+      ü
+    </div>
+
+  </div>
+
+<hr width="80%" background-color="#45475a" color="#45475a">
+
+  <h2><b>Eszett</b></h2>
+  <div class="row">
+    <div class="letter" id="ß" onclick="playThis(this);">
+      ß
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+
+  function playThis(element){
+    const mainDir="{% static 'res/audio/letters/de' %}";
+    let eId=element.id;
+    let aud= new Audio(mainDir+"/"+eId.toLowerCase()+".mp3");
+    aud.play();
+  }
+
+</script>
+
+{% endblock %}

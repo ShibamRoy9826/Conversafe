@@ -1,7 +1,7 @@
 ###  Libraries and stuff ############################################################
 import json
 import random  # For random initial messages
-from requests import get
+from requests import get,post
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -36,7 +36,7 @@ def translate(txt,lang):
         "format": "text",
         "api_key": ""
     }
-    response = requests.post(translateUrl, data=json.dumps(data), headers=translateHeaders)
+    response = post(translateUrl, data=json.dumps(data), headers=translateHeaders)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -56,6 +56,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.model = BlenderbotForConditionalGeneration.from_pretrained(
             "facebook/blenderbot-400M-distill"
         )
+        print("Bot initialization completed!")
 
     # Handles Chat prompts with the model
     def chat(self, prompt):
@@ -177,7 +178,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             mixer.music.load("temp/temp.mp3")
             mixer.music.play()
         except Exception as e:
-            print("ERROR: ",e)
+            print("GTTS ERROR: ",e)
 
         await self.save_message(AiDisplayname, AiUsername, room, AiReply, msgType)
 
@@ -210,6 +211,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "Did you know an octopus has three hearts? What’s a fun fact you know? ",
         ]
         AiReply = random.choice(replies)
+        print("Ai send initial choice: ",AiReply)
         try:
             a = gTTS(AiReply[:-1], lang="en")
             a.save("temp/temp.mp3")
@@ -232,6 +234,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+        print("Sent message from the server")
 
     # Function that handles sending messages to client
     async def chat_message(self, event):
@@ -260,6 +263,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         obj = AIRoom.objects.get(slug=room)
         user = AUser.objects.get(username=username)
         obj.userConnected = True
+        print("New user connected!")
         obj.save()
 
     @sync_to_async
