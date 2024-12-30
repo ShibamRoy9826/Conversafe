@@ -11,6 +11,8 @@ An open-source platform to make language learning fun and easy, entirely for fre
 ## Demo ✨ 
 Its live [here](https://conversafe.hackclub.app)
 
+Thanks to [Hackclub](https://hackclub.com/) , I was able to finally host it entirely for free.
+
 ## Screenshots 📸
 
 ![Landing page](screenshots/landing.png)
