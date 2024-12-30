@@ -67,32 +67,20 @@ As of now, these are the languages which are supported:
 ## Usage guide 🛠️
 
 > [!NOTE]
-> Email verification is broken as of now, I am still trying to fix it...
+> Email verification is broken as of now(In the hosted version), I am still trying to fix it...
 > So some steps in the middle may not be required anymore.
 
 1. This is the landing page of the website, click on the signup button at the top-right to create a new account.( Press on login if you already have an account)
 
-![App Screenshot](/screenshots/image-1.png)
+![App Screenshot](/screenshots/landing.png)
 
-2. Once you get into the signup page, enter the details its asking for inorder to create an account. Next, click on the Submit button to send a verification email to the provided email.
+2. Fill your details in the form
 
-![App Screenshot](/screenshots/image-2.png)
-![App Screenshot](/screenshots/image-3.png)
+3. Click on the create account button
 
-3. Go to your email providers website , and check for an email. Make sure to check the Spam folder incase you don't find the email
+4. Once you've created your account, click on the login button. And fill in the details you've used to create your account.
 
-![App Screenshot](/screenshots/image-4.png)
-![App Screenshot](/screenshots/image-5.png)
-
- 4. Email Verification is now successful
-
-![App Screenshot](/screenshots/image-6.png)
-
- 5. Go to the login page, and login with the same details that you used to create the account 
-
-![App Screenshot](/screenshots/image-7.png)
-
- 6. Done! Now you're logged in and you can explore the rest of the website, its pretty user-friendly.
+5. Done! Now you're logged in and you can explore the rest of the website, its pretty user-friendly.
  If you don't understand the language, Click `Settings icon > Language learning medium > Change to any language you want(Out of the ones that are supported)`
 
 ## How is it made?
@@ -109,7 +97,7 @@ There's also a word finder functionailty which uses a local database and the [Da
 
 ## Installation/Running Locally 🛠️
 
-Running this project locally is very easy.
+Running this project locally is not very complicated.
 
 1. Start by cloning this repository
 
@@ -133,6 +121,17 @@ Running this project locally is very easy.
 npm init -y
 npm install -D tailwindcss
 npx tailwindcss init
+```
+
+5. Set a few Environment variables,
+You need to start by generating a key, run `python` and type this:
+```python
+>> import secrets
+>> print(secrets.token_urlsafe(50))
+```
+Copy the generated token and paste it in the next command:
+```
+export CONVERSAFE_SECRET_KEY="<your_token_here_without_quotes>" # Required
 ```
 
 5. To Run the server
