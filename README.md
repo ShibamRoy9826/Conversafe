@@ -1,4 +1,4 @@
-<img src="static/logo.png" width=40%>
+<img src="static/logo.png" width=10%>
 
 # Conversafe 💬
 
@@ -155,19 +155,19 @@ This step will require some time when run it for the first time, as it will down
 8. Now you can visit https://127.0.0.1:8000 to view the application :)
 
 ## Todo list
-- [x] -- Integrate Catppuccin color palette --
-- [x] -- Add a multiple languages --
-- [x] -- Add a letter learning features --
-- [x] -- Add a Word helper --
-- [x] -- Add a Vocubarry quiz --
-- [x] -- Rewrite a few things to make the code better --
-- [] Fix websocket problems in hosted version
-- [] Fix CORS header problems in hosted version
-- [] Add a better LLM
-- [] Add more themes
-- [] Create something like posts, to make it somewhat like a social media platform maybe...
-- [] Make a video scrolling section, so people can watch educational shorts
-- [] Make it resposive
+- [x] ~~Integrate Catppuccin color palette~~
+- [x] ~~Add a multiple languages~~
+- [x] ~~Add a letter learning features~~
+- [x] ~~Add a Word helper~~
+- [x] ~~Add a Vocubarry quiz~~
+- [x] ~~Write a few things to make the code better~~
+- [ ] Fix websocket problems in hosted version
+- [ ] Fix CORS header problems in hosted version
+- [ ] Add a better LLM
+- [ ] Add more themes
+- [ ] Create something like posts, to make it somewhat like a social media platform maybe...
+- [ ] Make a video scrolling section, so people can watch educational shorts
+- [ ] Make it resposive
 
 ## FAQ ❔
 
