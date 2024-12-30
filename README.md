@@ -2,22 +2,54 @@
 
 # Conversafe 💬
 
-Conversafe is language learning platform designed to make mastering languages both fun and engaging! This platform is more fun for pre-intermediate to interemediate users at the moment. This platform provides a learning environment through real conversations with other users. Infact, incase other users are not available, they can have a conversation with AI! It has many other amazing features like fun general knowledge quizzes, vocabulary quizzes, a word helper(Somewhat like a dictionary), and many more! This platform is extremely user-friendly and offers a welcoming space for learners to practice, learn, and have fun:) 
+An open-source platform to make language learning fun and easy, entirely for free! Have a nice conversation with other users or even AI, along with many other features!
 
 > [!NOTE]
-> This demo version doesn't have all the features, as the application is quite resource intensive at the moment...
+> This demo version still doesn't work with websockets(I am still working on fixing it), so the chat system and AI system won't work:(
+> Also  the translation isn't working cause I need to setup CORS headers and stuff, I am working on that too.
 
-## ✨ Demo - https://conversafe.pythonanywhere.com/
+## Demo ✨ 
+Its live [here](https://conversafe.hackclub.app)
+
+## Screenshots 📸
+
+![Landing page](screenshots/landing.png)
+
+![Dashboard](screenshots/dashboard.png)
+
+![Normal Chat](screenshots/normal.png)
+
+![AI Chat](screenshots/ai.png)
+
+![Events](screenshots/events.png)
+
+![Quiz](screenshots/quiz.png)
+
+![Vocabulary quiz](screenshots/vocab.png)
+
+![Word Helper](screenshots/words.png)
+
+![Friends Search](screenshots/friendSearch.png)
+
+![Friends](screenshots/friend.png)
+
+![Settings](screenshots/settings.png)
+
+![Feedback](screenshots/feedback.png)
+
+![Contact](screenshots/contact.png)
+
 
 ## Features 😎
 
 -  Conversation with real peole (other learners)
 -  Conversation with AI in absense of other users
+-  Multiple languages(English,Hindi,Bengali,German,and Spanish)
 -  Fun general knowledge quizzes, and Vocabulary quizzes
 -  A word helper, something like a dictionary, but with more things like synonyms, phonetics etc.
 -  Random Quotes, and Fun facts
+-  Remain upto date with the platform using notifications
 -  Friends system, so that users can make new friends
--  Sources to more learning material, not exclusive to English, but many other skills too
 -  Catppuccin based dark theme by default
 -  Extremely user-friendly UI
 -  Fully free and open source
@@ -33,6 +65,10 @@ As of now, these are the languages which are supported:
 - German
 
 ## Usage guide 🛠️
+
+> [!NOTE]
+> Email verification is broken as of now, I am still trying to fix it...
+> So some steps in the middle may not be required anymore.
 
 1. This is the landing page of the website, click on the signup button at the top-right to create a new account.( Press on login if you already have an account)
 
@@ -110,19 +146,34 @@ python manage.py runserver
 npm run dev
 ```
 
-7. To run the language server
+7. To run the language translation server
 ```bash
 libretranslate --load-only en,es,de,bn,hi
 ```
-This step will require a huge amount of time when run for the first time, as it will download all the translation models for these languages
+This step will require some time when run it for the first time, as it will download all the translation models for these languages
 
 8. Now you can visit https://127.0.0.1:8000 to view the application :)
+
+## Todo list
+- [x] -- Integrate Catppuccin color palette --
+- [x] -- Add a multiple languages --
+- [x] -- Add a letter learning features --
+- [x] -- Add a Word helper --
+- [x] -- Add a Vocubarry quiz --
+- [x] -- Rewrite a few things to make the code better --
+- [] Fix websocket problems in hosted version
+- [] Fix CORS header problems in hosted version
+- [] Add a better LLM
+- [] Add more themes
+- [] Create something like posts, to make it somewhat like a social media platform maybe...
+- [] Make a video scrolling section, so people can watch educational shorts
+- [] Make it resposive
 
 ## FAQ ❔
 
 ### 1. Why Conversafe? There are other language learning apps too!
 
-Yes, there are indeed many other applications which offer language learning for free, but Conversafe is an open-source alternative to that! and along with that it provides more practical interaction between the users so that they can learn better! 
+Yes, there are indeed many other applications which offer language learning for free, but Conversafe is an open-source alternative to that! and along with that it provides more practical interaction between the users so that they can learn better!
 
 ### 2. What's the point of using the AI feature? I can just have a conversation with ChatGPT or Gemini, they are far more accurate!
 
