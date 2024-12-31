@@ -6,13 +6,19 @@ An open-source platform to make language learning fun and easy, entirely for fre
 
 > [!NOTE]
 > This demo version still doesn't work with websockets(I am still working on fixing it), so the chat system and AI system won't work:(
-> Also  the translation isn't working cause I need to setup CORS headers and stuff, I am working on that too.
+> Also  the translation isn't working cause I need to setup CORS headers and stuff, I am working on that too, any help would be appreciated!
 
 ## Demo ✨ 
 Its live [here](https://conversafe.hackclub.app)
 
 Thanks to [Hackclub](https://hackclub.com/) , I was able to finally host it entirely for free.
 
+If you don't want to create an account, here's a testing account(Only for online demo version):
+
+| Keys | Action |
+| :--- | :--- |
+| Email | testuser@gmail.com |
+| Passsword | Password@123 |
 ## Screenshots 📸
 
 ![Landing page](screenshots/landing.png)
