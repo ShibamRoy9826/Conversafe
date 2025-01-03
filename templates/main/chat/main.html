@@ -333,6 +333,18 @@ ul{
                 </div>
             </div>
         </div>
+
+        {% elif message.messageType == 'SUGGEST' %}
+        <div class="flex flex-row justify-end">
+            <div class='text-white selfMessage mx-8 my-4 space-y-3 text-right w-auto max-w-[95%] lg:max-w-[45%]'>
+                <div class='p-4 selfMessage'>
+                    <p class='font-bold text-xl text-right w-auto'> Corrections/Suggestions </p>
+                    <p class="w-auto"> {{ message.content }} </p>
+                </div>
+            </div>
+        </div>
+
+
         {% else %}
         <div class="flex flex-row justify-center rounded-xl joinedLeft">
             <div class="bg-[#1e1e2e] text-white rounded-xl mx-8 space-y-3 w-full">
@@ -689,6 +701,16 @@ function manageChat(data){
             }
         }
         document.querySelector("#chatContainer").innerHTML += html;
+
+    } else if (data.messageType == "SUGGEST") {
+            let msg = data.message;
+
+            let html = "<div class='flex flex-row justify-end'><div class='text-white selfMessage mx-8 my-4 space-y-3  text-right w-auto h-auto max-w-[95%] lg:max-w-[45%] '><div class='p-4 selfMessage h-auto' style='text-align:left;' ><p class='font-bold text-xl w-auto text-[#89b4fa]'> Corrections/Suggestions </p><p class='w-auto h-auto' style='text-align:left;'>" + msg + "</p></div></div></div>";
+
+        audioContainer=document.getElementById("audio")
+
+        document.querySelector("#chatContainer").innerHTML += html;
+
     } else {
         var audio = new Audio("{% static 'res/audio/userDisconnected.mp3' %}");
         // audio.volume = 0.3;

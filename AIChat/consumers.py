@@ -18,6 +18,7 @@ from landing.models import AUser
 
 # Some Model objects
 from .models import AIRoom, Message
+from string import punctuation
 
 ####################################################################################
 
@@ -36,6 +37,13 @@ def translate(txt,lang):
         "format": "text",
         "api_key": ""
     }
+def removeSymb(text):
+    new=""
+    for i in text:
+        if i not in punctuation:
+            new+=i
+    return new
+
     response = post(translateUrl, data=json.dumps(data), headers=translateHeaders)
 
 
@@ -101,28 +109,33 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         if messageType=="NORMAL":
             errors=s.unknown(message.split(" "))
-            corrections=[]
+            ecorrArray=[]
             for i in errors:
-                corrections.append(s.correction(i))
+                corr=s.correction(i)
+                if corr!=removeSymb(i):
+                    ecorrArray.append((i,corr))
 
             if len(errors)!=0:
                 msg="Some corrections to the last sentence:<br><ul class='flex flex-col'>"
-                for ind,i in enumerate(errors):
+                counted=False
+                for err,co in ecorrArray:
                     if msg!=f"<li>  -> i</li>":
-                        msg+=f"<li style='list-style-type: circle;margin-left: 1rem;'> {i} -> {corrections[ind]}</li>"
+                        msg+=f"<li style='list-style-type: circle;margin-left: 1rem;'> {err} -> {co}</li>"
+                        counted=True
                 msg+="</ul>"
-                print(msg)
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "chat_message",
-                        "displayName": "Corrections",
-                        "message": msg,
-                        "username": username,
-                        "room": room,
-                        "messageType": "SUGGEST",
-                    },
-                )
+                if counted:
+                    print(msg)
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "chat_message",
+                            "displayName": "Corrections",
+                            "message": msg,
+                            "username": username,
+                            "room": room,
+                            "messageType": "SUGGEST",
+                        },
+                    )
 
         # Sending Initial message on joining and giving reply to any prompt
         if messageType == "JOINED":
