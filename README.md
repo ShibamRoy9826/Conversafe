@@ -1,15 +1,17 @@
 <img src="static/logo.png" width=10%>
 
-# Conversafe 💬
+# Conversafe 
+
+> [!NOTE]
+> Looking back, I find this entire codebase quite messy and lacking in best practices. I don't have any incentive to develop this project further... fixing the existing problems would be time consuming but have a very little learning value.<br>
+> Even if I did rewrite it, hosting it and trying to gather a userbase wouldn't make sense, as much better alternatives already exist today.<br>
+>As a conclusion, I am indefinitely archiving this repository. I strongly suggest not using this code as a reference, but if you do, take it as a prime example of how NOT to write code.
 
 An open-source platform to make language learning fun and easy, entirely for free! Have a nice conversation with other users or even AI, along with many other features!
 
-> [!NOTE]
-> This demo version still doesn't work with websockets(I am still working on fixing it), so the chat system and AI system won't work:(
-> Also  the translation isn't working cause I need to setup CORS headers and stuff, I am working on that too, any help would be appreciated!
+## Demo  
 
-## Demo ✨ 
-Its live [here](https://conversafe.hackclub.app)
+Its used to be live [here](https://conversafe.hackclub.app)
 
 Thanks to [Hackclub](https://hackclub.com/) , I was able to finally host it entirely for free.
 
@@ -19,7 +21,7 @@ If you don't want to create an account, here's a testing account(Only for online
 | :--- | :--- |
 | Email | testuser@gmail.com |
 | Passsword | Password@123 |
-## Screenshots 📸
+## Screenshots 
 
 ![Landing page](screenshots/landing.png)
 
@@ -48,7 +50,7 @@ If you don't want to create an account, here's a testing account(Only for online
 ![Contact](screenshots/contact.png)
 
 
-## Features 😎
+## Features 
 
 -  Conversation with real peole (other learners)
 -  Conversation with AI in absense of other users
@@ -62,7 +64,7 @@ If you don't want to create an account, here's a testing account(Only for online
 -  Extremely user-friendly UI
 -  Fully free and open source
 
-## Language support🗣️
+## Language support
 
 As of now, these are the languages which are supported:
 
@@ -72,7 +74,7 @@ As of now, these are the languages which are supported:
 - Spanish
 - German
 
-## Usage guide 🛠️
+## Usage guide 
 
 > [!NOTE]
 > Email verification is broken as of now(In the hosted version), I am still trying to fix it...
@@ -103,7 +105,7 @@ The AI feature uses [Blenderbot 400M Distill](https://huggingface.co/facebook/bl
 There's also a word finder functionailty which uses a local database and the [Datamuse API](https://www.datamuse.com/api/) for phonetics and similar words.
 
 
-## Installation/Running Locally 🛠️
+## Installation/Running Locally 
 
 Running this project locally is not very complicated.
 
@@ -186,7 +188,7 @@ Yes, there are indeed many other applications which offer language learning for 
 
 While they may be far more accurate, they also collect your data. Your responses are used to train the model itself, but incase of Conversafe, it uses [Blenderbot 400M Distill](https://huggingface.co/facebook/blenderbot-400M-distill) which is another open-source project made by Meta. Its a little lightweight, and that's why its being used in this application, but If I find any better open-source alternative I would definitely shift to that. You can suggest any model either by raising an issue in this github repository.
 
-## Contributing 🤝
+## Contributing 
 
 Everyone is welcome to contribute to the code!
 You can also raise an issue, or suggest any features that you think would be great :)
